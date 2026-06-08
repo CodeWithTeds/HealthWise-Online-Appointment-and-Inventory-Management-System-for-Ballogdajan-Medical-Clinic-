@@ -1,5 +1,6 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import { dashboard, login, register } from '@/routes';
+import type { User } from '@/types/auth';
 import {
     Calendar,
     ClipboardList,
@@ -25,6 +26,25 @@ export default function Welcome({
 }) {
     const { auth } = usePage().props;
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    const user = auth.user as User | null;
+
+    const roleGreeting = (role: string | undefined) => {
+        switch (role) {
+            case 'doctor':
+                return { greeting: 'Welcome back, Doctor', icon: Stethoscope, color: 'text-emerald-500 bg-emerald-50' };
+            case 'secretary':
+                return { greeting: 'Welcome back', icon: UserCheck, color: 'text-purple-500 bg-purple-50' };
+            case 'pharmacist':
+                return { greeting: 'Welcome back', icon: Pill, color: 'text-amber-500 bg-amber-50' };
+            case 'patient':
+                return { greeting: 'Welcome back', icon: Heart, color: 'text-rose-500 bg-rose-50' };
+            default:
+                return { greeting: 'Welcome', icon: Users, color: 'text-[#0787f7] bg-[#0787f7]/10' };
+        }
+    };
+
+    const roleInfo = user ? roleGreeting(user.role) : null;
 
     return (
         <>
@@ -149,10 +169,22 @@ export default function Welcome({
                     <div className="relative mx-auto flex min-h-[calc(100vh-4.5rem)] max-w-7xl flex-col items-center justify-center px-6 py-16 lg:flex-row lg:gap-12 lg:px-8">
                         {/* Left Content */}
                         <div className="flex-1 text-center lg:text-left">
-                            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-[#0787f7]/[0.08] px-4 py-2">
-                                <Heart className="h-3.5 w-3.5 text-[#0787f7]" />
-                                <span className="text-xs font-bold tracking-wide text-[#0787f7] uppercase">Ballogdajan Medical Clinic</span>
-                            </div>
+                            {user && roleInfo ? (
+                                <div className="mb-6 inline-flex items-center gap-3 rounded-full border border-gray-100 bg-white px-5 py-2.5 shadow-sm">
+                                    <div className={`flex h-8 w-8 items-center justify-center rounded-full ${roleInfo.color}`}>
+                                        <roleInfo.icon className="h-4 w-4" />
+                                    </div>
+                                    <div className="text-left">
+                                        <p className="text-xs font-bold text-[#11165a]">{roleInfo.greeting}, {user.name.split(' ')[0]}</p>
+                                        <p className="text-[10px] capitalize text-[#192433]/40">{user.role} Account</p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-[#0787f7]/[0.08] px-4 py-2">
+                                    <Heart className="h-3.5 w-3.5 text-[#0787f7]" />
+                                    <span className="text-xs font-bold tracking-wide text-[#0787f7] uppercase">Ballogdajan Medical Clinic</span>
+                                </div>
+                            )}
 
                             <h1 className="mb-6 text-[#11165a]">
                                 <span className="block text-5xl leading-[1.08] font-black tracking-tight sm:text-6xl lg:text-7xl">
