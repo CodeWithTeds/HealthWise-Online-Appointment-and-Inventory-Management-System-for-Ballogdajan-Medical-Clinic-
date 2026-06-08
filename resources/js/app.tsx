@@ -15,6 +15,8 @@ createInertiaApp({
                 return null;
             case name === 'auth/verify-email':
                 return null;
+            case name === 'auth/account-pending':
+                return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('settings/'):

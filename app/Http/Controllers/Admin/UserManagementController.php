@@ -48,4 +48,11 @@ final class UserManagementController extends Controller
 
         return back()->with('success', 'User deleted successfully.');
     }
+
+    public function approve(User $user): RedirectResponse
+    {
+        $this->users->update($user, ['status' => 'active']);
+
+        return back()->with('success', 'User approved successfully.');
+    }
 }

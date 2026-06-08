@@ -15,33 +15,41 @@ Route::post('/verification-code/send', [EmailVerificationCodeController::class, 
 Route::post('/verification-code/verify', [EmailVerificationCodeController::class, 'verify'])->name('verification-code.verify');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Redirect /dashboard to the role-prefixed dashboard
-    Route::get('dashboard', function () {
-        $role = Auth::user()->role->value;
+    // Pending account page
+    Route::inertia('account/pending', 'auth/account-pending')->name('account.pending');
 
-        return redirect()->route("{$role}.dashboard");
-    })->name('dashboard');
+    // All routes below require approved status
+    Route::middleware('approved')->group(function () {
+        // Redirect /dashboard to the role-prefixed dashboard
+        Route::get('dashboard', function () {
+            $role = Auth::user()->role->value;
 
-    // Role-prefixed dashboards
-    Route::inertia('doctor/dashboard', 'dashboard')->name('doctor.dashboard');
-    Route::inertia('secretary/dashboard', 'dashboard')->name('secretary.dashboard');
-    Route::inertia('pharmacist/dashboard', 'dashboard')->name('pharmacist.dashboard');
-    Route::inertia('patient/dashboard', 'dashboard')->name('patient.dashboard');
+            return redirect()->route("{$role}.dashboard");
+        })->name('dashboard');
 
-    // Secretary (Admin) - User Management
-    Route::prefix('secretary')->name('secretary.')->group(function () {
-        Route::get('users', [UserManagementController::class, 'index'])->name('users.index');
-        Route::post('users', [UserManagementController::class, 'store'])->name('users.store');
-        Route::put('users/{user}', [UserManagementController::class, 'update'])->name('users.update');
-        Route::delete('users/{user}', [UserManagementController::class, 'destroy'])->name('users.destroy');
-    });
+        // Role-prefixed dashboards
+        Route::inertia('doctor/dashboard', 'dashboard')->name('doctor.dashboard');
+        Route::inertia('secretary/dashboard', 'dashboard')->name('secretary.dashboard');
+        Route::inertia('pharmacist/dashboard', 'dashboard')->name('pharmacist.dashboard');
+        Route::inertia('patient/dashboard', 'dashboard')->name('patient.dashboard');
 
-    // Doctor - User Management
-    Route::prefix('doctor')->name('doctor.')->group(function () {
-        Route::get('users', [UserManagementController::class, 'index'])->name('users.index');
-        Route::post('users', [UserManagementController::class, 'store'])->name('users.store');
-        Route::put('users/{user}', [UserManagementController::class, 'update'])->name('users.update');
-        Route::delete('users/{user}', [UserManagementController::class, 'destroy'])->name('users.destroy');
+        // Secretary (Admin) - User Management
+        Route::prefix('secretary')->name('secretary.')->group(function () {
+            Route::get('users', [UserManagementController::class, 'index'])->name('users.index');
+            Route::post('users', [UserManagementController::class, 'store'])->name('users.store');
+            Route::put('users/{user}', [UserManagementController::class, 'update'])->name('users.update');
+            Route::patch('users/{user}/approve', [UserManagementController::class, 'approve'])->name('users.approve');
+            Route::delete('users/{user}', [UserManagementController::class, 'destroy'])->name('users.destroy');
+        });
+
+        // Doctor - User Management
+        Route::prefix('doctor')->name('doctor.')->group(function () {
+            Route::get('users', [UserManagementController::class, 'index'])->name('users.index');
+            Route::post('users', [UserManagementController::class, 'store'])->name('users.store');
+            Route::put('users/{user}', [UserManagementController::class, 'update'])->name('users.update');
+            Route::patch('users/{user}/approve', [UserManagementController::class, 'approve'])->name('users.approve');
+            Route::delete('users/{user}', [UserManagementController::class, 'destroy'])->name('users.destroy');
+        });
     });
 });
 

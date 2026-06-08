@@ -8,6 +8,7 @@ import {
     Trash2,
     X,
     Users,
+    Check,
 } from 'lucide-react';
 
 type PaginatedUsers = {
@@ -123,6 +124,11 @@ export default function UserManagement({ users, filters }: Props) {
         }
     };
 
+    const handleApprove = (user: User) => {
+        const prefix = getRolePrefix();
+        router.patch(`${prefix}/users/${user.id}/approve`, {}, { preserveScroll: true });
+    };
+
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         const prefix = getRolePrefix();
@@ -140,9 +146,12 @@ export default function UserManagement({ users, filters }: Props) {
     };
 
     const statusBadge = (status: string) => {
-        return status === 'active'
-            ? 'bg-green-50 text-green-700'
-            : 'bg-red-50 text-red-700';
+        switch (status) {
+            case 'active': return 'bg-green-50 text-green-700';
+            case 'inactive': return 'bg-red-50 text-red-700';
+            case 'pending': return 'bg-amber-50 text-amber-700';
+            default: return 'bg-gray-50 text-gray-700';
+        }
     };
 
     return (
@@ -227,6 +236,15 @@ export default function UserManagement({ users, filters }: Props) {
                                         </td>
                                         <td className="whitespace-nowrap px-4 py-3">
                                             <div className="flex items-center gap-1">
+                                                {(user.status as string) === 'pending' && (
+                                                    <button
+                                                        onClick={() => handleApprove(user)}
+                                                        className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-green-50 hover:text-green-600 dark:hover:bg-green-900/20"
+                                                        title="Approve"
+                                                    >
+                                                        <Check className="h-4 w-4" />
+                                                    </button>
+                                                )}
                                                 <button
                                                     onClick={() => openEdit(user)}
                                                     className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-[#0787f7] dark:hover:bg-neutral-700"
@@ -397,6 +415,7 @@ export default function UserManagement({ users, filters }: Props) {
                                         className="h-9 w-full rounded-lg border border-neutral-200 px-3 text-sm focus:border-[#0787f7] focus:ring-1 focus:ring-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100"
                                     >
                                         <option value="active">Active</option>
+                                        <option value="pending">Pending</option>
                                         <option value="inactive">Inactive</option>
                                     </select>
                                     {form.errors.status && <p className="mt-1 text-xs text-red-500">{form.errors.status}</p>}

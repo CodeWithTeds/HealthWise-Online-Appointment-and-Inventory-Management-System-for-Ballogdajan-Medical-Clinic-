@@ -50,6 +50,7 @@ class CreateNewUser implements CreatesNewUsers
             'contact_person' => $input['contact_person'] ?? null,
             'contact_number' => $input['contact_number'] ?? null,
             'blood_type' => $input['blood_type'] ?? null,
+            'status' => 'pending',
             'email_verified_at' => null,
         ]);
     }
