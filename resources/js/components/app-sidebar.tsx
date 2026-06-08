@@ -33,6 +33,11 @@ const doctorNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
+        title: 'User Management',
+        href: '/doctor/users',
+        icon: Users,
+    },
+    {
         title: 'Appointment Scheduling',
         href: '/doctor/appointment-scheduling',
         icon: Calendar,

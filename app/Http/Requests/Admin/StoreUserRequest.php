@@ -13,7 +13,7 @@ final class StoreUserRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->isSecretary() ?? false;
+        return $this->user()?->isSecretary() || $this->user()?->isDoctor();
     }
 
     /**
@@ -30,6 +30,10 @@ final class StoreUserRequest extends FormRequest
             'gender' => ['nullable', 'string', Rule::in(['male', 'female'])],
             'birthdate' => ['nullable', 'date', 'before:today'],
             'address' => ['nullable', 'string', 'max:255'],
+            'contact_person' => ['nullable', 'string', 'max:255'],
+            'contact_number' => ['nullable', 'string', 'max:20'],
+            'blood_type' => ['nullable', 'string', Rule::in(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])],
+            'civil_status' => ['nullable', 'string', Rule::in(['single', 'married', 'widowed', 'separated'])],
             'status' => ['nullable', 'string', Rule::in(['active', 'inactive'])],
         ];
     }

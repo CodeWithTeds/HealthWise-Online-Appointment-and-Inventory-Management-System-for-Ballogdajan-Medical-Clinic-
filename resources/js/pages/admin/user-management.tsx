@@ -32,6 +32,10 @@ type UserFormData = {
     gender: string;
     birthdate: string;
     address: string;
+    contact_person: string;
+    contact_number: string;
+    blood_type: string;
+    civil_status: string;
     status: string;
     password: string;
     password_confirmation: string;
@@ -45,10 +49,21 @@ const emptyForm: UserFormData = {
     gender: '',
     birthdate: '',
     address: '',
+    contact_person: '',
+    contact_number: '',
+    blood_type: '',
+    civil_status: '',
     status: 'active',
     password: '',
     password_confirmation: '',
 };
+
+function getRolePrefix(): string {
+    const path = window.location.pathname;
+    if (path.startsWith('/doctor')) return '/doctor';
+    if (path.startsWith('/secretary')) return '/secretary';
+    return '/secretary';
+}
 
 export default function UserManagement({ users, filters }: Props) {
     const [showModal, setShowModal] = useState(false);
@@ -74,6 +89,10 @@ export default function UserManagement({ users, filters }: Props) {
             gender: (user.gender as string) || '',
             birthdate: (user.birthdate as string) || '',
             address: (user.address as string) || '',
+            contact_person: (user.contact_person as string) || '',
+            contact_number: (user.contact_number as string) || '',
+            blood_type: (user.blood_type as string) || '',
+            civil_status: (user.civil_status as string) || '',
             status: (user.status as string) || 'active',
             password: '',
             password_confirmation: '',
@@ -83,13 +102,14 @@ export default function UserManagement({ users, filters }: Props) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        const prefix = getRolePrefix();
         if (editingUser) {
-            form.put(`/secretary/users/${editingUser.id}`, {
+            form.put(`${prefix}/users/${editingUser.id}`, {
                 onSuccess: () => setShowModal(false),
                 preserveScroll: true,
             });
         } else {
-            form.post('/secretary/users', {
+            form.post(`${prefix}/users`, {
                 onSuccess: () => setShowModal(false),
                 preserveScroll: true,
             });
@@ -98,13 +118,15 @@ export default function UserManagement({ users, filters }: Props) {
 
     const handleDelete = (user: User) => {
         if (confirm(`Are you sure you want to delete ${user.name}?`)) {
-            router.delete(`/secretary/users/${user.id}`, { preserveScroll: true });
+            const prefix = getRolePrefix();
+            router.delete(`${prefix}/users/${user.id}`, { preserveScroll: true });
         }
     };
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        router.get('/secretary/users', { search }, { preserveState: true });
+        const prefix = getRolePrefix();
+        router.get(`${prefix}/users`, { search }, { preserveState: true });
     };
 
     const roleBadge = (role: string) => {
@@ -172,6 +194,10 @@ export default function UserManagement({ users, filters }: Props) {
                                     <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Gender</th>
                                     <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Birthdate</th>
                                     <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Address</th>
+                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Contact Person</th>
+                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Contact #</th>
+                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Blood Type</th>
+                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Civil Status</th>
                                     <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Status</th>
                                     <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Actions</th>
                                 </tr>
@@ -190,6 +216,10 @@ export default function UserManagement({ users, filters }: Props) {
                                         <td className="whitespace-nowrap px-4 py-3 capitalize text-neutral-600 dark:text-neutral-300">{(user.gender as string) || '—'}</td>
                                         <td className="whitespace-nowrap px-4 py-3 text-neutral-600 dark:text-neutral-300">{(user.birthdate as string) || '—'}</td>
                                         <td className="max-w-[180px] truncate px-4 py-3 text-neutral-600 dark:text-neutral-300">{(user.address as string) || '—'}</td>
+                                        <td className="whitespace-nowrap px-4 py-3 text-neutral-600 dark:text-neutral-300">{(user.contact_person as string) || '—'}</td>
+                                        <td className="whitespace-nowrap px-4 py-3 text-neutral-600 dark:text-neutral-300">{(user.contact_number as string) || '—'}</td>
+                                        <td className="whitespace-nowrap px-4 py-3 text-neutral-600 dark:text-neutral-300">{(user.blood_type as string) || '—'}</td>
+                                        <td className="whitespace-nowrap px-4 py-3 capitalize text-neutral-600 dark:text-neutral-300">{(user.civil_status as string) || '—'}</td>
                                         <td className="whitespace-nowrap px-4 py-3">
                                             <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${statusBadge((user.status as string) || 'active')}`}>
                                                 {(user.status as string) || 'active'}
@@ -217,7 +247,7 @@ export default function UserManagement({ users, filters }: Props) {
                                 ))}
                                 {users.data.length === 0 && (
                                     <tr>
-                                        <td colSpan={9} className="px-4 py-8 text-center text-neutral-400">
+                                        <td colSpan={13} className="px-4 py-8 text-center text-neutral-400">
                                             No users found.
                                         </td>
                                     </tr>
@@ -370,6 +400,68 @@ export default function UserManagement({ users, filters }: Props) {
                                         <option value="inactive">Inactive</option>
                                     </select>
                                     {form.errors.status && <p className="mt-1 text-xs text-red-500">{form.errors.status}</p>}
+                                </div>
+                            </div>
+
+                            <div className="grid gap-4 sm:grid-cols-2">
+                                <div>
+                                    <label className="mb-1 block text-xs font-semibold text-neutral-600 dark:text-neutral-300">Contact Person</label>
+                                    <input
+                                        type="text"
+                                        value={form.data.contact_person}
+                                        onChange={(e) => form.setData('contact_person', e.target.value)}
+                                        className="h-9 w-full rounded-lg border border-neutral-200 px-3 text-sm focus:border-[#0787f7] focus:ring-1 focus:ring-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100"
+                                        placeholder="Emergency contact name"
+                                    />
+                                    {form.errors.contact_person && <p className="mt-1 text-xs text-red-500">{form.errors.contact_person}</p>}
+                                </div>
+                                <div>
+                                    <label className="mb-1 block text-xs font-semibold text-neutral-600 dark:text-neutral-300">Contact Number</label>
+                                    <input
+                                        type="text"
+                                        value={form.data.contact_number}
+                                        onChange={(e) => form.setData('contact_number', e.target.value)}
+                                        className="h-9 w-full rounded-lg border border-neutral-200 px-3 text-sm focus:border-[#0787f7] focus:ring-1 focus:ring-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100"
+                                        placeholder="09XX-XXX-XXXX"
+                                    />
+                                    {form.errors.contact_number && <p className="mt-1 text-xs text-red-500">{form.errors.contact_number}</p>}
+                                </div>
+                            </div>
+
+                            <div className="grid gap-4 sm:grid-cols-2">
+                                <div>
+                                    <label className="mb-1 block text-xs font-semibold text-neutral-600 dark:text-neutral-300">Blood Type</label>
+                                    <select
+                                        value={form.data.blood_type}
+                                        onChange={(e) => form.setData('blood_type', e.target.value)}
+                                        className="h-9 w-full rounded-lg border border-neutral-200 px-3 text-sm focus:border-[#0787f7] focus:ring-1 focus:ring-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100"
+                                    >
+                                        <option value="">Select blood type</option>
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                    </select>
+                                    {form.errors.blood_type && <p className="mt-1 text-xs text-red-500">{form.errors.blood_type}</p>}
+                                </div>
+                                <div>
+                                    <label className="mb-1 block text-xs font-semibold text-neutral-600 dark:text-neutral-300">Civil Status</label>
+                                    <select
+                                        value={form.data.civil_status}
+                                        onChange={(e) => form.setData('civil_status', e.target.value)}
+                                        className="h-9 w-full rounded-lg border border-neutral-200 px-3 text-sm focus:border-[#0787f7] focus:ring-1 focus:ring-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100"
+                                    >
+                                        <option value="">Select civil status</option>
+                                        <option value="single">Single</option>
+                                        <option value="married">Married</option>
+                                        <option value="widowed">Widowed</option>
+                                        <option value="separated">Separated</option>
+                                    </select>
+                                    {form.errors.civil_status && <p className="mt-1 text-xs text-red-500">{form.errors.civil_status}</p>}
                                 </div>
                             </div>
 
