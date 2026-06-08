@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\Auth\EmailVerificationCodeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -8,6 +9,10 @@ use Laravel\Fortify\Features;
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
 ])->name('home');
+
+// Email verification code (public, for registration)
+Route::post('/verification-code/send', [EmailVerificationCodeController::class, 'send'])->name('verification-code.send');
+Route::post('/verification-code/verify', [EmailVerificationCodeController::class, 'verify'])->name('verification-code.verify');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Redirect /dashboard to the role-prefixed dashboard
@@ -25,6 +30,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Secretary (Admin) - User Management
     Route::prefix('secretary')->name('secretary.')->group(function () {
+        Route::get('users', [UserManagementController::class, 'index'])->name('users.index');
+        Route::post('users', [UserManagementController::class, 'store'])->name('users.store');
+        Route::put('users/{user}', [UserManagementController::class, 'update'])->name('users.update');
+        Route::delete('users/{user}', [UserManagementController::class, 'destroy'])->name('users.destroy');
+    });
+
+    // Doctor - User Management
+    Route::prefix('doctor')->name('doctor.')->group(function () {
         Route::get('users', [UserManagementController::class, 'index'])->name('users.index');
         Route::post('users', [UserManagementController::class, 'store'])->name('users.store');
         Route::put('users/{user}', [UserManagementController::class, 'update'])->name('users.update');
