@@ -1,5 +1,14 @@
-import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import {
+    LayoutGrid,
+    Calendar,
+    ClipboardList,
+    Package,
+    AlertTriangle,
+    Users,
+    BarChart3,
+    Bell,
+} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -15,29 +24,200 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
+import type { User } from '@/types/auth';
 
-const mainNavItems: NavItem[] = [
+const doctorNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: dashboard(),
+        href: '/doctor/dashboard',
         icon: LayoutGrid,
     },
+    {
+        title: 'Appointment Scheduling',
+        href: '/doctor/appointment-scheduling',
+        icon: Calendar,
+    },
+    {
+        title: 'Appointment Management',
+        href: '/doctor/appointment-management',
+        icon: Users,
+    },
+    {
+        title: 'Patient Record Management',
+        href: '/doctor/patient-records',
+        icon: ClipboardList,
+    },
+    {
+        title: 'Inventory Management',
+        href: '/doctor/inventory',
+        icon: Package,
+    },
+    {
+        title: 'Inventory Alerts',
+        href: '/doctor/inventory-alerts',
+        icon: AlertTriangle,
+    },
+    {
+        title: 'Report Generation',
+        href: '/doctor/reports',
+        icon: BarChart3,
+    },
+    {
+        title: 'Notifications',
+        href: '/doctor/notifications',
+        icon: Bell,
+    },
 ];
 
-const footerNavItems: NavItem[] = [
+const secretaryNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: FolderGit2,
+        title: 'Dashboard',
+        href: '/secretary/dashboard',
+        icon: LayoutGrid,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
+        title: 'Appointment Scheduling',
+        href: '/secretary/appointment-scheduling',
+        icon: Calendar,
+    },
+    {
+        title: 'Appointment Management',
+        href: '/secretary/appointment-management',
+        icon: Users,
+    },
+    {
+        title: 'Patient Record Management',
+        href: '/secretary/patient-records',
+        icon: ClipboardList,
+    },
+    {
+        title: 'Inventory Management',
+        href: '/secretary/inventory',
+        icon: Package,
+    },
+    {
+        title: 'Inventory Alerts',
+        href: '/secretary/inventory-alerts',
+        icon: AlertTriangle,
+    },
+    {
+        title: 'Report Generation',
+        href: '/secretary/reports',
+        icon: BarChart3,
+    },
+    {
+        title: 'Notifications',
+        href: '/secretary/notifications',
+        icon: Bell,
     },
 ];
+
+const pharmacistNavItems: NavItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/pharmacist/dashboard',
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Appointment Scheduling',
+        href: '/pharmacist/appointment-scheduling',
+        icon: Calendar,
+    },
+    {
+        title: 'Appointment Management',
+        href: '/pharmacist/appointment-management',
+        icon: Users,
+    },
+    {
+        title: 'Patient Record Management',
+        href: '/pharmacist/patient-records',
+        icon: ClipboardList,
+    },
+    {
+        title: 'Inventory Management',
+        href: '/pharmacist/inventory',
+        icon: Package,
+    },
+    {
+        title: 'Inventory Alerts',
+        href: '/pharmacist/inventory-alerts',
+        icon: AlertTriangle,
+    },
+    {
+        title: 'Report Generation',
+        href: '/pharmacist/reports',
+        icon: BarChart3,
+    },
+    {
+        title: 'Notifications',
+        href: '/pharmacist/notifications',
+        icon: Bell,
+    },
+];
+
+const patientNavItems: NavItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/patient/dashboard',
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Appointment Scheduling',
+        href: '/patient/appointment-scheduling',
+        icon: Calendar,
+    },
+    {
+        title: 'Appointment Management',
+        href: '/patient/appointment-management',
+        icon: Users,
+    },
+    {
+        title: 'Patient Record Management',
+        href: '/patient/patient-records',
+        icon: ClipboardList,
+    },
+    {
+        title: 'Inventory Management',
+        href: '/patient/inventory',
+        icon: Package,
+    },
+    {
+        title: 'Inventory Alerts',
+        href: '/patient/inventory-alerts',
+        icon: AlertTriangle,
+    },
+    {
+        title: 'Report Generation',
+        href: '/patient/reports',
+        icon: BarChart3,
+    },
+    {
+        title: 'Notifications',
+        href: '/patient/notifications',
+        icon: Bell,
+    },
+];
+
+function getNavItemsByRole(role: string | undefined): NavItem[] {
+    switch (role) {
+        case 'doctor':
+            return doctorNavItems;
+        case 'secretary':
+            return secretaryNavItems;
+        case 'pharmacist':
+            return pharmacistNavItems;
+        case 'patient':
+            return patientNavItems;
+        default:
+            return [{ title: 'Dashboard', href: dashboard(), icon: LayoutGrid }];
+    }
+}
 
 export function AppSidebar() {
+    const { auth } = usePage().props;
+    const user = auth.user as User | null;
+    const navItems = getNavItemsByRole(user?.role);
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -53,11 +233,11 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={navItems} />
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
+                <NavFooter items={[]} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>
