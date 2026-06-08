@@ -27,6 +27,14 @@ class CreateNewUser implements CreatesNewUsers
             ...$this->profileRules(),
             'password' => $this->passwordRules(),
             'role' => ['required', Rule::enum(UserRole::class)],
+            'phone' => ['required', 'string', 'max:20'],
+            'gender' => ['required', 'string', Rule::in(['male', 'female'])],
+            'birthdate' => ['required', 'date', 'before:today'],
+            'address' => ['required', 'string', 'max:255'],
+            'civil_status' => ['required', 'string', Rule::in(['single', 'married', 'widowed', 'separated'])],
+            'contact_person' => ['nullable', 'string', 'max:255'],
+            'contact_number' => ['nullable', 'string', 'max:20'],
+            'blood_type' => ['nullable', 'string', Rule::in(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])],
         ])->validate();
 
         return User::create([
@@ -34,6 +42,14 @@ class CreateNewUser implements CreatesNewUsers
             'email' => $input['email'],
             'password' => $input['password'],
             'role' => $input['role'],
+            'phone' => $input['phone'],
+            'gender' => $input['gender'],
+            'birthdate' => $input['birthdate'],
+            'address' => $input['address'],
+            'civil_status' => $input['civil_status'],
+            'contact_person' => $input['contact_person'] ?? null,
+            'contact_number' => $input['contact_number'] ?? null,
+            'blood_type' => $input['blood_type'] ?? null,
             'email_verified_at' => null,
         ]);
     }
