@@ -76,6 +76,11 @@ const secretaryNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
+        title: 'User Management',
+        href: '/secretary/users',
+        icon: Users,
+    },
+    {
         title: 'Appointment Scheduling',
         href: '/secretary/appointment-scheduling',
         icon: Calendar,
