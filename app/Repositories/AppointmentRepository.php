@@ -32,7 +32,7 @@ final class AppointmentRepository implements AppointmentRepositoryInterface
         $date = $date ?? now()->toDateString();
 
         return Appointment::query()
-            ->with('user:id,name,phone,priority_type')
+            ->with('user:id,name,phone')
             ->where('date', $date)
             ->whereIn('status', ['pending', 'confirmed', 'not_arrived'])
             ->orderByRaw("FIELD(priority_type, 'senior', 'pwd', 'pregnant', 'regular')")
