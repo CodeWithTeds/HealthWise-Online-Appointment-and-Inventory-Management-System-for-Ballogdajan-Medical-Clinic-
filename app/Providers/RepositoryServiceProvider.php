@@ -6,6 +6,8 @@ use App\Repositories\TaskRepository;
 use App\Repositories\TaskRepositoryInterface;
 use App\Repositories\UserRepository;
 use App\Repositories\UserRepositoryInterface;
+use App\Repositories\ScheduleRepository;
+use App\Repositories\ScheduleRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -18,6 +20,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->singleton(TaskRepositoryInterface::class, TaskRepository::class);
         $this->app->singleton(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->singleton(ScheduleRepositoryInterface::class, ScheduleRepository::class);
     }
 
     /**

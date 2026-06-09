@@ -38,22 +38,26 @@ const doctorNavItems: NavItem[] = [
         icon: Users,
     },
     {
-        title: 'Appointment Scheduling',
+        title: 'Scheduling',
         href: '/doctor/appointment-scheduling',
         icon: Calendar,
+        children: [
+            { title: 'Calendar', href: '/doctor/appointment-scheduling?view=calendar', icon: Calendar },
+            { title: 'Schedules', href: '/doctor/appointment-scheduling?view=schedules', icon: ClipboardList },
+        ],
     },
     {
-        title: 'Appointment Management',
+        title: 'Appointments',
         href: '/doctor/appointment-management',
         icon: Users,
     },
     {
-        title: 'Patient Record Management',
+        title: 'Patient Records',
         href: '/doctor/patient-records',
         icon: ClipboardList,
     },
     {
-        title: 'Inventory Management',
+        title: 'Inventory',
         href: '/doctor/inventory',
         icon: Package,
     },
@@ -63,7 +67,7 @@ const doctorNavItems: NavItem[] = [
         icon: AlertTriangle,
     },
     {
-        title: 'Report Generation',
+        title: 'Reports',
         href: '/doctor/reports',
         icon: BarChart3,
     },
@@ -86,22 +90,26 @@ const secretaryNavItems: NavItem[] = [
         icon: Users,
     },
     {
-        title: 'Appointment Scheduling',
+        title: 'Scheduling',
         href: '/secretary/appointment-scheduling',
         icon: Calendar,
+        children: [
+            { title: 'Calendar', href: '/secretary/appointment-scheduling?view=calendar', icon: Calendar },
+            { title: 'Schedules', href: '/secretary/appointment-scheduling?view=schedules', icon: ClipboardList },
+        ],
     },
     {
-        title: 'Appointment Management',
+        title: 'Appointments',
         href: '/secretary/appointment-management',
         icon: Users,
     },
     {
-        title: 'Patient Record Management',
+        title: 'Patient Records',
         href: '/secretary/patient-records',
         icon: ClipboardList,
     },
     {
-        title: 'Inventory Management',
+        title: 'Inventory',
         href: '/secretary/inventory',
         icon: Package,
     },
@@ -111,7 +119,7 @@ const secretaryNavItems: NavItem[] = [
         icon: AlertTriangle,
     },
     {
-        title: 'Report Generation',
+        title: 'Reports',
         href: '/secretary/reports',
         icon: BarChart3,
     },
@@ -129,22 +137,22 @@ const pharmacistNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Appointment Scheduling',
+        title: 'Scheduling',
         href: '/pharmacist/appointment-scheduling',
         icon: Calendar,
     },
     {
-        title: 'Appointment Management',
+        title: 'Appointments',
         href: '/pharmacist/appointment-management',
         icon: Users,
     },
     {
-        title: 'Patient Record Management',
+        title: 'Patient Records',
         href: '/pharmacist/patient-records',
         icon: ClipboardList,
     },
     {
-        title: 'Inventory Management',
+        title: 'Inventory',
         href: '/pharmacist/inventory',
         icon: Package,
     },
@@ -154,7 +162,7 @@ const pharmacistNavItems: NavItem[] = [
         icon: AlertTriangle,
     },
     {
-        title: 'Report Generation',
+        title: 'Reports',
         href: '/pharmacist/reports',
         icon: BarChart3,
     },
@@ -172,22 +180,22 @@ const patientNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Appointment Scheduling',
+        title: 'Scheduling',
         href: '/patient/appointment-scheduling',
         icon: Calendar,
     },
     {
-        title: 'Appointment Management',
+        title: 'Appointments',
         href: '/patient/appointment-management',
         icon: Users,
     },
     {
-        title: 'Patient Record Management',
+        title: 'Patient Records',
         href: '/patient/patient-records',
         icon: ClipboardList,
     },
     {
-        title: 'Inventory Management',
+        title: 'Inventory',
         href: '/patient/inventory',
         icon: Package,
     },
@@ -197,7 +205,7 @@ const patientNavItems: NavItem[] = [
         icon: AlertTriangle,
     },
     {
-        title: 'Report Generation',
+        title: 'Reports',
         href: '/patient/reports',
         icon: BarChart3,
     },
