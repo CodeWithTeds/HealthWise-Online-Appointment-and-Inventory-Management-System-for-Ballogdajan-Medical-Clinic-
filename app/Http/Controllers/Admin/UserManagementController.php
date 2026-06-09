@@ -23,7 +23,7 @@ final class UserManagementController extends Controller
     public function index(Request $request): Response
     {
         return Inertia::render('admin/user-management', [
-            'users' => $this->users->paginate(15, $request->input('search')),
+            'users' => $this->users->paginate(35, $request->input('search')),
             'filters' => $request->only('search'),
         ]);
     }

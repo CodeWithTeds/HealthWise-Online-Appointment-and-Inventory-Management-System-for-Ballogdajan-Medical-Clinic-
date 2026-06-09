@@ -193,71 +193,71 @@ export default function UserManagement({ users, filters }: Props) {
                 {/* Table */}
                 <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
                     <div className="overflow-x-auto">
-                        <table className="w-full text-left text-sm">
+                        <table className="w-full text-left text-xs">
                             <thead className="border-b border-neutral-100 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800">
                                 <tr>
-                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Name</th>
-                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Email</th>
-                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Role</th>
-                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Phone</th>
-                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Gender</th>
-                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Birthdate</th>
-                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Address</th>
-                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Contact Person</th>
-                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Contact #</th>
-                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Blood Type</th>
-                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Civil Status</th>
-                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Status</th>
-                                    <th className="px-4 py-3 font-semibold text-neutral-600 dark:text-neutral-300">Actions</th>
+                                    <th className="px-2 py-2 font-semibold text-neutral-600 dark:text-neutral-300">Name</th>
+                                    <th className="px-2 py-2 font-semibold text-neutral-600 dark:text-neutral-300">Email</th>
+                                    <th className="px-2 py-2 font-semibold text-neutral-600 dark:text-neutral-300">Role</th>
+                                    <th className="px-2 py-2 font-semibold text-neutral-600 dark:text-neutral-300">Phone</th>
+                                    <th className="px-2 py-2 font-semibold text-neutral-600 dark:text-neutral-300">Gender</th>
+                                    <th className="px-2 py-2 font-semibold text-neutral-600 dark:text-neutral-300">Birthdate</th>
+                                    <th className="px-2 py-2 font-semibold text-neutral-600 dark:text-neutral-300">Address</th>
+                                    <th className="px-2 py-2 font-semibold text-neutral-600 dark:text-neutral-300">Contact Person</th>
+                                    <th className="px-2 py-2 font-semibold text-neutral-600 dark:text-neutral-300">Contact #</th>
+                                    <th className="px-2 py-2 font-semibold text-neutral-600 dark:text-neutral-300">Blood</th>
+                                    <th className="px-2 py-2 font-semibold text-neutral-600 dark:text-neutral-300">Civil</th>
+                                    <th className="px-2 py-2 font-semibold text-neutral-600 dark:text-neutral-300">Status</th>
+                                    <th className="px-2 py-2 font-semibold text-neutral-600 dark:text-neutral-300">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-neutral-100 dark:divide-neutral-700">
                                 {users.data.map((user) => (
                                     <tr key={user.id} className="transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
-                                        <td className="whitespace-nowrap px-4 py-3 font-medium text-neutral-900 dark:text-neutral-100">{user.name}</td>
-                                        <td className="whitespace-nowrap px-4 py-3 text-neutral-600 dark:text-neutral-300">{user.email}</td>
-                                        <td className="whitespace-nowrap px-4 py-3">
-                                            <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${roleBadge(user.role)}`}>
+                                        <td className="whitespace-nowrap px-2 py-2 font-medium text-neutral-900 dark:text-neutral-100">{user.name}</td>
+                                        <td className="max-w-[140px] truncate px-2 py-2 text-neutral-600 dark:text-neutral-300">{user.email}</td>
+                                        <td className="whitespace-nowrap px-2 py-2">
+                                            <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${roleBadge(user.role)}`}>
                                                 {user.role}
                                             </span>
                                         </td>
-                                        <td className="whitespace-nowrap px-4 py-3 text-neutral-600 dark:text-neutral-300">{(user.phone as string) || '—'}</td>
-                                        <td className="whitespace-nowrap px-4 py-3 capitalize text-neutral-600 dark:text-neutral-300">{(user.gender as string) || '—'}</td>
-                                        <td className="whitespace-nowrap px-4 py-3 text-neutral-600 dark:text-neutral-300">{(user.birthdate as string) || '—'}</td>
-                                        <td className="max-w-[180px] truncate px-4 py-3 text-neutral-600 dark:text-neutral-300">{(user.address as string) || '—'}</td>
-                                        <td className="whitespace-nowrap px-4 py-3 text-neutral-600 dark:text-neutral-300">{(user.contact_person as string) || '—'}</td>
-                                        <td className="whitespace-nowrap px-4 py-3 text-neutral-600 dark:text-neutral-300">{(user.contact_number as string) || '—'}</td>
-                                        <td className="whitespace-nowrap px-4 py-3 text-neutral-600 dark:text-neutral-300">{(user.blood_type as string) || '—'}</td>
-                                        <td className="whitespace-nowrap px-4 py-3 capitalize text-neutral-600 dark:text-neutral-300">{(user.civil_status as string) || '—'}</td>
-                                        <td className="whitespace-nowrap px-4 py-3">
-                                            <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${statusBadge((user.status as string) || 'active')}`}>
+                                        <td className="whitespace-nowrap px-2 py-2 text-neutral-600 dark:text-neutral-300">{(user.phone as string) || '—'}</td>
+                                        <td className="whitespace-nowrap px-2 py-2 capitalize text-neutral-600 dark:text-neutral-300">{(user.gender as string) || '—'}</td>
+                                        <td className="whitespace-nowrap px-2 py-2 text-neutral-600 dark:text-neutral-300">{(user.birthdate as string) || '—'}</td>
+                                        <td className="max-w-[120px] truncate px-2 py-2 text-neutral-600 dark:text-neutral-300">{(user.address as string) || '—'}</td>
+                                        <td className="max-w-[100px] truncate px-2 py-2 text-neutral-600 dark:text-neutral-300">{(user.contact_person as string) || '—'}</td>
+                                        <td className="whitespace-nowrap px-2 py-2 text-neutral-600 dark:text-neutral-300">{(user.contact_number as string) || '—'}</td>
+                                        <td className="whitespace-nowrap px-2 py-2 text-neutral-600 dark:text-neutral-300">{(user.blood_type as string) || '—'}</td>
+                                        <td className="whitespace-nowrap px-2 py-2 capitalize text-neutral-600 dark:text-neutral-300">{(user.civil_status as string) || '—'}</td>
+                                        <td className="whitespace-nowrap px-2 py-2">
+                                            <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${statusBadge((user.status as string) || 'active')}`}>
                                                 {(user.status as string) || 'active'}
                                             </span>
                                         </td>
-                                        <td className="whitespace-nowrap px-4 py-3">
-                                            <div className="flex items-center gap-1">
+                                        <td className="whitespace-nowrap px-2 py-2">
+                                            <div className="flex items-center gap-0.5">
                                                 {(user.status as string) === 'pending' && (
                                                     <button
                                                         onClick={() => handleApprove(user)}
-                                                        className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-green-50 hover:text-green-600 dark:hover:bg-green-900/20"
+                                                        className="rounded p-1 text-neutral-400 transition-colors hover:bg-green-50 hover:text-green-600 dark:hover:bg-green-900/20"
                                                         title="Approve"
                                                     >
-                                                        <Check className="h-4 w-4" />
+                                                        <Check className="h-3.5 w-3.5" />
                                                     </button>
                                                 )}
                                                 <button
                                                     onClick={() => openEdit(user)}
-                                                    className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-[#0787f7] dark:hover:bg-neutral-700"
+                                                    className="rounded p-1 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-[#0787f7] dark:hover:bg-neutral-700"
                                                     title="Edit"
                                                 >
-                                                    <Pencil className="h-4 w-4" />
+                                                    <Pencil className="h-3.5 w-3.5" />
                                                 </button>
                                                 <button
                                                     onClick={() => handleDelete(user)}
-                                                    className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20"
+                                                    className="rounded p-1 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20"
                                                     title="Delete"
                                                 >
-                                                    <Trash2 className="h-4 w-4" />
+                                                    <Trash2 className="h-3.5 w-3.5" />
                                                 </button>
                                             </div>
                                         </td>
