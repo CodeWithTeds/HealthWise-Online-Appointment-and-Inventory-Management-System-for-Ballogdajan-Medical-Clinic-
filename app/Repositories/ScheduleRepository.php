@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\Schedule;
-use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -36,9 +35,12 @@ final class ScheduleRepository implements ScheduleRepositoryInterface
             Schedule::updateOrCreate(
                 ['date' => $date->toDateString()],
                 [
-                    'start_time' => $data['start_time'],
-                    'end_time' => $data['end_time'],
-                    'slots' => $data['slots'],
+                    'am_start' => '08:00',
+                    'am_end' => '12:00',
+                    'am_slots' => $data['am_slots'],
+                    'pm_start' => '13:00',
+                    'pm_end' => '17:00',
+                    'pm_slots' => $data['pm_slots'],
                     'status' => 'available',
                     'notes' => $data['notes'] ?? null,
                 ]

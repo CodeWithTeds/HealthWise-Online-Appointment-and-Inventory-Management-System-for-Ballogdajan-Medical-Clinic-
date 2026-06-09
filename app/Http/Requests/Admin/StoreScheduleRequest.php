@@ -16,11 +16,10 @@ final class StoreScheduleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date_from' => ['required', 'date', 'after_or_equal:today'],
+            'date_from' => ['required', 'date'],
             'date_to' => ['required', 'date', 'after_or_equal:date_from'],
-            'start_time' => ['required', 'date_format:H:i'],
-            'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
-            'slots' => ['required', 'integer', 'min:1', 'max:100'],
+            'am_slots' => ['required', 'integer', 'min:1', 'max:100'],
+            'pm_slots' => ['required', 'integer', 'min:1', 'max:100'],
             'notes' => ['nullable', 'string', 'max:500'],
         ];
     }

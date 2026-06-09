@@ -16,9 +16,8 @@ final class UpdateScheduleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'start_time' => ['required', 'date_format:H:i'],
-            'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
-            'slots' => ['required', 'integer', 'min:1', 'max:100'],
+            'am_slots' => ['required', 'integer', 'min:1', 'max:100'],
+            'pm_slots' => ['required', 'integer', 'min:1', 'max:100'],
             'status' => ['required', 'string', 'in:available,full,closed'],
             'notes' => ['nullable', 'string', 'max:500'],
         ];
