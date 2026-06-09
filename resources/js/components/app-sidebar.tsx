@@ -50,6 +50,10 @@ const doctorNavItems: NavItem[] = [
         title: 'Appointments',
         href: '/doctor/appointment-management',
         icon: Users,
+        children: [
+            { title: 'List', href: '/doctor/appointment-management?view=list', icon: ClipboardList },
+            { title: 'Priority Queue', href: '/doctor/appointment-management?view=priority', icon: Users },
+        ],
     },
     {
         title: 'Patient Records',
@@ -102,6 +106,10 @@ const secretaryNavItems: NavItem[] = [
         title: 'Appointments',
         href: '/secretary/appointment-management',
         icon: Users,
+        children: [
+            { title: 'List', href: '/secretary/appointment-management?view=list', icon: ClipboardList },
+            { title: 'Priority Queue', href: '/secretary/appointment-management?view=priority', icon: Users },
+        ],
     },
     {
         title: 'Patient Records',
@@ -180,34 +188,9 @@ const patientNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Scheduling',
-        href: '/patient/appointment-scheduling',
+        title: 'Book Appointment',
+        href: '/patient/book-appointment',
         icon: Calendar,
-    },
-    {
-        title: 'Appointments',
-        href: '/patient/appointment-management',
-        icon: Users,
-    },
-    {
-        title: 'Patient Records',
-        href: '/patient/patient-records',
-        icon: ClipboardList,
-    },
-    {
-        title: 'Inventory',
-        href: '/patient/inventory',
-        icon: Package,
-    },
-    {
-        title: 'Inventory Alerts',
-        href: '/patient/inventory-alerts',
-        icon: AlertTriangle,
-    },
-    {
-        title: 'Reports',
-        href: '/patient/reports',
-        icon: BarChart3,
     },
     {
         title: 'Notifications',

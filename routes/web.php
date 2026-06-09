@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Admin\ScheduleController;
+use App\Http\Controllers\Admin\AppointmentManagementController;
 use App\Http\Controllers\Auth\EmailVerificationCodeController;
+use App\Http\Controllers\Patient\AppointmentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -45,9 +47,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('appointment-scheduling', [ScheduleController::class, 'index'])->name('schedules.index');
             Route::post('appointment-scheduling', [ScheduleController::class, 'store'])->name('schedules.store');
             Route::put('appointment-scheduling/{schedule}', [ScheduleController::class, 'update'])->name('schedules.update');
+
+            Route::get('appointment-management', [AppointmentManagementController::class, 'index'])->name('appointments.index');
+            Route::patch('appointments/{appointment}/status', [AppointmentManagementController::class, 'updateStatus'])->name('appointments.status');
         });
 
-        // Doctor - User Management & Schedules
+        // Doctor - User Management, Schedules & Appointments
         Route::prefix('doctor')->name('doctor.')->group(function () {
             Route::get('users', [UserManagementController::class, 'index'])->name('users.index');
             Route::post('users', [UserManagementController::class, 'store'])->name('users.store');
@@ -58,6 +63,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('appointment-scheduling', [ScheduleController::class, 'index'])->name('schedules.index');
             Route::post('appointment-scheduling', [ScheduleController::class, 'store'])->name('schedules.store');
             Route::put('appointment-scheduling/{schedule}', [ScheduleController::class, 'update'])->name('schedules.update');
+
+            Route::get('appointment-management', [AppointmentManagementController::class, 'index'])->name('appointments.index');
+            Route::patch('appointments/{appointment}/status', [AppointmentManagementController::class, 'updateStatus'])->name('appointments.status');
+        });
+
+        // Patient - Book Appointment
+        Route::prefix('patient')->name('patient.')->group(function () {
+            Route::get('book-appointment', [AppointmentController::class, 'index'])->name('appointments.index');
+            Route::post('book-appointment', [AppointmentController::class, 'store'])->name('appointments.store');
         });
     });
 });
