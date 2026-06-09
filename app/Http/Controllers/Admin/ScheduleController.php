@@ -23,8 +23,9 @@ final class ScheduleController extends Controller
     public function index(Request $request): Response
     {
         return Inertia::render('admin/appointment-scheduling', [
-            'schedules' => $this->schedules->paginate(35),
+            'schedules' => $this->schedules->paginate(35, $request->only('date_from', 'date_to', 'status')),
             'calendarData' => $this->schedules->getByMonth((int) $request->input('year', now()->year), (int) $request->input('month', now()->month)),
+            'filters' => $request->only('date_from', 'date_to', 'status'),
         ]);
     }
 

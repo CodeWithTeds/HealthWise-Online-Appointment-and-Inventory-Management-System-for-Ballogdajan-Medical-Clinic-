@@ -36,6 +36,7 @@ type PaginatedSchedules = {
 type Props = {
     schedules: PaginatedSchedules;
     calendarData: Schedule[];
+    filters: { date_from?: string; date_to?: string; status?: string };
 };
 
 function getRolePrefix(): string {
@@ -44,13 +45,16 @@ function getRolePrefix(): string {
     return '/secretary';
 }
 
-export default function AppointmentScheduling({ schedules, calendarData }: Props) {
+export default function AppointmentScheduling({ schedules, calendarData, filters }: Props) {
     const params = new URLSearchParams(window.location.search);
     const initialView = params.get('view') || 'calendar';
     const [view, setView] = useState<'calendar' | 'schedules'>(initialView as 'calendar' | 'schedules');
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
+    const [filterDateFrom, setFilterDateFrom] = useState(filters.date_from || '');
+    const [filterDateTo, setFilterDateTo] = useState(filters.date_to || '');
+    const [filterStatus, setFilterStatus] = useState(filters.status || '');
 
     const createForm = useForm({
         date_from: '',
@@ -199,6 +203,26 @@ export default function AppointmentScheduling({ schedules, calendarData }: Props
 
                 {/* Schedules Table */}
                 {view === 'schedules' && (
+                    <>
+                        {/* Filters */}
+                        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-neutral-200 bg-white p-3 dark:border-neutral-700 dark:bg-neutral-900">
+                            <div className="flex items-center gap-1.5">
+                                <label className="text-[10px] font-semibold text-neutral-500">From</label>
+                                <input type="date" value={filterDateFrom} onChange={(e) => setFilterDateFrom(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" />
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <label className="text-[10px] font-semibold text-neutral-500">To</label>
+                                <input type="date" value={filterDateTo} onChange={(e) => setFilterDateTo(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" />
+                            </div>
+                            <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
+                                <option value="">All Status</option>
+                                <option value="available">Available</option>
+                                <option value="full">Full</option>
+                                <option value="closed">Closed</option>
+                            </select>
+                            <button onClick={() => router.get(`${prefix}/appointment-scheduling`, { view: 'schedules', date_from: filterDateFrom, date_to: filterDateTo, status: filterStatus }, { preserveState: true })} className="h-8 rounded-lg bg-[#0787f7] px-3 text-xs font-semibold text-white hover:bg-[#0670d4]">Filter</button>
+                            <button onClick={() => { setFilterDateFrom(''); setFilterDateTo(''); setFilterStatus(''); router.get(`${prefix}/appointment-scheduling`, { view: 'schedules' }, { preserveState: true }); }} className="h-8 rounded-lg border border-neutral-200 px-3 text-xs font-medium text-neutral-500 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-400">Clear</button>
+                        </div>
                     <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-xs">
@@ -252,6 +276,7 @@ export default function AppointmentScheduling({ schedules, calendarData }: Props
                             </div>
                         )}
                     </div>
+                    </>
                 )}
             </div>
 

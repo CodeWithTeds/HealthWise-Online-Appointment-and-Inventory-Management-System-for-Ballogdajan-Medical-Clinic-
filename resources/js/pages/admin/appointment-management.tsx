@@ -29,7 +29,7 @@ type PaginatedAppointments = {
 type Props = {
     appointments: PaginatedAppointments;
     priorityQueue: Appointment[];
-    filters: { search?: string; date?: string };
+    filters: { search?: string; date?: string; date_from?: string; date_to?: string; session?: string; status?: string; priority_type?: string; queue_session?: string };
 };
 
 function getRolePrefix(): string {
@@ -42,16 +42,36 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
     const [view, setView] = useState<'list' | 'priority'>(initialView as 'list' | 'priority');
     const [search, setSearch] = useState(filters.search || '');
     const [queueDate, setQueueDate] = useState(filters.date || new Date().toISOString().split('T')[0]);
+    const [queueSession, setQueueSession] = useState(filters.queue_session || '');
+    const [filterDateFrom, setFilterDateFrom] = useState(filters.date_from || '');
+    const [filterDateTo, setFilterDateTo] = useState(filters.date_to || '');
+    const [filterSession, setFilterSession] = useState(filters.session || '');
+    const [filterStatus, setFilterStatus] = useState(filters.status || '');
+    const [filterPriority, setFilterPriority] = useState(filters.priority_type || '');
     const prefix = getRolePrefix();
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        router.get(`${prefix}/appointment-management`, { search, view: 'list' }, { preserveState: true });
+        router.get(`${prefix}/appointment-management`, { search, view: 'list', date_from: filterDateFrom, date_to: filterDateTo, session: filterSession, status: filterStatus, priority_type: filterPriority }, { preserveState: true });
+    };
+
+    const applyListFilters = () => {
+        router.get(`${prefix}/appointment-management`, { view: 'list', search, date_from: filterDateFrom, date_to: filterDateTo, session: filterSession, status: filterStatus, priority_type: filterPriority }, { preserveState: true });
+    };
+
+    const clearListFilters = () => {
+        setSearch(''); setFilterDateFrom(''); setFilterDateTo(''); setFilterSession(''); setFilterStatus(''); setFilterPriority('');
+        router.get(`${prefix}/appointment-management`, { view: 'list' }, { preserveState: true });
     };
 
     const handleDateFilter = (date: string) => {
         setQueueDate(date);
-        router.get(`${prefix}/appointment-management`, { date, view: 'priority' }, { preserveState: true });
+        router.get(`${prefix}/appointment-management`, { date, queue_session: queueSession, view: 'priority' }, { preserveState: true });
+    };
+
+    const handleQueueSessionFilter = (session: string) => {
+        setQueueSession(session);
+        router.get(`${prefix}/appointment-management`, { date: queueDate, queue_session: session, view: 'priority' }, { preserveState: true });
     };
 
     const updateStatus = (id: number, status: string) => {
@@ -103,10 +123,43 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
                 {/* List View */}
                 {view === 'list' && (
                     <>
-                        <form onSubmit={handleSearch} className="relative w-full sm:w-64">
-                            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-neutral-400" />
-                            <input type="text" placeholder="Search patient..." value={search} onChange={(e) => setSearch(e.target.value)} className="h-9 w-full rounded-lg border border-neutral-200 bg-white pl-9 pr-3 text-sm placeholder:text-neutral-400 focus:border-[#0787f7] focus:ring-1 focus:ring-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" />
-                        </form>
+                        {/* Filter Bar */}
+                        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-neutral-200 bg-white p-3 dark:border-neutral-700 dark:bg-neutral-900">
+                            <div className="relative">
+                                <Search className="absolute top-1/2 left-2.5 h-3.5 w-3.5 -translate-y-1/2 text-neutral-400" />
+                                <input type="text" placeholder="Patient name..." value={search} onChange={(e) => setSearch(e.target.value)} className="h-8 w-36 rounded-lg border border-neutral-200 bg-white pl-8 pr-2 text-xs placeholder:text-neutral-400 focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" />
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <label className="text-[10px] font-semibold text-neutral-500">From</label>
+                                <input type="date" value={filterDateFrom} onChange={(e) => setFilterDateFrom(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" />
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <label className="text-[10px] font-semibold text-neutral-500">To</label>
+                                <input type="date" value={filterDateTo} onChange={(e) => setFilterDateTo(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" />
+                            </div>
+                            <select value={filterSession} onChange={(e) => setFilterSession(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
+                                <option value="">All Sessions</option>
+                                <option value="AM">AM</option>
+                                <option value="PM">PM</option>
+                            </select>
+                            <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="completed">Completed</option>
+                                <option value="not_arrived">Not Arrived</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                            <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
+                                <option value="">All Priority</option>
+                                <option value="regular">Regular</option>
+                                <option value="senior">Senior</option>
+                                <option value="pwd">PWD</option>
+                                <option value="pregnant">Pregnant</option>
+                            </select>
+                            <button onClick={applyListFilters} className="h-8 rounded-lg bg-[#0787f7] px-3 text-xs font-semibold text-white hover:bg-[#0670d4]">Filter</button>
+                            <button onClick={clearListFilters} className="h-8 rounded-lg border border-neutral-200 px-3 text-xs font-medium text-neutral-500 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-400">Clear</button>
+                        </div>
                         <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left text-xs">
@@ -164,9 +217,17 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
                 {/* Priority Queue View */}
                 {view === 'priority' && (
                     <>
-                        <div className="flex items-center gap-3">
-                            <label className="text-xs font-semibold text-neutral-600 dark:text-neutral-300">Date:</label>
-                            <input type="date" value={queueDate} onChange={(e) => handleDateFilter(e.target.value)} className="h-9 rounded-lg border border-neutral-200 px-3 text-sm focus:border-[#0787f7] focus:ring-1 focus:ring-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" />
+                        <div className="flex flex-wrap items-center gap-3 rounded-xl border border-neutral-200 bg-white p-3 dark:border-neutral-700 dark:bg-neutral-900">
+                            <div className="flex items-center gap-1.5">
+                                <label className="text-[10px] font-semibold text-neutral-500">Date</label>
+                                <input type="date" value={queueDate} onChange={(e) => handleDateFilter(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" />
+                            </div>
+                            <select value={queueSession} onChange={(e) => handleQueueSessionFilter(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
+                                <option value="">All Sessions</option>
+                                <option value="AM">AM Only</option>
+                                <option value="PM">PM Only</option>
+                            </select>
+                            <span className="text-[10px] text-neutral-400">Showing {priorityQueue.length} patients</span>
                         </div>
                         <div className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-900">
                             <p className="mb-3 text-xs text-neutral-400">Priority: Senior → PWD → Pregnant → Regular. Patients marked "Not Arrived" are skipped.</p>

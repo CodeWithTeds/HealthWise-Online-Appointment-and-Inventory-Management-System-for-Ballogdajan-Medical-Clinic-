@@ -21,9 +21,9 @@ final class AppointmentManagementController extends Controller
     public function index(Request $request): Response
     {
         return Inertia::render('admin/appointment-management', [
-            'appointments' => $this->appointments->paginateAll(35, $request->input('search')),
-            'priorityQueue' => $this->appointments->priorityQueue($request->input('date')),
-            'filters' => $request->only('search', 'date'),
+            'appointments' => $this->appointments->paginateAll(35, $request->input('search'), $request->only('date_from', 'date_to', 'session', 'status', 'priority_type')),
+            'priorityQueue' => $this->appointments->priorityQueue($request->input('date'), $request->input('queue_session')),
+            'filters' => $request->only('search', 'date', 'date_from', 'date_to', 'session', 'status', 'priority_type', 'queue_session'),
         ]);
     }
 

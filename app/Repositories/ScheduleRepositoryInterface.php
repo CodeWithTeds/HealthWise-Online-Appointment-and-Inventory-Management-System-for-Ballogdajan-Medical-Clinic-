@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 
 interface ScheduleRepositoryInterface
 {
-    public function paginate(int $perPage = 35): LengthAwarePaginator;
+    public function paginate(int $perPage = 35, array $filters = []): LengthAwarePaginator;
 
     public function getByMonth(int $year, int $month): Collection;
 

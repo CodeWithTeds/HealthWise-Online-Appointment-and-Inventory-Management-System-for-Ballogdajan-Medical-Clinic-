@@ -11,9 +11,12 @@ use Illuminate\Support\Collection;
 
 final class ScheduleRepository implements ScheduleRepositoryInterface
 {
-    public function paginate(int $perPage = 35): LengthAwarePaginator
+    public function paginate(int $perPage = 35, array $filters = []): LengthAwarePaginator
     {
         return Schedule::query()
+            ->when($filters['date_from'] ?? null, fn ($q, $v) => $q->where('date', '>=', $v))
+            ->when($filters['date_to'] ?? null, fn ($q, $v) => $q->where('date', '<=', $v))
+            ->when($filters['status'] ?? null, fn ($q, $v) => $q->where('status', $v))
             ->orderBy('date', 'desc')
             ->paginate($perPage);
     }
