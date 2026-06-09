@@ -84,7 +84,7 @@ export default function AppointmentScheduling({ schedules, calendarData }: Props
 
     const getScheduleForDate = (date: Date): Schedule | undefined => {
         const dateStr = format(date, 'yyyy-MM-dd');
-        return calendarData.find((s) => s.date === dateStr);
+        return calendarData.find((s) => s.date.slice(0, 10) === dateStr);
     };
 
     const handleCreate = (e: React.FormEvent) => {

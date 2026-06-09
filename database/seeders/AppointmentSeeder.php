@@ -31,14 +31,14 @@ class AppointmentSeeder extends Seeder
         $priorities = ['regular', 'regular', 'regular', 'regular', 'regular', 'regular', 'senior', 'pwd', 'pregnant', 'regular'];
         $statuses = ['pending', 'confirmed', 'pending', 'confirmed', 'pending'];
 
-        for ($i = 0; $i < 20; $i++) {
-            $session = $i < 10 ? 'AM' : 'PM';
+        for ($i = 0; $i < 40; $i++) {
+            $session = $i < 20 ? 'AM' : 'PM';
             Appointment::create([
                 'user_id' => $patients[array_rand($patients)],
                 'schedule_id' => $schedule->id,
                 'date' => '2026-06-09',
                 'session' => $session,
-                'reason' => $reasons[$i],
+                'reason' => $reasons[$i % 20],
                 'symptoms' => fake()->optional(0.6)->sentence(3),
                 'priority_type' => $priorities[array_rand($priorities)],
                 'status' => $statuses[array_rand($statuses)],

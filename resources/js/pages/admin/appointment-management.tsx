@@ -173,30 +173,39 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
                             {priorityQueue.length === 0 ? (
                                 <p className="py-8 text-center text-sm text-neutral-400">No appointments for this date.</p>
                             ) : (
-                                <div className="space-y-2">
-                                    {priorityQueue.map((apt, idx) => (
-                                        <div key={apt.id} className={`flex items-center gap-3 rounded-lg border p-3 ${apt.status === 'not_arrived' ? 'border-neutral-200 bg-neutral-50 opacity-50' : 'border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800'}`}>
-                                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0787f7]/10 text-xs font-bold text-[#0787f7]">
-                                                {idx + 1}
+                                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                                    {[0, 1, 2, 3].map((col) => {
+                                        const start = col * 10;
+                                        const items = priorityQueue.slice(start, start + 10);
+                                        if (items.length === 0) return null;
+                                        return (
+                                            <div key={col} className="space-y-2">
+                                                {items.map((apt, idx) => (
+                                                    <div key={apt.id} className={`flex items-center gap-2 rounded-lg border p-2.5 ${apt.status === 'not_arrived' ? 'border-neutral-200 bg-neutral-50 opacity-50' : 'border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800'}`}>
+                                                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0787f7]/10 text-[11px] font-bold text-[#0787f7]">
+                                                            {start + idx + 1}
+                                                        </div>
+                                                        <div className="min-w-0 flex-1">
+                                                            <p className="truncate text-xs font-medium text-neutral-900 dark:text-neutral-100">{apt.user.name}</p>
+                                                            <p className="truncate text-[10px] text-neutral-400">{apt.session} · {apt.reason}</p>
+                                                        </div>
+                                                        <div className="flex shrink-0 items-center gap-1">
+                                                            {apt.priority_type !== 'regular' && (
+                                                                <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold capitalize ${priorityBadge(apt.priority_type)}`}>{apt.priority_type}</span>
+                                                            )}
+                                                            <select className="w-[70px] rounded border border-neutral-200 px-1 py-0.5 text-[9px] dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" value={apt.status} onChange={(e) => updateStatus(apt.id, e.target.value)}>
+                                                                <option value="pending">Pending</option>
+                                                                <option value="confirmed">Confirmed</option>
+                                                                <option value="completed">Done</option>
+                                                                <option value="not_arrived">Not Arrived</option>
+                                                                <option value="cancelled">Cancelled</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                ))}
                                             </div>
-                                            <div className="flex-1">
-                                                <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{apt.user.name}</p>
-                                                <p className="text-[11px] text-neutral-400">{apt.session} · {apt.reason}</p>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                {apt.priority_type !== 'regular' && (
-                                                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold capitalize ${priorityBadge(apt.priority_type)}`}>{apt.priority_type}</span>
-                                                )}
-                                                <select className="rounded border border-neutral-200 px-2 py-1 text-[10px] dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" value={apt.status} onChange={(e) => updateStatus(apt.id, e.target.value)}>
-                                                    <option value="pending">Pending</option>
-                                                    <option value="confirmed">Confirmed</option>
-                                                    <option value="completed">Completed</option>
-                                                    <option value="not_arrived">Not Arrived</option>
-                                                    <option value="cancelled">Cancelled</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             )}
                         </div>
