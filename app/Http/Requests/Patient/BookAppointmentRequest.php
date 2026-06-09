@@ -22,6 +22,13 @@ final class BookAppointmentRequest extends FormRequest
             'session' => ['required', Rule::in(['AM', 'PM'])],
             'reason' => ['required', 'string', 'max:255'],
             'symptoms' => ['nullable', 'string', 'max:500'],
+            'contact_number' => ['nullable', 'string', 'max:20'],
+            'allergies' => ['nullable', 'string', 'max:255'],
+            'current_medication' => ['nullable', 'string', 'max:255'],
+            'medical_history' => ['nullable', 'string', 'max:1000'],
+            'temperature' => ['nullable', 'string', 'max:10'],
+            'blood_pressure' => ['nullable', 'string', 'max:20'],
+            'weight' => ['nullable', 'string', 'max:10'],
             'priority_type' => ['required', Rule::in(['regular', 'senior', 'pwd', 'pregnant'])],
             'notes' => ['nullable', 'string', 'max:500'],
         ];

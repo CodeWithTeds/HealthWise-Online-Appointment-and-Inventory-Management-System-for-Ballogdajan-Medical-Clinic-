@@ -1,7 +1,7 @@
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import { format, isToday, isBefore, startOfToday } from 'date-fns';
-import { Calendar, Clock, X, CheckCircle } from 'lucide-react';
+import { format } from 'date-fns';
+import { Calendar, X, Sun, Moon } from 'lucide-react';
 import type { User } from '@/types/auth';
 
 type Schedule = {
@@ -24,7 +24,6 @@ type Appointment = {
     status: string;
     queue_number: number | null;
     notes: string | null;
-    created_at: string;
 };
 
 type Props = {
@@ -45,6 +44,13 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
         session: '',
         reason: '',
         symptoms: '',
+        contact_number: '',
+        allergies: '',
+        current_medication: '',
+        medical_history: '',
+        temperature: '',
+        blood_pressure: '',
+        weight: '',
         priority_type: 'regular',
         notes: '',
     });
@@ -54,10 +60,17 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
         setSelectedSession(session);
         form.setData({
             schedule_id: String(schedule.id),
-            date: schedule.date,
+            date: schedule.date.slice(0, 10),
             session,
             reason: '',
             symptoms: '',
+            contact_number: (user.phone as string) || '',
+            allergies: '',
+            current_medication: '',
+            medical_history: '',
+            temperature: '',
+            blood_pressure: '',
+            weight: '',
             priority_type: 'regular',
             notes: '',
         });
@@ -72,75 +85,93 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
         });
     };
 
-    const statusBadge = (status: string) => {
+    const statusColor = (status: string) => {
         switch (status) {
-            case 'pending': return 'bg-amber-50 text-amber-700';
-            case 'confirmed': return 'bg-green-50 text-green-700';
-            case 'completed': return 'bg-blue-50 text-blue-700';
-            case 'cancelled': return 'bg-red-50 text-red-700';
-            case 'not_arrived': return 'bg-neutral-100 text-neutral-500';
-            default: return 'bg-neutral-50 text-neutral-600';
+            case 'pending': return 'border-amber-200 bg-amber-50 text-amber-700';
+            case 'confirmed': return 'border-green-200 bg-green-50 text-green-700';
+            case 'completed': return 'border-blue-200 bg-blue-50 text-blue-700';
+            case 'cancelled': return 'border-red-200 bg-red-50 text-red-700';
+            default: return 'border-neutral-200 bg-neutral-50 text-neutral-600';
         }
     };
 
-    const inputCls = 'h-9 w-full rounded-lg border border-neutral-200 px-3 text-sm focus:border-[#0787f7] focus:ring-1 focus:ring-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100';
+    const inputCls = 'h-10 w-full rounded-xl border border-neutral-200 px-4 text-sm focus:border-[#0787f7] focus:ring-2 focus:ring-[#0787f7]/10 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100';
 
     return (
         <>
             <Head title="Book Appointment" />
-            <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-4 sm:p-6">
-                {/* Welcome Card */}
-                <div className="rounded-2xl bg-gradient-to-r from-[#0787f7] to-[#0560c9] p-5 text-white sm:p-8">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex h-full flex-1 flex-col gap-6 overflow-y-auto p-4 sm:p-6">
+                {/* Hero Card */}
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0787f7] to-[#0560c9] p-6 sm:p-8">
+                    <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-white/10" />
+                    <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-white/5" />
+                    <div className="relative flex items-center justify-between">
                         <div>
-                            <p className="text-sm opacity-80">Hi, {user.name.split(' ')[0]}!</p>
-                            <h1 className="mt-1 text-xl font-bold sm:text-2xl">Book an Appointment</h1>
-                            <p className="mt-1 text-xs opacity-70 sm:text-sm">Select an available slot below. First come, first served.</p>
+                            <p className="text-sm font-medium text-white/70">Hi, {user.name.split(' ')[0]}!</p>
+                            <h1 className="mt-1 text-2xl font-bold text-white sm:text-3xl">Book Appointment</h1>
+                            <p className="mt-2 max-w-md text-sm text-white/60">Choose an available date and session below. First come, first served.</p>
                         </div>
-                        <img src="/images/logo.png" alt="" className="hidden h-16 w-16 rounded-xl bg-white/10 object-contain p-2 sm:block" />
+                        <img src="/images/logo.png" alt="" className="hidden h-14 w-14 rounded-xl bg-white/10 object-contain p-2 sm:block" />
                     </div>
                 </div>
 
-                {/* Available Schedules */}
+                {/* Available Slots */}
                 <div>
-                    <h2 className="mb-3 text-sm font-bold text-neutral-900 dark:text-neutral-100">Available Slots</h2>
+                    <div className="mb-4 flex items-center justify-between">
+                        <h2 className="text-base font-bold text-neutral-900 dark:text-neutral-100">Available Slots</h2>
+                        <span className="text-xs text-neutral-400">{availableSchedules.length} dates available</span>
+                    </div>
+
                     {availableSchedules.length === 0 ? (
-                        <div className="rounded-xl border border-neutral-200 bg-white p-8 text-center dark:border-neutral-700 dark:bg-neutral-900">
-                            <Calendar className="mx-auto mb-2 h-8 w-8 text-neutral-300" />
-                            <p className="text-sm text-neutral-400">No available schedules at the moment.</p>
+                        <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 py-16 dark:border-neutral-700">
+                            <Calendar className="mb-3 h-10 w-10 text-neutral-300" />
+                            <p className="text-sm font-medium text-neutral-400">No available schedules</p>
+                            <p className="text-xs text-neutral-300">Check back later for new openings.</p>
                         </div>
                     ) : (
-                        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                             {availableSchedules.map((schedule) => {
-                                const amFull = schedule.am_booked >= schedule.am_slots;
-                                const pmFull = schedule.pm_booked >= schedule.pm_slots;
+                                const dateStr = schedule.date.slice(0, 10);
+                                const amLeft = schedule.am_slots - schedule.am_booked;
+                                const pmLeft = schedule.pm_slots - schedule.pm_booked;
+                                const amAvail = amLeft > 0;
+                                const pmAvail = pmLeft > 0;
                                 return (
-                                    <div key={schedule.id} className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-900">
-                                        <div className="mb-3 flex items-center gap-2">
-                                            <Calendar className="h-4 w-4 text-[#0787f7]" />
-                                            <p className="text-sm font-bold text-neutral-900 dark:text-neutral-100">
-                                                {format(new Date(schedule.date + 'T00:00:00'), 'EEE, MMM d, yyyy')}
-                                            </p>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-2">
-                                            <button
-                                                onClick={() => !amFull && openBooking(schedule, 'AM')}
-                                                disabled={amFull}
-                                                className={`rounded-lg p-3 text-center transition-all ${amFull ? 'cursor-not-allowed bg-neutral-100 opacity-50 dark:bg-neutral-800' : 'border border-blue-100 bg-blue-50 hover:border-blue-300 hover:shadow-sm dark:border-blue-900 dark:bg-blue-900/20'}`}
-                                            >
-                                                <p className="text-[10px] font-bold text-blue-600 uppercase">AM</p>
-                                                <p className="text-xs text-blue-800 dark:text-blue-300">8:00 – 12:00</p>
-                                                <p className="mt-1 text-[10px] text-blue-600">{schedule.am_slots - schedule.am_booked} slots left</p>
-                                            </button>
-                                            <button
-                                                onClick={() => !pmFull && openBooking(schedule, 'PM')}
-                                                disabled={pmFull}
-                                                className={`rounded-lg p-3 text-center transition-all ${pmFull ? 'cursor-not-allowed bg-neutral-100 opacity-50 dark:bg-neutral-800' : 'border border-orange-100 bg-orange-50 hover:border-orange-300 hover:shadow-sm dark:border-orange-900 dark:bg-orange-900/20'}`}
-                                            >
-                                                <p className="text-[10px] font-bold text-orange-600 uppercase">PM</p>
-                                                <p className="text-xs text-orange-800 dark:text-orange-300">1:00 – 5:00</p>
-                                                <p className="mt-1 text-[10px] text-orange-600">{schedule.pm_slots - schedule.pm_booked} slots left</p>
-                                            </button>
+                                    <div key={schedule.id} className="group rounded-2xl border border-neutral-100 bg-white p-4 shadow-sm transition-all hover:border-[#0787f7]/20 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900">
+                                        <p className="mb-3 text-sm font-bold text-neutral-900 dark:text-neutral-100">
+                                            {format(new Date(dateStr + 'T00:00:00'), 'EEE, MMM d')}
+                                        </p>
+                                        <div className="space-y-2">
+                                            {amAvail && (
+                                                <button
+                                                    onClick={() => openBooking(schedule, 'AM')}
+                                                    className="flex w-full items-center gap-3 rounded-xl border border-blue-100 bg-blue-50/50 p-3 transition-all hover:scale-[1.02] hover:shadow-sm active:scale-[0.98] dark:border-blue-900/50 dark:bg-blue-900/10"
+                                                >
+                                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                                                        <Sun className="h-4 w-4 text-blue-600" />
+                                                    </div>
+                                                    <div className="flex-1 text-left">
+                                                        <p className="text-xs font-bold text-blue-700 dark:text-blue-400">Morning</p>
+                                                        <p className="text-[10px] text-blue-500">8:00 AM – 12:00 PM</p>
+                                                    </div>
+                                                    <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-700">{amLeft} left</span>
+                                                </button>
+                                            )}
+                                            {pmAvail && (
+                                                <button
+                                                    onClick={() => openBooking(schedule, 'PM')}
+                                                    className="flex w-full items-center gap-3 rounded-xl border border-orange-100 bg-orange-50/50 p-3 transition-all hover:scale-[1.02] hover:shadow-sm active:scale-[0.98] dark:border-orange-900/50 dark:bg-orange-900/10"
+                                                >
+                                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100 dark:bg-orange-900/30">
+                                                        <Moon className="h-4 w-4 text-orange-600" />
+                                                    </div>
+                                                    <div className="flex-1 text-left">
+                                                        <p className="text-xs font-bold text-orange-700 dark:text-orange-400">Afternoon</p>
+                                                        <p className="text-[10px] text-orange-500">1:00 PM – 5:00 PM</p>
+                                                    </div>
+                                                    <span className="rounded-full bg-orange-100 px-2 py-0.5 text-[10px] font-bold text-orange-700">{pmLeft} left</span>
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 );
@@ -152,24 +183,27 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
                 {/* My Appointments */}
                 {appointments.data.length > 0 && (
                     <div>
-                        <h2 className="mb-3 text-sm font-bold text-neutral-900 dark:text-neutral-100">My Appointments</h2>
+                        <h2 className="mb-4 text-base font-bold text-neutral-900 dark:text-neutral-100">My Appointments</h2>
                         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                             {appointments.data.map((apt) => (
-                                <div key={apt.id} className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-900">
-                                    <div className="mb-2 flex items-center justify-between">
-                                        <span className="text-xs font-bold text-neutral-900 dark:text-neutral-100">
-                                            {format(new Date(apt.date + 'T00:00:00'), 'MMM d, yyyy')}
-                                        </span>
-                                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${statusBadge(apt.status)}`}>
+                                <div key={apt.id} className="rounded-2xl border border-neutral-100 bg-white p-4 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+                                    <div className="mb-3 flex items-center justify-between">
+                                        <p className="text-sm font-bold text-neutral-900 dark:text-neutral-100">
+                                            {format(new Date(apt.date.slice(0, 10) + 'T00:00:00'), 'MMM d, yyyy')}
+                                        </p>
+                                        <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold capitalize ${statusColor(apt.status)}`}>
                                             {apt.status.replace('_', ' ')}
                                         </span>
                                     </div>
-                                    <div className="space-y-1 text-xs text-neutral-500">
-                                        <p><span className="font-medium text-neutral-700 dark:text-neutral-300">Session:</span> {apt.session}</p>
-                                        <p><span className="font-medium text-neutral-700 dark:text-neutral-300">Reason:</span> {apt.reason}</p>
-                                        {apt.queue_number && <p><span className="font-medium text-neutral-700 dark:text-neutral-300">Queue #:</span> {apt.queue_number}</p>}
+                                    <div className="space-y-1.5">
+                                        <div className="flex items-center gap-2">
+                                            {apt.session === 'AM' ? <Sun className="h-3 w-3 text-blue-500" /> : <Moon className="h-3 w-3 text-orange-500" />}
+                                            <span className="text-xs text-neutral-600 dark:text-neutral-300">{apt.session === 'AM' ? 'Morning' : 'Afternoon'} session</span>
+                                        </div>
+                                        <p className="text-xs text-neutral-500"><span className="font-medium text-neutral-700 dark:text-neutral-200">Reason:</span> {apt.reason}</p>
+                                        {apt.queue_number && <p className="text-xs text-neutral-500"><span className="font-medium text-neutral-700 dark:text-neutral-200">Queue:</span> #{apt.queue_number}</p>}
                                         {apt.priority_type !== 'regular' && (
-                                            <p><span className="rounded bg-purple-50 px-1.5 py-0.5 text-[10px] font-semibold capitalize text-purple-700">{apt.priority_type}</span></p>
+                                            <span className="inline-flex rounded-full bg-purple-50 px-2 py-0.5 text-[10px] font-bold capitalize text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">{apt.priority_type}</span>
                                         )}
                                     </div>
                                 </div>
@@ -181,45 +215,77 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
 
             {/* Booking Modal */}
             {showBooking && selectedSchedule && (
-                <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-0 sm:items-center sm:p-4">
-                    <div className="w-full max-w-md rounded-t-2xl bg-white p-5 shadow-xl sm:rounded-2xl dark:bg-neutral-900">
-                        <div className="mb-4 flex items-center justify-between">
-                            <div>
-                                <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">Book Appointment</h2>
-                                <p className="text-xs text-neutral-400">
-                                    {format(new Date(selectedSchedule.date + 'T00:00:00'), 'EEEE, MMMM d, yyyy')} · {selectedSession}
-                                </p>
-                            </div>
-                            <button onClick={() => setShowBooking(false)} className="rounded-lg p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800">
+                <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm sm:items-center sm:p-4">
+                    <div className="w-full max-w-md animate-in slide-in-from-bottom-4 rounded-t-3xl bg-white p-6 shadow-2xl sm:rounded-3xl dark:bg-neutral-900">
+                        <div className="mb-1 flex items-center justify-between">
+                            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">Confirm Booking</h2>
+                            <button onClick={() => setShowBooking(false)} className="rounded-full p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800">
                                 <X className="h-5 w-5 text-neutral-400" />
                             </button>
                         </div>
+                        <p className="mb-5 text-xs text-neutral-400">
+                            {selectedSchedule && format(new Date(selectedSchedule.date.slice(0, 10) + 'T00:00:00'), 'EEEE, MMMM d, yyyy')} · {selectedSession === 'AM' ? 'Morning' : 'Afternoon'}
+                        </p>
 
-                        <form onSubmit={handleSubmit} className="grid gap-3">
-                            <div>
-                                <label className="mb-1 block text-xs font-semibold text-neutral-600 dark:text-neutral-300">Reason for Visit *</label>
-                                <input type="text" value={form.data.reason} onChange={(e) => form.setData('reason', e.target.value)} className={inputCls} placeholder="e.g., General checkup, follow-up" required />
-                                {form.errors.reason && <p className="mt-1 text-xs text-red-500">{form.errors.reason}</p>}
+                        <form onSubmit={handleSubmit} className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
+                            <div className="grid gap-3 sm:grid-cols-2">
+                                <div>
+                                    <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Reason for Visit *</label>
+                                    <input type="text" value={form.data.reason} onChange={(e) => form.setData('reason', e.target.value)} className={inputCls} placeholder="e.g., General checkup" required />
+                                    {form.errors.reason && <p className="mt-1 text-xs text-red-500">{form.errors.reason}</p>}
+                                </div>
+                                <div>
+                                    <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Contact Number</label>
+                                    <input type="text" value={form.data.contact_number} onChange={(e) => form.setData('contact_number', e.target.value)} className={inputCls} placeholder="09XX-XXX-XXXX" />
+                                </div>
                             </div>
                             <div>
-                                <label className="mb-1 block text-xs font-semibold text-neutral-600 dark:text-neutral-300">Symptoms</label>
+                                <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Symptoms</label>
                                 <input type="text" value={form.data.symptoms} onChange={(e) => form.setData('symptoms', e.target.value)} className={inputCls} placeholder="e.g., Headache, fever, cough" />
                             </div>
+                            <div className="grid gap-3 sm:grid-cols-2">
+                                <div>
+                                    <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Allergies</label>
+                                    <input type="text" value={form.data.allergies} onChange={(e) => form.setData('allergies', e.target.value)} className={inputCls} placeholder="e.g., Penicillin, seafood" />
+                                </div>
+                                <div>
+                                    <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Current Medication</label>
+                                    <input type="text" value={form.data.current_medication} onChange={(e) => form.setData('current_medication', e.target.value)} className={inputCls} placeholder="e.g., Metformin 500mg" />
+                                </div>
+                            </div>
+                            <div className="grid gap-3 sm:grid-cols-3">
+                                <div>
+                                    <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Temperature</label>
+                                    <input type="text" value={form.data.temperature} onChange={(e) => form.setData('temperature', e.target.value)} className={inputCls} placeholder="37.5°C" />
+                                </div>
+                                <div>
+                                    <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Blood Pressure</label>
+                                    <input type="text" value={form.data.blood_pressure} onChange={(e) => form.setData('blood_pressure', e.target.value)} className={inputCls} placeholder="120/80" />
+                                </div>
+                                <div>
+                                    <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Weight (kg)</label>
+                                    <input type="text" value={form.data.weight} onChange={(e) => form.setData('weight', e.target.value)} className={inputCls} placeholder="65" />
+                                </div>
+                            </div>
                             <div>
-                                <label className="mb-1 block text-xs font-semibold text-neutral-600 dark:text-neutral-300">Priority Type *</label>
+                                <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Medical History</label>
+                                <textarea value={form.data.medical_history} onChange={(e) => form.setData('medical_history', e.target.value)} rows={2} className="w-full rounded-xl border border-neutral-200 px-4 py-3 text-sm focus:border-[#0787f7] focus:ring-2 focus:ring-[#0787f7]/10 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" placeholder="Previous surgeries, conditions..." />
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Priority Type *</label>
                                 <select value={form.data.priority_type} onChange={(e) => form.setData('priority_type', e.target.value)} className={inputCls}>
                                     <option value="regular">Regular</option>
                                     <option value="senior">Senior Citizen (60+)</option>
-                                    <option value="pwd">Person with Disability (PWD)</option>
+                                    <option value="pwd">Person with Disability</option>
                                     <option value="pregnant">Pregnant</option>
                                 </select>
-                                <p className="mt-1 text-[10px] text-neutral-400">Priority patients are served first in the queue.</p>
+                                <p className="mt-1 text-[10px] text-neutral-400">Priority patients are served first.</p>
                             </div>
                             <div>
-                                <label className="mb-1 block text-xs font-semibold text-neutral-600 dark:text-neutral-300">Additional Notes</label>
-                                <textarea value={form.data.notes} onChange={(e) => form.setData('notes', e.target.value)} rows={2} className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm focus:border-[#0787f7] focus:ring-1 focus:ring-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" placeholder="Any special requests..." />
+                                <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Additional Notes</label>
+                                <textarea value={form.data.notes} onChange={(e) => form.setData('notes', e.target.value)} rows={2} className="w-full rounded-xl border border-neutral-200 px-4 py-3 text-sm focus:border-[#0787f7] focus:ring-2 focus:ring-[#0787f7]/10 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" placeholder="Any special requests..." />
                             </div>
-                            <button type="submit" disabled={form.processing} className="mt-2 w-full rounded-lg bg-[#0787f7] py-3 text-sm font-bold text-white shadow-lg shadow-[#0787f7]/20 transition-all hover:bg-[#0670d4] disabled:opacity-50">
+                            <button type="submit" disabled={form.processing} className="w-full rounded-xl bg-[#0787f7] py-3.5 text-sm font-bold text-white shadow-lg shadow-[#0787f7]/20 transition-all hover:bg-[#0670d4] active:scale-[0.98] disabled:opacity-50">
                                 {form.processing ? 'Booking...' : 'Confirm Booking'}
                             </button>
                         </form>

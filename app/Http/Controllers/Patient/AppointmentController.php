@@ -24,7 +24,14 @@ final class AppointmentController extends Controller
     {
         return Inertia::render('patient/book-appointment', [
             'appointments' => $this->appointments->paginateByUser($request->user()->id),
-            'availableSchedules' => Schedule::where('status', 'available')->where('date', '>=', now()->toDateString())->orderBy('date')->get(),
+            'availableSchedules' => Schedule::where('status', 'available')
+                ->where('date', '>=', now()->toDateString())
+                ->where(function ($q) {
+                    $q->whereRaw('am_booked < am_slots')
+                      ->orWhereRaw('pm_booked < pm_slots');
+                })
+                ->orderBy('date')
+                ->get(),
         ]);
     }
 
@@ -32,6 +39,16 @@ final class AppointmentController extends Controller
     {
         $data = $request->validated();
         $data['user_id'] = $request->user()->id;
+
+        // Check if patient already has a booking for this date
+        $existing = Appointment::where('user_id', $data['user_id'])
+            ->where('date', $data['date'])
+            ->whereNotIn('status', ['cancelled'])
+            ->exists();
+
+        if ($existing) {
+            return back()->withErrors(['date' => 'You already have an appointment on this date. Only 1 booking per day is allowed.']);
+        }
 
         // Assign queue number (priority patients get lower numbers)
         $existingCount = Appointment::where('schedule_id', $data['schedule_id'])
