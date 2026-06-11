@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\AppointmentManagementController;
+use App\Http\Controllers\Admin\PatientRecordController;
 use App\Http\Controllers\Auth\EmailVerificationCodeController;
 use App\Http\Controllers\Patient\AppointmentController;
 use Illuminate\Support\Facades\Auth;
@@ -50,6 +51,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::get('appointment-management', [AppointmentManagementController::class, 'index'])->name('appointments.index');
             Route::patch('appointments/{appointment}/status', [AppointmentManagementController::class, 'updateStatus'])->name('appointments.status');
+
+            Route::get('patient-records', [PatientRecordController::class, 'index'])->name('patient-records.index');
+            Route::get('patient-records/{user}/appointments', [PatientRecordController::class, 'appointments'])->name('patient-records.appointments');
         });
 
         // Doctor - User Management, Schedules & Appointments
@@ -66,6 +70,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::get('appointment-management', [AppointmentManagementController::class, 'index'])->name('appointments.index');
             Route::patch('appointments/{appointment}/status', [AppointmentManagementController::class, 'updateStatus'])->name('appointments.status');
+
+            Route::get('patient-records', [PatientRecordController::class, 'index'])->name('patient-records.index');
+            Route::get('patient-records/{user}/appointments', [PatientRecordController::class, 'appointments'])->name('patient-records.appointments');
         });
 
         // Patient - Book Appointment
