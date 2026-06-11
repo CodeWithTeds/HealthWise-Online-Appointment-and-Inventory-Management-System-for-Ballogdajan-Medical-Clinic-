@@ -1,5 +1,6 @@
 import { Head, usePage } from '@inertiajs/react';
 import { dashboard } from '@/routes';
+import { useLanguage } from '@/contexts/language-context';
 import type { User } from '@/types/auth';
 import {
     Stethoscope,
@@ -12,22 +13,24 @@ import {
     Bell,
 } from 'lucide-react';
 
-const roleConfig = {
-    doctor: { label: 'Doctor', icon: Stethoscope, color: 'bg-emerald-50 text-emerald-600', badge: 'bg-emerald-100 text-emerald-700' },
-    secretary: { label: 'Secretary', icon: UserCheck, color: 'bg-purple-50 text-purple-600', badge: 'bg-purple-100 text-purple-700' },
-    pharmacist: { label: 'Pharmacist', icon: Pill, color: 'bg-amber-50 text-amber-600', badge: 'bg-amber-100 text-amber-700' },
-    patient: { label: 'Patient', icon: Heart, color: 'bg-rose-50 text-rose-600', badge: 'bg-rose-100 text-rose-700' },
-} as const;
-
 export default function Dashboard() {
     const { auth } = usePage().props;
     const user = auth.user as User;
+    const { t } = useLanguage();
+
+    const roleConfig = {
+        doctor: { label: t('doctor'), icon: Stethoscope, color: 'bg-emerald-50 text-emerald-600', badge: 'bg-emerald-100 text-emerald-700' },
+        secretary: { label: t('secretary'), icon: UserCheck, color: 'bg-purple-50 text-purple-600', badge: 'bg-purple-100 text-purple-700' },
+        pharmacist: { label: t('pharmacist'), icon: Pill, color: 'bg-amber-50 text-amber-600', badge: 'bg-amber-100 text-amber-700' },
+        patient: { label: t('patient'), icon: Heart, color: 'bg-rose-50 text-rose-600', badge: 'bg-rose-100 text-rose-700' },
+    } as const;
+
     const config = roleConfig[user.role] ?? roleConfig.patient;
     const RoleIcon = config.icon;
 
     return (
         <>
-            <Head title="Dashboard" />
+            <Head title={t('dashboard')} />
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-6">
                 {/* Welcome Section with Logo */}
                 <div className="flex flex-col items-center justify-center rounded-2xl border border-sidebar-border/50 bg-white px-8 py-12 text-center dark:border-sidebar-border dark:bg-neutral-900">
@@ -37,10 +40,10 @@ export default function Dashboard() {
                         className="mb-6 h-24 w-24 object-contain"
                     />
                     <h1 className="text-2xl font-black text-neutral-900 dark:text-neutral-100">
-                        Welcome to <span className="text-[#0787f7]">HealthWise</span>
+                        {t('welcome_to')} <span className="text-[#0787f7]">HealthWise</span>
                     </h1>
                     <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-                        Ballogdajan Medical Clinic — Integrated Online Appointment, Patient Record & Inventory Management System
+                        {t('clinic_subtitle')}
                     </p>
 
                     {/* User Info */}
@@ -51,7 +54,7 @@ export default function Dashboard() {
                         <div className="text-left">
                             <p className="text-sm font-bold text-neutral-900 dark:text-neutral-100">{user.name}</p>
                             <p className="text-xs text-neutral-400">
-                                Logged in as{' '}
+                                {t('logged_in_as')}{' '}
                                 <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${config.badge}`}>
                                     {config.label}
                                 </span>
@@ -68,7 +71,7 @@ export default function Dashboard() {
                         </div>
                         <div>
                             <p className="text-xl font-bold text-neutral-900 dark:text-neutral-100">0</p>
-                            <p className="text-xs text-neutral-400">Appointments Today</p>
+                            <p className="text-xs text-neutral-400">{t('appointments_today')}</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-4 rounded-xl border border-sidebar-border/50 bg-white p-5 dark:border-sidebar-border dark:bg-neutral-900">
@@ -77,7 +80,7 @@ export default function Dashboard() {
                         </div>
                         <div>
                             <p className="text-xl font-bold text-neutral-900 dark:text-neutral-100">0</p>
-                            <p className="text-xs text-neutral-400">Patient Records</p>
+                            <p className="text-xs text-neutral-400">{t('patient_records')}</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-4 rounded-xl border border-sidebar-border/50 bg-white p-5 dark:border-sidebar-border dark:bg-neutral-900">
@@ -86,7 +89,7 @@ export default function Dashboard() {
                         </div>
                         <div>
                             <p className="text-xl font-bold text-neutral-900 dark:text-neutral-100">0</p>
-                            <p className="text-xs text-neutral-400">Inventory Items</p>
+                            <p className="text-xs text-neutral-400">{t('inventory_items')}</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-4 rounded-xl border border-sidebar-border/50 bg-white p-5 dark:border-sidebar-border dark:bg-neutral-900">
@@ -95,7 +98,7 @@ export default function Dashboard() {
                         </div>
                         <div>
                             <p className="text-xl font-bold text-neutral-900 dark:text-neutral-100">0</p>
-                            <p className="text-xs text-neutral-400">Notifications</p>
+                            <p className="text-xs text-neutral-400">{t('notifications')}</p>
                         </div>
                     </div>
                 </div>
