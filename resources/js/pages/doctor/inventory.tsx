@@ -1,7 +1,7 @@
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { Package, Search, Filter, AlertTriangle, Eye } from 'lucide-react';
+import { Package, Search, Filter, AlertTriangle, Eye, Download } from 'lucide-react';
 
 type InventoryItem = {
     id: number;
@@ -61,6 +61,35 @@ export default function DoctorInventory({ items, filters }: Props) {
     const isLow = (item: InventoryItem) => item.quantity <= item.minimum_stock;
     const isExpired = (item: InventoryItem) => item.expiration_date && new Date(item.expiration_date) < new Date();
 
+    const exportCSV = () => {
+        const headers = ['Name', 'Description', 'Category', 'Quantity', 'Minimum Stock', 'Unit', 'Unit Price', 'Expiration Date', 'Supplier', 'Batch Number', 'Status'];
+        const rows = items.data.map((item) => [
+            item.name,
+            item.description || '',
+            item.category,
+            item.quantity,
+            item.minimum_stock,
+            item.unit,
+            item.unit_price,
+            item.expiration_date || '',
+            item.supplier || '',
+            item.batch_number || '',
+            item.status,
+        ]);
+
+        const csvContent = [headers, ...rows]
+            .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+            .join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `inventory_export_${format(new Date(), 'yyyy-MM-dd')}.csv`;
+        link.click();
+        URL.revokeObjectURL(url);
+    };
+
     return (
         <>
             <Head title="Inventory (View Only)" />
@@ -83,6 +112,9 @@ export default function DoctorInventory({ items, filters }: Props) {
                         </form>
                         <button onClick={() => setShowFilters(!showFilters)} className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 px-3 py-2 text-xs font-medium text-neutral-600 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300">
                             <Filter className="h-3.5 w-3.5" /> Filters
+                        </button>
+                        <button onClick={exportCSV} className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-emerald-700">
+                            <Download className="h-3.5 w-3.5" /> Export CSV
                         </button>
                     </div>
                 </div>
@@ -117,12 +149,14 @@ export default function DoctorInventory({ items, filters }: Props) {
                             <thead className="border-b border-neutral-100 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800">
                                 <tr>
                                     <th className="px-3 py-2.5 font-semibold text-neutral-600 dark:text-neutral-300">Item</th>
+                                    <th className="px-3 py-2.5 font-semibold text-neutral-600 dark:text-neutral-300">Description</th>
                                     <th className="px-3 py-2.5 font-semibold text-neutral-600 dark:text-neutral-300">Category</th>
                                     <th className="px-3 py-2.5 font-semibold text-neutral-600 dark:text-neutral-300">Stock</th>
                                     <th className="px-3 py-2.5 font-semibold text-neutral-600 dark:text-neutral-300">Unit</th>
                                     <th className="px-3 py-2.5 font-semibold text-neutral-600 dark:text-neutral-300">Price</th>
                                     <th className="px-3 py-2.5 font-semibold text-neutral-600 dark:text-neutral-300">Expiration</th>
                                     <th className="px-3 py-2.5 font-semibold text-neutral-600 dark:text-neutral-300">Supplier</th>
+                                    <th className="px-3 py-2.5 font-semibold text-neutral-600 dark:text-neutral-300">Batch</th>
                                     <th className="px-3 py-2.5 font-semibold text-neutral-600 dark:text-neutral-300">Status</th>
                                 </tr>
                             </thead>
@@ -131,8 +165,8 @@ export default function DoctorInventory({ items, filters }: Props) {
                                     <tr key={item.id} className="transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
                                         <td className="whitespace-nowrap px-3 py-2.5">
                                             <p className="font-semibold text-neutral-900 dark:text-neutral-100">{item.name}</p>
-                                            {item.description && <p className="max-w-[160px] truncate text-[10px] text-neutral-400">{item.description}</p>}
                                         </td>
+                                        <td className="max-w-[140px] truncate px-3 py-2.5 text-neutral-500 dark:text-neutral-400">{item.description || '—'}</td>
                                         <td className="px-3 py-2.5"><span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${categoryBadge(item.category)}`}>{item.category}</span></td>
                                         <td className="whitespace-nowrap px-3 py-2.5">
                                             <div className="flex items-center gap-1.5">
@@ -152,13 +186,14 @@ export default function DoctorInventory({ items, filters }: Props) {
                                             ) : <span className="text-neutral-400">—</span>}
                                         </td>
                                         <td className="max-w-[100px] truncate px-3 py-2.5 text-neutral-600 dark:text-neutral-300">{item.supplier || '—'}</td>
+                                        <td className="whitespace-nowrap px-3 py-2.5 text-neutral-600 dark:text-neutral-300">{item.batch_number || '—'}</td>
                                         <td className="whitespace-nowrap px-3 py-2.5">
                                             <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${item.status === 'active' ? 'bg-green-50 text-green-700' : 'bg-neutral-100 text-neutral-500'}`}>{item.status}</span>
                                         </td>
                                     </tr>
                                 ))}
                                 {items.data.length === 0 && (
-                                    <tr><td colSpan={8} className="px-4 py-12 text-center text-neutral-400">No inventory items found.</td></tr>
+                                    <tr><td colSpan={10} className="px-4 py-12 text-center text-neutral-400">No inventory items found.</td></tr>
                                 )}
                             </tbody>
                         </table>
