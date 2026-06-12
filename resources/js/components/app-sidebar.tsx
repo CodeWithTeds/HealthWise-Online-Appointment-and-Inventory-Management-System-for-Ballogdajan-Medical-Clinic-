@@ -145,21 +145,6 @@ const pharmacistNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Scheduling',
-        href: '/pharmacist/appointment-scheduling',
-        icon: Calendar,
-    },
-    {
-        title: 'Appointments',
-        href: '/pharmacist/appointment-management',
-        icon: Users,
-    },
-    {
-        title: 'Patient Records',
-        href: '/pharmacist/patient-records',
-        icon: ClipboardList,
-    },
-    {
         title: 'Inventory',
         href: '/pharmacist/inventory',
         icon: Package,
@@ -168,16 +153,6 @@ const pharmacistNavItems: NavItem[] = [
         title: 'Inventory Alerts',
         href: '/pharmacist/inventory-alerts',
         icon: AlertTriangle,
-    },
-    {
-        title: 'Reports',
-        href: '/pharmacist/reports',
-        icon: BarChart3,
-    },
-    {
-        title: 'Notifications',
-        href: '/pharmacist/notifications',
-        icon: Bell,
     },
 ];
 

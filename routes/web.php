@@ -5,7 +5,9 @@ use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\AppointmentManagementController;
 use App\Http\Controllers\Admin\PatientRecordController;
 use App\Http\Controllers\Auth\EmailVerificationCodeController;
+use App\Http\Controllers\Doctor\InventoryViewController;
 use App\Http\Controllers\Patient\AppointmentController;
+use App\Http\Controllers\Pharmacist\InventoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -73,6 +75,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::get('patient-records', [PatientRecordController::class, 'index'])->name('patient-records.index');
             Route::get('patient-records/{user}/appointments', [PatientRecordController::class, 'appointments'])->name('patient-records.appointments');
+
+            Route::get('inventory', [InventoryViewController::class, 'index'])->name('inventory.index');
+            Route::get('inventory-alerts', [InventoryViewController::class, 'alerts'])->name('inventory-alerts.index');
+        });
+
+        // Pharmacist - Inventory Management
+        Route::prefix('pharmacist')->name('pharmacist.')->group(function () {
+            Route::get('inventory', [InventoryController::class, 'index'])->name('inventory.index');
+            Route::post('inventory', [InventoryController::class, 'store'])->name('inventory.store');
+            Route::put('inventory/{item}', [InventoryController::class, 'update'])->name('inventory.update');
+            Route::delete('inventory/{item}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
+            Route::patch('inventory/{item}/adjust', [InventoryController::class, 'adjust'])->name('inventory.adjust');
+            Route::get('inventory-alerts', [InventoryController::class, 'alerts'])->name('inventory-alerts.index');
         });
 
         // Patient - Book Appointment
