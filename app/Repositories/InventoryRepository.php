@@ -14,12 +14,18 @@ final class InventoryRepository implements InventoryRepositoryInterface
     public function paginate(int $perPage = 25, ?string $search = null, array $filters = []): LengthAwarePaginator
     {
         return InventoryItem::query()
-            ->when($search, fn ($q) => $q->where('name', 'like', "%{$search}%")
-                ->orWhere('supplier', 'like', "%{$search}%")
-                ->orWhere('batch_number', 'like', "%{$search}%"))
+            ->when($search, fn ($q) => $q->where(function ($q2) use ($search) {
+                $q2->where('name', 'like', "%{$search}%")
+                    ->orWhere('supplier', 'like', "%{$search}%")
+                    ->orWhere('batch_number', 'like', "%{$search}%");
+            }))
             ->when($filters['category'] ?? null, fn ($q, $cat) => $q->where('category', $cat))
             ->when($filters['status'] ?? null, fn ($q, $s) => $q->where('status', $s))
             ->when(($filters['stock'] ?? null) === 'low', fn ($q) => $q->whereColumn('quantity', '<=', 'minimum_stock'))
+            ->when(($filters['stock'] ?? null) === 'out', fn ($q) => $q->where('quantity', 0))
+            ->when(($filters['expiration'] ?? null) === 'expired', fn ($q) => $q->whereNotNull('expiration_date')->where('expiration_date', '<', now()))
+            ->when(($filters['expiration'] ?? null) === 'expiring_soon', fn ($q) => $q->whereNotNull('expiration_date')->where('expiration_date', '>', now())->where('expiration_date', '<=', now()->addDays(30)))
+            ->when($filters['supplier'] ?? null, fn ($q, $sup) => $q->where('supplier', $sup))
             ->latest()
             ->paginate($perPage);
     }

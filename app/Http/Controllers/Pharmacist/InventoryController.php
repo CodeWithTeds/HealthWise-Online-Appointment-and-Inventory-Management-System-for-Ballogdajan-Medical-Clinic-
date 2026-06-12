@@ -21,8 +21,8 @@ final class InventoryController extends Controller
     public function index(Request $request): Response
     {
         return Inertia::render('pharmacist/inventory', [
-            'items' => $this->inventory->paginate(25, $request->input('search'), $request->only('category', 'status', 'stock')),
-            'filters' => $request->only('search', 'category', 'status', 'stock'),
+            'items' => $this->inventory->paginate(25, $request->input('search'), $request->only('category', 'status', 'stock', 'expiration', 'supplier')),
+            'filters' => $request->only('search', 'category', 'status', 'stock', 'expiration', 'supplier'),
         ]);
     }
 

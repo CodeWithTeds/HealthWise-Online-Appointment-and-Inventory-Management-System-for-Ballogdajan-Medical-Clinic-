@@ -28,22 +28,24 @@ type PaginatedItems = {
 
 type Props = {
     items: PaginatedItems;
-    filters: { search?: string; category?: string; status?: string; stock?: string };
+    filters: { search?: string; category?: string; status?: string; stock?: string; expiration?: string; supplier?: string };
 };
 
 export default function DoctorInventory({ items, filters }: Props) {
     const [search, setSearch] = useState(filters.search || '');
     const [filterCategory, setFilterCategory] = useState(filters.category || '');
+    const [filterStock, setFilterStock] = useState(filters.stock || '');
+    const [filterExpiration, setFilterExpiration] = useState(filters.expiration || '');
     const [showFilters, setShowFilters] = useState(false);
 
     const handleSearch = (e: React.FormEvent) => { e.preventDefault(); applyFilters(); };
 
     const applyFilters = () => {
-        router.get('/doctor/inventory', { search, category: filterCategory }, { preserveState: true });
+        router.get('/doctor/inventory', { search, category: filterCategory, stock: filterStock, expiration: filterExpiration }, { preserveState: true });
     };
 
     const clearFilters = () => {
-        setSearch(''); setFilterCategory('');
+        setSearch(''); setFilterCategory(''); setFilterStock(''); setFilterExpiration('');
         router.get('/doctor/inventory', {}, { preserveState: true });
     };
 
@@ -92,6 +94,16 @@ export default function DoctorInventory({ items, filters }: Props) {
                             <option value="medicine">Medicine</option>
                             <option value="supply">Supply</option>
                             <option value="equipment">Equipment</option>
+                        </select>
+                        <select value={filterStock} onChange={(e) => setFilterStock(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
+                            <option value="">All Stock Levels</option>
+                            <option value="low">Low Stock</option>
+                            <option value="out">Out of Stock</option>
+                        </select>
+                        <select value={filterExpiration} onChange={(e) => setFilterExpiration(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
+                            <option value="">All Expiration</option>
+                            <option value="expired">Expired</option>
+                            <option value="expiring_soon">Expiring in 30 days</option>
                         </select>
                         <button onClick={applyFilters} className="h-8 rounded-lg bg-[#0787f7] px-3 text-xs font-semibold text-white hover:bg-[#0670d4]">Apply</button>
                         <button onClick={clearFilters} className="h-8 rounded-lg border border-neutral-200 px-3 text-xs font-medium text-neutral-500 hover:bg-neutral-50 dark:border-neutral-700">Clear</button>

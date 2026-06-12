@@ -40,7 +40,7 @@ type PaginatedItems = {
 
 type Props = {
     items: PaginatedItems;
-    filters: { search?: string; category?: string; status?: string; stock?: string };
+    filters: { search?: string; category?: string; status?: string; stock?: string; expiration?: string; supplier?: string };
 };
 
 type ItemFormData = {
@@ -70,6 +70,8 @@ export default function Inventory({ items, filters }: Props) {
     const [filterCategory, setFilterCategory] = useState(filters.category || '');
     const [filterStatus, setFilterStatus] = useState(filters.status || '');
     const [filterStock, setFilterStock] = useState(filters.stock || '');
+    const [filterExpiration, setFilterExpiration] = useState(filters.expiration || '');
+    const [filterSupplier, setFilterSupplier] = useState(filters.supplier || '');
     const [showFilters, setShowFilters] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showAdjust, setShowAdjust] = useState(false);
@@ -82,11 +84,11 @@ export default function Inventory({ items, filters }: Props) {
     const handleSearch = (e: React.FormEvent) => { e.preventDefault(); applyFilters(); };
 
     const applyFilters = () => {
-        router.get('/pharmacist/inventory', { search, category: filterCategory, status: filterStatus, stock: filterStock }, { preserveState: true });
+        router.get('/pharmacist/inventory', { search, category: filterCategory, status: filterStatus, stock: filterStock, expiration: filterExpiration, supplier: filterSupplier }, { preserveState: true });
     };
 
     const clearFilters = () => {
-        setSearch(''); setFilterCategory(''); setFilterStatus(''); setFilterStock('');
+        setSearch(''); setFilterCategory(''); setFilterStatus(''); setFilterStock(''); setFilterExpiration(''); setFilterSupplier('');
         router.get('/pharmacist/inventory', {}, { preserveState: true });
     };
 
@@ -194,7 +196,22 @@ export default function Inventory({ items, filters }: Props) {
                         </select>
                         <select value={filterStock} onChange={(e) => setFilterStock(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
                             <option value="">All Stock Levels</option>
-                            <option value="low">Low Stock Only</option>
+                            <option value="low">Low Stock</option>
+                            <option value="out">Out of Stock</option>
+                        </select>
+                        <select value={filterExpiration} onChange={(e) => setFilterExpiration(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
+                            <option value="">All Expiration</option>
+                            <option value="expired">Expired</option>
+                            <option value="expiring_soon">Expiring in 30 days</option>
+                        </select>
+                        <select value={filterSupplier} onChange={(e) => setFilterSupplier(e.target.value)} className="h-8 rounded-lg border border-neutral-200 px-2 text-xs focus:border-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
+                            <option value="">All Suppliers</option>
+                            <option value="PhilPharma Inc.">PhilPharma Inc.</option>
+                            <option value="MedSupply Co.">MedSupply Co.</option>
+                            <option value="UniDrug Corp.">UniDrug Corp.</option>
+                            <option value="HealthFirst Distributors">HealthFirst Distributors</option>
+                            <option value="Pacific Medical">Pacific Medical</option>
+                            <option value="Metro Drug Inc.">Metro Drug Inc.</option>
                         </select>
                         <button onClick={applyFilters} className="h-8 rounded-lg bg-[#0787f7] px-3 text-xs font-semibold text-white hover:bg-[#0670d4]">Apply</button>
                         <button onClick={clearFilters} className="h-8 rounded-lg border border-neutral-200 px-3 text-xs font-medium text-neutral-500 hover:bg-neutral-50 dark:border-neutral-700">Clear</button>
