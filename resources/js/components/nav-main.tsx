@@ -70,9 +70,14 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                 isActive={isCurrentUrl(item.href)}
                                 tooltip={{ children: item.title }}
                             >
-                                <Link href={item.href} prefetch>
+                                <Link href={item.href} prefetch className="relative">
                                     {item.icon && <item.icon />}
                                     <span>{item.title}</span>
+                                    {item.badge && item.badge > 0 && !isCurrentUrl(item.href) && (
+                                        <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white">
+                                            {item.badge > 99 ? '99+' : item.badge}
+                                        </span>
+                                    )}
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>

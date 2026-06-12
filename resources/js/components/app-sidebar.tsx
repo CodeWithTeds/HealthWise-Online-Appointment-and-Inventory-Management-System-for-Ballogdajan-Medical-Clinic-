@@ -190,9 +190,17 @@ function getNavItemsByRole(role: string | undefined): NavItem[] {
 }
 
 export function AppSidebar() {
-    const { auth } = usePage().props;
-    const user = auth.user as User | null;
+    const { auth, inventoryAlertCount } = usePage().props as { auth: { user: User | null }; inventoryAlertCount?: number };
+    const user = auth.user;
     const navItems = getNavItemsByRole(user?.role);
+
+    // Inject badge count into "Inventory Alerts" nav item
+    const itemsWithBadge = navItems.map((item) => {
+        if (item.title === 'Inventory Alerts' && inventoryAlertCount && inventoryAlertCount > 0) {
+            return { ...item, badge: inventoryAlertCount };
+        }
+        return item;
+    });
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -209,7 +217,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={navItems} />
+                <NavMain items={itemsWithBadge} />
             </SidebarContent>
 
             <SidebarFooter>

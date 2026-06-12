@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\InventoryItem;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -42,6 +43,27 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'inventoryAlertCount' => fn () => $this->getInventoryAlertCount($request),
         ];
+    }
+
+    private function getInventoryAlertCount(Request $request): int
+    {
+        if (! $request->user()) {
+            return 0;
+        }
+
+        $role = $request->user()->role->value ?? '';
+        if (! in_array($role, ['doctor', 'pharmacist', 'secretary'])) {
+            return 0;
+        }
+
+        return InventoryItem::query()
+            ->where('status', 'active')
+            ->where(function ($q) {
+                $q->whereColumn('quantity', '<=', 'minimum_stock')
+                    ->orWhere('expiration_date', '<=', now()->addDays(30));
+            })
+            ->count();
     }
 }
