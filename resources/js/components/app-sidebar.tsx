@@ -13,7 +13,6 @@ import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
-import { useBranding } from '@/contexts/branding-context';
 import {
     Sidebar,
     SidebarContent,
@@ -194,8 +193,6 @@ export function AppSidebar() {
     const { auth, inventoryAlertCount } = usePage().props as { auth: { user: User | null }; inventoryAlertCount?: number };
     const user = auth.user;
     const navItems = getNavItemsByRole(user?.role);
-    const { settings } = useBranding();
-    const sidebarColor = settings.sidebar_color;
 
     // Inject badge count into "Inventory Alerts" nav item
     const itemsWithBadge = navItems.map((item) => {
@@ -206,7 +203,11 @@ export function AppSidebar() {
     });
 
     return (
-        <Sidebar collapsible="icon" variant="inset" style={{ '--sidebar-bg': sidebarColor } as React.CSSProperties} className="[&_[data-slot=sidebar]]:!bg-[var(--sidebar-bg)] [&_[data-slot=sidebar]]:text-white [&_[data-slot=sidebar]_*]:!text-white/90">
+        <Sidebar
+            collapsible="icon"
+            variant="inset"
+            className="[&_[data-sidebar=sidebar]]:text-white [&_[data-sidebar=sidebar]_*]:text-white/90 [&_[data-sidebar=sidebar]_[data-active=true]]:text-white"
+        >
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
