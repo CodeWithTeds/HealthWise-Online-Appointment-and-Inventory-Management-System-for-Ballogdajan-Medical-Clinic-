@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\AppSetting;
 use App\Models\InventoryItem;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -44,6 +45,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'inventoryAlertCount' => fn () => $this->getInventoryAlertCount($request),
+            'appSettings' => fn () => AppSetting::allSettings(),
         ];
     }
 

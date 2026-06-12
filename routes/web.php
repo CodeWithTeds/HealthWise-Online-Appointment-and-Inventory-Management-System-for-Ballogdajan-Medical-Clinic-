@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\AppointmentManagementController;
+use App\Http\Controllers\Admin\AppSettingsController;
 use App\Http\Controllers\Admin\PatientRecordController;
 use App\Http\Controllers\Auth\EmailVerificationCodeController;
 use App\Http\Controllers\Doctor\InventoryViewController;
@@ -95,6 +96,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('book-appointment', [AppointmentController::class, 'index'])->name('appointments.index');
             Route::post('book-appointment', [AppointmentController::class, 'store'])->name('appointments.store');
         });
+
+        // App Settings (branding)
+        Route::post('app-settings', [AppSettingsController::class, 'update'])->name('app-settings.update');
+        Route::post('app-settings/logo', [AppSettingsController::class, 'uploadLogo'])->name('app-settings.upload-logo');
     });
 });
 

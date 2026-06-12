@@ -1,5 +1,6 @@
 import { createInertiaApp } from '@inertiajs/react';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { BrandingProvider } from '@/contexts/branding-context';
 import { LanguageProvider } from '@/contexts/language-context';
 import { initializeTheme } from '@/hooks/use-appearance';
 import AppLayout from '@/layouts/app-layout';
@@ -30,7 +31,9 @@ createInertiaApp({
     withApp(app) {
         return (
             <LanguageProvider>
-                <TooltipProvider delayDuration={0}>{app}</TooltipProvider>
+                <BrandingProvider>
+                    <TooltipProvider delayDuration={0}>{app}</TooltipProvider>
+                </BrandingProvider>
             </LanguageProvider>
         );
     },
