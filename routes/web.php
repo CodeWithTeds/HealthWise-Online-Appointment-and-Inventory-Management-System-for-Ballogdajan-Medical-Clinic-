@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AppSettingsController;
 use App\Http\Controllers\Admin\PatientRecordController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Auth\EmailVerificationCodeController;
+use App\Http\Controllers\Doctor\DashboardController;
 use App\Http\Controllers\Doctor\InventoryViewController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Patient\AppointmentController;
@@ -37,7 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('dashboard');
 
         // Role-prefixed dashboards
-        Route::inertia('doctor/dashboard', 'dashboard')->name('doctor.dashboard');
+        Route::get('doctor/dashboard', DashboardController::class)->name('doctor.dashboard');
         Route::inertia('secretary/dashboard', 'dashboard')->name('secretary.dashboard');
         Route::inertia('pharmacist/dashboard', 'dashboard')->name('pharmacist.dashboard');
         Route::inertia('patient/dashboard', 'dashboard')->name('patient.dashboard');
