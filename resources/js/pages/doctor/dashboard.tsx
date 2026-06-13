@@ -1,6 +1,6 @@
 import { Head, usePage } from '@inertiajs/react';
 import {
-    AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
+    BarChart, Bar, PieChart, Pie, Cell,
     XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
 import {
@@ -65,7 +65,7 @@ export default function DoctorDashboard({ stats }: Props) {
 
                 {/* Charts Row */}
                 <div className="grid gap-4 lg:grid-cols-3">
-                    {/* Area Chart - 7 Day Trend */}
+                    {/* Bar Chart - 7 Day Trend */}
                     <div className="lg:col-span-2 rounded-xl border border-neutral-100 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
                         <div className="mb-3 flex items-center justify-between">
                             <div>
@@ -74,42 +74,34 @@ export default function DoctorDashboard({ stats }: Props) {
                             </div>
                             <TrendingUp className="h-4 w-4 text-[#0787f7]" />
                         </div>
-                        <ResponsiveContainer width="100%" height={220}>
-                            <AreaChart data={stats.chart_7days}>
-                                <defs>
-                                    <linearGradient id="colorAppts" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#0787f7" stopOpacity={0.3} />
-                                        <stop offset="95%" stopColor="#0787f7" stopOpacity={0} />
-                                    </linearGradient>
-                                    <linearGradient id="colorCompleted" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                                        <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-                                    </linearGradient>
-                                </defs>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                                <XAxis dataKey="date" tick={{ fontSize: 10 }} stroke="#94a3b8" />
-                                <YAxis tick={{ fontSize: 10 }} stroke="#94a3b8" />
-                                <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #e2e8f0' }} />
-                                <Area type="monotone" dataKey="appointments" stroke="#0787f7" strokeWidth={2} fillOpacity={1} fill="url(#colorAppts)" name="Total" />
-                                <Area type="monotone" dataKey="completed" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#colorCompleted)" name="Completed" />
-                            </AreaChart>
+                        <ResponsiveContainer width="100%" height={160}>
+                            <BarChart data={stats.chart_7days} barCategoryGap="20%">
+                                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                                <XAxis dataKey="date" tick={{ fontSize: 9 }} stroke="#94a3b8" axisLine={false} tickLine={false} />
+                                <YAxis tick={{ fontSize: 9 }} stroke="#94a3b8" axisLine={false} tickLine={false} width={25} />
+                                <Tooltip contentStyle={{ fontSize: 10, borderRadius: 8, border: '1px solid #e2e8f0' }} cursor={{ fill: '#f8fafc' }} />
+                                <Legend iconSize={6} iconType="circle" wrapperStyle={{ fontSize: 9 }} />
+                                <Bar dataKey="appointments" fill="#0787f7" radius={[3, 3, 0, 0]} name="Total" />
+                                <Bar dataKey="completed" fill="#10b981" radius={[3, 3, 0, 0]} name="Completed" />
+                                <Bar dataKey="cancelled" fill="#ef4444" radius={[3, 3, 0, 0]} name="Cancelled" />
+                            </BarChart>
                         </ResponsiveContainer>
                     </div>
 
                     {/* Pie Chart - Status Breakdown */}
                     <div className="rounded-xl border border-neutral-100 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
-                        <div className="mb-3">
+                        <div className="mb-2">
                             <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">Status Breakdown</h3>
                             <p className="text-[10px] text-neutral-400">{totalAppts} total appointments</p>
                         </div>
-                        <ResponsiveContainer width="100%" height={180}>
+                        <ResponsiveContainer width="100%" height={140}>
                             <PieChart>
-                                <Pie data={pieData} cx="50%" cy="50%" innerRadius={45} outerRadius={70} paddingAngle={3} dataKey="value">
+                                <Pie data={pieData} cx="50%" cy="50%" innerRadius={35} outerRadius={55} paddingAngle={3} dataKey="value">
                                     {pieData.map((_, i) => (
                                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
                                     ))}
                                 </Pie>
-                                <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8 }} />
+                                <Tooltip contentStyle={{ fontSize: 10, borderRadius: 8 }} />
                             </PieChart>
                         </ResponsiveContainer>
                         <div className="mt-2 flex flex-wrap justify-center gap-x-3 gap-y-1">
@@ -125,24 +117,37 @@ export default function DoctorDashboard({ stats }: Props) {
 
                 {/* Bottom Row */}
                 <div className="grid gap-4 lg:grid-cols-2">
-                    {/* Bar Chart - 30 Day Overview */}
+                    {/* Donut Chart - Monthly Completion Rate */}
                     <div className="rounded-xl border border-neutral-100 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
-                        <div className="mb-3 flex items-center justify-between">
-                            <div>
-                                <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">Monthly Overview</h3>
-                                <p className="text-[10px] text-neutral-400">Last 30 days</p>
+                        <div className="mb-3">
+                            <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">Monthly Overview</h3>
+                            <p className="text-[10px] text-neutral-400">{stats.chart_30days.reduce((a, d) => a + d.appointments, 0)} total this month</p>
+                        </div>
+                        <ResponsiveContainer width="100%" height={140}>
+                            <PieChart>
+                                <Pie
+                                    data={[
+                                        { name: 'Completed', value: stats.chart_30days.reduce((a, d) => a + d.completed, 0) },
+                                        { name: 'Others', value: stats.chart_30days.reduce((a, d) => a + d.appointments, 0) - stats.chart_30days.reduce((a, d) => a + d.completed, 0) },
+                                    ]}
+                                    cx="50%" cy="50%" innerRadius={35} outerRadius={55} paddingAngle={3} dataKey="value"
+                                >
+                                    <Cell fill="#10b981" />
+                                    <Cell fill="#e2e8f0" />
+                                </Pie>
+                                <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8 }} />
+                            </PieChart>
+                        </ResponsiveContainer>
+                        <div className="mt-2 flex justify-center gap-4">
+                            <div className="flex items-center gap-1.5">
+                                <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                                <span className="text-[10px] text-neutral-500">Completed ({stats.chart_30days.reduce((a, d) => a + d.completed, 0)})</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <span className="h-2.5 w-2.5 rounded-full bg-neutral-200" />
+                                <span className="text-[10px] text-neutral-500">Others ({stats.chart_30days.reduce((a, d) => a + d.appointments, 0) - stats.chart_30days.reduce((a, d) => a + d.completed, 0)})</span>
                             </div>
                         </div>
-                        <ResponsiveContainer width="100%" height={180}>
-                            <BarChart data={stats.chart_30days} barGap={2}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                                <XAxis dataKey="date" tick={{ fontSize: 9 }} stroke="#94a3b8" interval={4} />
-                                <YAxis tick={{ fontSize: 10 }} stroke="#94a3b8" />
-                                <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #e2e8f0' }} />
-                                <Bar dataKey="appointments" fill="#0787f7" radius={[3, 3, 0, 0]} name="Appointments" />
-                                <Bar dataKey="completed" fill="#10b981" radius={[3, 3, 0, 0]} name="Completed" />
-                            </BarChart>
-                        </ResponsiveContainer>
                     </div>
 
                     {/* Quick Alerts */}
