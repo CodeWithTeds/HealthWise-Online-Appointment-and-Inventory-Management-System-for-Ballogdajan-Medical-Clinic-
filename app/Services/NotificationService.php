@@ -12,7 +12,7 @@ final class NotificationService
         private readonly NotificationRepositoryInterface $notifications,
     ) {}
 
-    public function appointmentCreated(string $patientName, string $date, string $session): void
+    public function appointmentCreated(string $patientName, string $date, string $session, ?int $userId = null): void
     {
         $this->notifications->create(
             'appointment_created',
@@ -20,10 +20,11 @@ final class NotificationService
             "{$patientName} booked an appointment for {$date} ({$session} session).",
             'calendar',
             null,
+            $userId,
         );
     }
 
-    public function appointmentCancelled(string $patientName, string $date): void
+    public function appointmentCancelled(string $patientName, string $date, ?int $userId = null): void
     {
         $this->notifications->create(
             'appointment_cancelled',
@@ -31,10 +32,11 @@ final class NotificationService
             "{$patientName} cancelled their appointment on {$date}.",
             'x-circle',
             null,
+            $userId,
         );
     }
 
-    public function appointmentStatusChanged(string $patientName, string $date, string $status): void
+    public function appointmentStatusChanged(string $patientName, string $date, string $status, ?int $userId = null): void
     {
         $this->notifications->create(
             'queue_update',
@@ -42,6 +44,7 @@ final class NotificationService
             "{$patientName}'s appointment on {$date} was marked as {$status}.",
             'activity',
             null,
+            $userId,
         );
     }
 
@@ -52,6 +55,7 @@ final class NotificationService
             'Low Stock Alert',
             "{$itemName} is low — {$quantity} remaining (min: {$minimum}).",
             'alert-triangle',
+            null,
             null,
         );
     }
@@ -64,6 +68,7 @@ final class NotificationService
             "Stock {$label}",
             "{$itemName}: {$qty} units {$label}. Reason: {$reason}.",
             'package',
+            null,
             null,
         );
     }

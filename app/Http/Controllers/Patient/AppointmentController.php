@@ -66,7 +66,7 @@ final class AppointmentController extends Controller
         $this->appointments->create($data);
 
         // Notify staff
-        $this->notificationService->appointmentCreated($request->user()->name, $data['date'], $data['session']);
+        $this->notificationService->appointmentCreated($request->user()->name, $data['date'], $data['session'], $request->user()->id);
 
         return back()->with('success', 'Appointment booked successfully!');
     }

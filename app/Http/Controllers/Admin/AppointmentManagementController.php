@@ -37,7 +37,8 @@ final class AppointmentManagementController extends Controller
         $this->notificationService->appointmentStatusChanged(
             $appointment->user->name ?? 'Patient',
             $appointment->date->format('M d, Y'),
-            $newStatus
+            $newStatus,
+            $appointment->user_id
         );
 
         return back()->with('success', 'Appointment status updated.');

@@ -58,6 +58,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::get('patient-records', [PatientRecordController::class, 'index'])->name('patient-records.index');
             Route::get('patient-records/{user}/appointments', [PatientRecordController::class, 'appointments'])->name('patient-records.appointments');
+
+            Route::inertia('notifications', 'admin/notifications')->name('notifications.index');
         });
 
         // Doctor - User Management, Schedules & Appointments
@@ -80,6 +82,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::get('inventory', [InventoryViewController::class, 'index'])->name('inventory.index');
             Route::get('inventory-alerts', [InventoryViewController::class, 'alerts'])->name('inventory-alerts.index');
+
+            Route::inertia('notifications', 'admin/notifications')->name('notifications.index');
         });
 
         // Pharmacist - Inventory Management
@@ -106,6 +110,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('notifications/data', [NotificationController::class, 'index'])->name('notifications.data');
         Route::patch('notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
         Route::patch('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+        Route::post('notifications/{id}/send-email', [NotificationController::class, 'sendEmail'])->name('notifications.send-email');
     });
 });
 

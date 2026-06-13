@@ -6,6 +6,7 @@ import {
     Package,
     AlertTriangle,
     Users,
+    Bell,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -68,6 +69,11 @@ const doctorNavItems: NavItem[] = [
         href: '/doctor/inventory-alerts',
         icon: AlertTriangle,
     },
+    {
+        title: 'Notifications',
+        href: '/doctor/notifications',
+        icon: Bell,
+    },
 ];
 
 const secretaryNavItems: NavItem[] = [
@@ -113,6 +119,11 @@ const secretaryNavItems: NavItem[] = [
         title: 'Inventory Alerts',
         href: '/secretary/inventory-alerts',
         icon: AlertTriangle,
+    },
+    {
+        title: 'Notifications',
+        href: '/secretary/notifications',
+        icon: Bell,
     },
 ];
 
@@ -163,7 +174,7 @@ function getNavItemsByRole(role: string | undefined): NavItem[] {
 }
 
 export function AppSidebar() {
-    const { auth, inventoryAlertCount } = usePage().props as { auth: { user: User | null }; inventoryAlertCount?: number };
+    const { auth, inventoryAlertCount, notificationCount } = usePage().props as { auth: { user: User | null }; inventoryAlertCount?: number; notificationCount?: number };
     const user = auth.user;
     const navItems = getNavItemsByRole(user?.role);
 
@@ -171,6 +182,9 @@ export function AppSidebar() {
     const itemsWithBadge = navItems.map((item) => {
         if (item.title === 'Inventory Alerts' && inventoryAlertCount && inventoryAlertCount > 0) {
             return { ...item, badge: inventoryAlertCount };
+        }
+        if (item.title === 'Notifications' && notificationCount && notificationCount > 0) {
+            return { ...item, badge: notificationCount };
         }
         return item;
     });
