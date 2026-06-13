@@ -9,6 +9,7 @@ use App\Http\Requests\Patient\BookAppointmentRequest;
 use App\Models\Appointment;
 use App\Models\Schedule;
 use App\Repositories\AppointmentRepositoryInterface;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,6 +19,7 @@ final class AppointmentController extends Controller
 {
     public function __construct(
         private readonly AppointmentRepositoryInterface $appointments,
+        private readonly NotificationService $notificationService,
     ) {}
 
     public function index(Request $request): Response
@@ -62,6 +64,9 @@ final class AppointmentController extends Controller
         $schedule->increment($field);
 
         $this->appointments->create($data);
+
+        // Notify staff
+        $this->notificationService->appointmentCreated($request->user()->name, $data['date'], $data['session']);
 
         return back()->with('success', 'Appointment booked successfully!');
     }

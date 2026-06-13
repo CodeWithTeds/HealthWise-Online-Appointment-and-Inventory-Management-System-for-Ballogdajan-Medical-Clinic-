@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AppSettingsController;
 use App\Http\Controllers\Admin\PatientRecordController;
 use App\Http\Controllers\Auth\EmailVerificationCodeController;
 use App\Http\Controllers\Doctor\InventoryViewController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Patient\AppointmentController;
 use App\Http\Controllers\Pharmacist\InventoryController;
 use Illuminate\Support\Facades\Auth;
@@ -100,6 +101,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // App Settings (branding)
         Route::post('app-settings', [AppSettingsController::class, 'update'])->name('app-settings.update');
         Route::post('app-settings/logo', [AppSettingsController::class, 'uploadLogo'])->name('app-settings.upload-logo');
+
+        // Notifications API
+        Route::get('notifications/data', [NotificationController::class, 'index'])->name('notifications.data');
+        Route::patch('notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+        Route::patch('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
     });
 });
 

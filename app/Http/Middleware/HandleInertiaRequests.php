@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\AppSetting;
+use App\Models\ClinicNotification;
 use App\Models\InventoryItem;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -46,6 +47,7 @@ class HandleInertiaRequests extends Middleware
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'inventoryAlertCount' => fn () => $this->getInventoryAlertCount($request),
             'appSettings' => fn () => AppSetting::allSettings(),
+            'notificationCount' => fn () => $this->getNotificationCount($request),
         ];
     }
 
@@ -67,5 +69,19 @@ class HandleInertiaRequests extends Middleware
                     ->orWhere('expiration_date', '<=', now()->addDays(30));
             })
             ->count();
+    }
+
+    private function getNotificationCount(Request $request): int
+    {
+        if (! $request->user()) {
+            return 0;
+        }
+
+        $role = $request->user()->role->value ?? '';
+        if (! in_array($role, ['doctor', 'pharmacist', 'secretary'])) {
+            return 0;
+        }
+
+        return ClinicNotification::where('read', false)->count();
     }
 }

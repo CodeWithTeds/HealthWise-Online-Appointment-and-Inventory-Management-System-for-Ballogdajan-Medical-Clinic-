@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Pharmacist;
 use App\Http\Controllers\Controller;
 use App\Models\InventoryItem;
 use App\Repositories\InventoryRepositoryInterface;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -16,6 +17,7 @@ final class InventoryController extends Controller
 {
     public function __construct(
         private readonly InventoryRepositoryInterface $inventory,
+        private readonly NotificationService $notificationService,
     ) {}
 
     public function index(Request $request): Response
@@ -50,7 +52,13 @@ final class InventoryController extends Controller
     public function adjust(Request $request, InventoryItem $item): RedirectResponse
     {
         $data = $request->validate(['quantity' => 'required|integer|min:1', 'type' => 'required|in:stock_in,stock_out', 'reason' => 'required|string|max:255', 'notes' => 'nullable|string']);
-        $this->inventory->adjustStock($item, (int) $data['quantity'], $data['type'], $data['reason'], $data['notes'] ?? null, $request->user()->id);
+        $updated = $this->inventory->adjustStock($item, (int) $data['quantity'], $data['type'], $data['reason'], $data['notes'] ?? null, $request->user()->id);
+
+        $this->notificationService->inventoryAdjusted($item->name, $data['type'], (int) $data['quantity'], $data['reason']);
+
+        if ($updated->isLowStock()) {
+            $this->notificationService->inventoryLow($updated->name, $updated->quantity, $updated->minimum_stock);
+        }
 
         return back()->with('success', 'Stock adjusted.');
     }

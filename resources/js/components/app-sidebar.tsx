@@ -6,8 +6,6 @@ import {
     Package,
     AlertTriangle,
     Users,
-    BarChart3,
-    Bell,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -70,16 +68,6 @@ const doctorNavItems: NavItem[] = [
         href: '/doctor/inventory-alerts',
         icon: AlertTriangle,
     },
-    {
-        title: 'Reports',
-        href: '/doctor/reports',
-        icon: BarChart3,
-    },
-    {
-        title: 'Notifications',
-        href: '/doctor/notifications',
-        icon: Bell,
-    },
 ];
 
 const secretaryNavItems: NavItem[] = [
@@ -126,16 +114,6 @@ const secretaryNavItems: NavItem[] = [
         href: '/secretary/inventory-alerts',
         icon: AlertTriangle,
     },
-    {
-        title: 'Reports',
-        href: '/secretary/reports',
-        icon: BarChart3,
-    },
-    {
-        title: 'Notifications',
-        href: '/secretary/notifications',
-        icon: Bell,
-    },
 ];
 
 const pharmacistNavItems: NavItem[] = [
@@ -166,11 +144,6 @@ const patientNavItems: NavItem[] = [
         title: 'Book Appointment',
         href: '/patient/book-appointment',
         icon: Calendar,
-    },
-    {
-        title: 'Notifications',
-        href: '/patient/notifications',
-        icon: Bell,
     },
 ];
 

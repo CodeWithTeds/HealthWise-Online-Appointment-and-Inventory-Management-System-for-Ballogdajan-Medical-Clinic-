@@ -1,5 +1,6 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { LanguageToggle } from '@/components/language-toggle';
+import { NotificationPanel } from '@/components/notification-panel';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import type { BreadcrumbItem as BreadcrumbItemType } from '@/types';
 
@@ -14,7 +15,10 @@ export function AppSidebarHeader({
                 <SidebarTrigger className="-ml-1" />
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
             </div>
-            <LanguageToggle />
+            <div className="flex items-center gap-2">
+                <NotificationPanel />
+                <LanguageToggle />
+            </div>
         </header>
     );
 }
