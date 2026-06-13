@@ -14,6 +14,8 @@ use App\Repositories\InventoryRepository;
 use App\Repositories\InventoryRepositoryInterface;
 use App\Repositories\NotificationRepository;
 use App\Repositories\NotificationRepositoryInterface;
+use App\Repositories\ReportRepository;
+use App\Repositories\ReportRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -30,6 +32,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(AppointmentRepositoryInterface::class, AppointmentRepository::class);
         $this->app->singleton(InventoryRepositoryInterface::class, InventoryRepository::class);
         $this->app->singleton(NotificationRepositoryInterface::class, NotificationRepository::class);
+        $this->app->singleton(ReportRepositoryInterface::class, ReportRepository::class);
     }
 
     /**

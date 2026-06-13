@@ -7,6 +7,7 @@ import {
     AlertTriangle,
     Users,
     Bell,
+    BarChart3,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -74,6 +75,11 @@ const doctorNavItems: NavItem[] = [
         href: '/doctor/notifications',
         icon: Bell,
     },
+    {
+        title: 'Reports',
+        href: '/doctor/reports',
+        icon: BarChart3,
+    },
 ];
 
 const secretaryNavItems: NavItem[] = [
@@ -124,6 +130,11 @@ const secretaryNavItems: NavItem[] = [
         title: 'Notifications',
         href: '/secretary/notifications',
         icon: Bell,
+    },
+    {
+        title: 'Reports',
+        href: '/secretary/reports',
+        icon: BarChart3,
     },
 ];
 

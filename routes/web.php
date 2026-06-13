@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\AppointmentManagementController;
 use App\Http\Controllers\Admin\AppSettingsController;
 use App\Http\Controllers\Admin\PatientRecordController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Auth\EmailVerificationCodeController;
 use App\Http\Controllers\Doctor\InventoryViewController;
 use App\Http\Controllers\NotificationController;
@@ -60,6 +61,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('patient-records/{user}/appointments', [PatientRecordController::class, 'appointments'])->name('patient-records.appointments');
 
             Route::inertia('notifications', 'admin/notifications')->name('notifications.index');
+
+            Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
         });
 
         // Doctor - User Management, Schedules & Appointments
@@ -84,6 +87,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('inventory-alerts', [InventoryViewController::class, 'alerts'])->name('inventory-alerts.index');
 
             Route::inertia('notifications', 'admin/notifications')->name('notifications.index');
+
+            Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
         });
 
         // Pharmacist - Inventory Management
