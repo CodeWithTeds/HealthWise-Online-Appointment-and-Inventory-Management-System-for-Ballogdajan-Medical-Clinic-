@@ -81,6 +81,11 @@ const doctorNavItems: NavItem[] = [
         href: '/doctor/reports',
         icon: BarChart3,
     },
+    {
+        title: 'Patient Feedback',
+        href: '/doctor/patient-feedback',
+        icon: MessageSquare,
+    },
 ];
 
 const secretaryNavItems: NavItem[] = [
