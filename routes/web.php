@@ -17,6 +17,7 @@ use App\Http\Controllers\Patient\DashboardController as PatientDashboardControll
 use App\Http\Controllers\Patient\FeedbackController;
 use App\Http\Controllers\Patient\QueueStatusController;
 use App\Http\Controllers\Pharmacist\InventoryController;
+use App\Http\Controllers\Secretary\DashboardController as SecretaryDashboardController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -44,7 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Role-prefixed dashboards
         Route::get('doctor/dashboard', DashboardController::class)->name('doctor.dashboard');
-        Route::inertia('secretary/dashboard', 'dashboard')->name('secretary.dashboard');
+        Route::get('secretary/dashboard', SecretaryDashboardController::class)->name('secretary.dashboard');
         Route::inertia('pharmacist/dashboard', 'dashboard')->name('pharmacist.dashboard');
         Route::get('patient/dashboard', PatientDashboardController::class)->name('patient.dashboard');
 
