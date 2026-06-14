@@ -16,6 +16,8 @@ use App\Repositories\FeedbackRepository;
 use App\Repositories\FeedbackRepositoryInterface;
 use App\Repositories\InventoryRepository;
 use App\Repositories\InventoryRepositoryInterface;
+use App\Repositories\PrescriptionRepository;
+use App\Repositories\PrescriptionRepositoryInterface;
 use App\Repositories\NotificationRepository;
 use App\Repositories\NotificationRepositoryInterface;
 use App\Repositories\ReportRepository;
@@ -35,6 +37,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(ScheduleRepositoryInterface::class, ScheduleRepository::class);
         $this->app->singleton(AppointmentRepositoryInterface::class, AppointmentRepository::class);
         $this->app->singleton(FeedbackRepositoryInterface::class, FeedbackRepository::class);
+        $this->app->singleton(PrescriptionRepositoryInterface::class, PrescriptionRepository::class);
         $this->app->singleton(DashboardRepositoryInterface::class, DashboardRepository::class);
         $this->app->singleton(InventoryRepositoryInterface::class, InventoryRepository::class);
         $this->app->singleton(NotificationRepositoryInterface::class, NotificationRepository::class);

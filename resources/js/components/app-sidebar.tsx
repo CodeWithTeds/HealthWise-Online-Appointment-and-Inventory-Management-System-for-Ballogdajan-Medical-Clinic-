@@ -9,6 +9,7 @@ import {
     Bell,
     BarChart3,
     MessageSquare,
+    Pill,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -60,6 +61,11 @@ const doctorNavItems: NavItem[] = [
         title: 'Patient Records',
         href: '/doctor/patient-records',
         icon: ClipboardList,
+    },
+    {
+        title: 'Prescriptions',
+        href: '/doctor/prescriptions',
+        icon: Pill,
     },
     {
         title: 'Inventory',

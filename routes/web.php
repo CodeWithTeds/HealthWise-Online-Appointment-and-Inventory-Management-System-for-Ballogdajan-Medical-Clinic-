@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\EmailVerificationCodeController;
 use App\Http\Controllers\Doctor\DashboardController;
 use App\Http\Controllers\Doctor\InventoryViewController;
 use App\Http\Controllers\Doctor\PatientFeedbackController;
+use App\Http\Controllers\Doctor\PrescriptionController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Patient\AppointmentController;
 use App\Http\Controllers\Patient\AppointmentHistoryController;
@@ -88,6 +89,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
 
             Route::get('patient-feedback', PatientFeedbackController::class)->name('patient-feedback.index');
+
+            Route::get('prescriptions', [PrescriptionController::class, 'index'])->name('prescriptions.index');
+            Route::post('prescriptions', [PrescriptionController::class, 'store'])->name('prescriptions.store');
         });
 
         // Pharmacist - Inventory Management

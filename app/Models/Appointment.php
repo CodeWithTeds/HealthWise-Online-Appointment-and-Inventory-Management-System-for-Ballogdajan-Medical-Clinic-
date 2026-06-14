@@ -47,6 +47,11 @@ class Appointment extends Model
         return $this->belongsTo(Schedule::class);
     }
 
+    public function prescription(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Prescription::class);
+    }
+
     public function isPriority(): bool
     {
         return in_array($this->priority_type, ['senior', 'pwd', 'pregnant']);
