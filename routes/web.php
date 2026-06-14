@@ -12,6 +12,8 @@ use App\Http\Controllers\Doctor\InventoryViewController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Patient\AppointmentController;
 use App\Http\Controllers\Patient\AppointmentHistoryController;
+use App\Http\Controllers\Patient\FeedbackController;
+use App\Http\Controllers\Patient\QueueStatusController;
 use App\Http\Controllers\Pharmacist\InventoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -98,6 +100,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('book-appointment', [AppointmentController::class, 'index'])->name('appointments.index');
             Route::post('book-appointment', [AppointmentController::class, 'store'])->name('appointments.store');
             Route::get('appointment-history', AppointmentHistoryController::class)->name('appointment-history');
+            Route::get('queue-status', QueueStatusController::class)->name('queue-status');
+            Route::get('feedback', [FeedbackController::class, 'index'])->name('feedback.index');
+            Route::post('feedback', [FeedbackController::class, 'store'])->name('feedback.store');
         });
 
         // App Settings (branding)

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-final class AppointmentHistoryController extends Controller
+final class QueueStatusController extends Controller
 {
     public function __construct(
         private readonly AppointmentRepositoryInterface $appointments,
@@ -18,9 +18,6 @@ final class AppointmentHistoryController extends Controller
 
     public function __invoke(Request $request): Response
     {
-        return Inertia::render('patient/appointment-history', [
-            'appointments' => $this->appointments->paginateByUserWithFilters($request->user()->id, $request->only('status', 'date_from', 'date_to')),
-            'filters' => $request->only('status', 'date_from', 'date_to'),
-        ]);
+        return Inertia::render('patient/queue-status', $this->appointments->queueStatusForUser($request->user()->id));
     }
 }

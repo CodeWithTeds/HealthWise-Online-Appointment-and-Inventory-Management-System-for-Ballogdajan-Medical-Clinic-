@@ -8,6 +8,7 @@ import {
     Users,
     Bell,
     BarChart3,
+    MessageSquare,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -146,6 +147,16 @@ const patientNavItems: NavItem[] = [
         title: 'Appointment History',
         href: '/patient/appointment-history',
         icon: ClipboardList,
+    },
+    {
+        title: 'Queue Status',
+        href: '/patient/queue-status',
+        icon: Users,
+    },
+    {
+        title: 'Feedback',
+        href: '/patient/feedback',
+        icon: MessageSquare,
     },
 ];
 
