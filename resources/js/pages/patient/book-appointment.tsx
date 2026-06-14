@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 import { Calendar, X, Sun, Moon } from 'lucide-react';
 import { useLanguage } from '@/contexts/language-context';
+import { FlashAlert } from '@/components/flash-alert';
+import Swal from 'sweetalert2';
 import type { User } from '@/types/auth';
 
 type Schedule = {
@@ -82,7 +84,33 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         form.post('/patient/book-appointment', {
-            onSuccess: () => { setShowBooking(false); form.reset(); },
+            onSuccess: () => {
+                setShowBooking(false);
+                form.reset();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Appointment Booked!',
+                    text: 'Your appointment has been successfully booked. You will receive a confirmation soon.',
+                    confirmButtonColor: '#0787f7',
+                });
+            },
+            onError: (errors) => {
+                const errorList = Object.values(errors)
+                    .flat()
+                    .map((msg) => `<li class="text-left text-sm text-red-600">${msg}</li>`)
+                    .join('');
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Booking Failed',
+                    html: `
+                        <p class="text-sm text-neutral-500 mb-3">Please fix the following errors:</p>
+                        <ul class="list-disc pl-5 space-y-1">${errorList}</ul>
+                    `,
+                    confirmButtonColor: '#0787f7',
+                    confirmButtonText: 'Got it',
+                });
+            },
             preserveScroll: true,
         });
     };
@@ -108,6 +136,7 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
         <>
             <Head title={t('book_appointment')} />
             <div className="flex h-full flex-1 flex-col gap-6 overflow-y-auto p-4 sm:p-6">
+                <FlashAlert />
                 {/* Hero Card */}
                 <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0787f7] to-[#0560c9] p-6 sm:p-8">
                     <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-white/10" />
@@ -235,6 +264,12 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
                         </p>
 
                         <form onSubmit={handleSubmit} className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
+                            {/* Global date error (duplicate booking) */}
+                            {form.errors.date && (
+                                <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-medium text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+                                    {form.errors.date}
+                                </div>
+                            )}
                             <div className="grid gap-3 sm:grid-cols-2">
                                 <div>
                                     <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('reason_for_visit')} *</label>
@@ -244,34 +279,41 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
                                 <div>
                                     <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('contact_number')}</label>
                                     <input type="text" value={form.data.contact_number} onChange={(e) => form.setData('contact_number', e.target.value)} className={inputCls} placeholder={t('placeholder_contact')} />
+                                    {form.errors.contact_number && <p className="mt-1 text-xs text-red-500">{form.errors.contact_number}</p>}
                                 </div>
                             </div>
                             <div>
                                 <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('symptoms')}</label>
                                 <input type="text" value={form.data.symptoms} onChange={(e) => form.setData('symptoms', e.target.value)} className={inputCls} placeholder={t('placeholder_symptoms')} />
+                                {form.errors.symptoms && <p className="mt-1 text-xs text-red-500">{form.errors.symptoms}</p>}
                             </div>
                             <div className="grid gap-3 sm:grid-cols-2">
                                 <div>
                                     <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('allergies')}</label>
                                     <input type="text" value={form.data.allergies} onChange={(e) => form.setData('allergies', e.target.value)} className={inputCls} placeholder={t('placeholder_allergies')} />
+                                    {form.errors.allergies && <p className="mt-1 text-xs text-red-500">{form.errors.allergies}</p>}
                                 </div>
                                 <div>
                                     <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('current_medication')}</label>
                                     <input type="text" value={form.data.current_medication} onChange={(e) => form.setData('current_medication', e.target.value)} className={inputCls} placeholder={t('placeholder_medication')} />
+                                    {form.errors.current_medication && <p className="mt-1 text-xs text-red-500">{form.errors.current_medication}</p>}
                                 </div>
                             </div>
                             <div className="grid gap-3 sm:grid-cols-3">
                                 <div>
                                     <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('temperature')}</label>
                                     <input type="text" value={form.data.temperature} onChange={(e) => form.setData('temperature', e.target.value)} className={inputCls} placeholder="37.5°C" />
+                                    {form.errors.temperature && <p className="mt-1 text-xs text-red-500">{form.errors.temperature}</p>}
                                 </div>
                                 <div>
                                     <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('blood_pressure')}</label>
                                     <input type="text" value={form.data.blood_pressure} onChange={(e) => form.setData('blood_pressure', e.target.value)} className={inputCls} placeholder="120/80" />
+                                    {form.errors.blood_pressure && <p className="mt-1 text-xs text-red-500">{form.errors.blood_pressure}</p>}
                                 </div>
                                 <div>
                                     <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('weight_kg')}</label>
                                     <input type="text" value={form.data.weight} onChange={(e) => form.setData('weight', e.target.value)} className={inputCls} placeholder="65" />
+                                    {form.errors.weight && <p className="mt-1 text-xs text-red-500">{form.errors.weight}</p>}
                                 </div>
                             </div>
                             <div>

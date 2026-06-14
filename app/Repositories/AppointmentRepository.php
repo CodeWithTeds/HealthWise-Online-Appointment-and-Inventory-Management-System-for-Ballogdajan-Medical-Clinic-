@@ -46,12 +46,12 @@ final class AppointmentRepository implements AppointmentRepositoryInterface
 
     public function queueStatusForUser(int $userId): array
     {
-        $today = now()->toDateString();
-
+        // Find the patient's nearest upcoming appointment (today or future)
         $myAppointment = Appointment::query()
             ->where('user_id', $userId)
-            ->where('date', $today)
+            ->where('date', '>=', now()->toDateString())
             ->whereIn('status', ['pending', 'confirmed', 'not_arrived'])
+            ->orderBy('date')
             ->first();
 
         if (! $myAppointment) {
@@ -60,7 +60,7 @@ final class AppointmentRepository implements AppointmentRepositoryInterface
 
         $queue = Appointment::query()
             ->with('user:id,name')
-            ->where('date', $today)
+            ->where('date', $myAppointment->date)
             ->where('session', $myAppointment->session)
             ->whereIn('status', ['pending', 'confirmed', 'not_arrived'])
             ->orderByRaw("FIELD(priority_type, 'senior', 'pwd', 'pregnant', 'regular')")
