@@ -18,6 +18,7 @@ use App\Http\Controllers\Patient\DashboardController as PatientDashboardControll
 use App\Http\Controllers\Patient\FeedbackController;
 use App\Http\Controllers\Patient\PrescriptionController as PatientPrescriptionController;
 use App\Http\Controllers\Patient\QueueStatusController;
+use App\Http\Controllers\Pharmacist\DashboardController as PharmacistDashboardController;
 use App\Http\Controllers\Pharmacist\InventoryController;
 use App\Http\Controllers\Secretary\DashboardController as SecretaryDashboardController;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +49,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Role-prefixed dashboards
         Route::get('doctor/dashboard', DashboardController::class)->name('doctor.dashboard');
         Route::get('secretary/dashboard', SecretaryDashboardController::class)->name('secretary.dashboard');
-        Route::inertia('pharmacist/dashboard', 'dashboard')->name('pharmacist.dashboard');
+        Route::get('pharmacist/dashboard', PharmacistDashboardController::class)->name('pharmacist.dashboard');
         Route::get('patient/dashboard', PatientDashboardController::class)->name('patient.dashboard');
 
         // Secretary - Scheduling, Appointments & Patient Records (restricted)
