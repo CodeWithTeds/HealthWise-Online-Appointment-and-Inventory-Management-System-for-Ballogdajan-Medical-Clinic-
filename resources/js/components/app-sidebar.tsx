@@ -169,6 +169,11 @@ const patientNavItems: NavItem[] = [
         href: '/patient/feedback',
         icon: MessageSquare,
     },
+    {
+        title: 'My Prescriptions',
+        href: '/patient/prescriptions',
+        icon: Pill,
+    },
 ];
 
 function getNavItemsByRole(role: string | undefined): NavItem[] {

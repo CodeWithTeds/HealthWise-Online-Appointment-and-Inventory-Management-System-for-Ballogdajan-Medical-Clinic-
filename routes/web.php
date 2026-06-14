@@ -16,6 +16,7 @@ use App\Http\Controllers\Patient\AppointmentController;
 use App\Http\Controllers\Patient\AppointmentHistoryController;
 use App\Http\Controllers\Patient\DashboardController as PatientDashboardController;
 use App\Http\Controllers\Patient\FeedbackController;
+use App\Http\Controllers\Patient\PrescriptionController as PatientPrescriptionController;
 use App\Http\Controllers\Patient\QueueStatusController;
 use App\Http\Controllers\Pharmacist\InventoryController;
 use App\Http\Controllers\Secretary\DashboardController as SecretaryDashboardController;
@@ -92,6 +93,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::get('prescriptions', [PrescriptionController::class, 'index'])->name('prescriptions.index');
             Route::post('prescriptions', [PrescriptionController::class, 'store'])->name('prescriptions.store');
+            Route::put('prescriptions/{prescription}', [PrescriptionController::class, 'update'])->name('prescriptions.update');
+            Route::get('prescriptions/{prescription}/pdf', [PrescriptionController::class, 'exportPdf'])->name('prescriptions.pdf');
         });
 
         // Pharmacist - Inventory Management
@@ -112,6 +115,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('queue-status', QueueStatusController::class)->name('queue-status');
             Route::get('feedback', [FeedbackController::class, 'index'])->name('feedback.index');
             Route::post('feedback', [FeedbackController::class, 'store'])->name('feedback.store');
+            Route::get('prescriptions', PatientPrescriptionController::class)->name('prescriptions');
         });
 
         // App Settings (branding)

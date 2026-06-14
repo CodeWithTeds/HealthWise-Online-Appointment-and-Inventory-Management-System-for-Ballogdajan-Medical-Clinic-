@@ -14,5 +14,9 @@ interface PrescriptionRepositoryInterface
 
     public function completedAppointmentsWithoutPrescription(): Collection;
 
+    public function getByPatient(int $userId): Collection;
+
     public function create(array $data): Prescription;
+
+    public function update(Prescription $prescription, array $data): Prescription;
 }

@@ -31,8 +31,24 @@ final class PrescriptionRepository implements PrescriptionRepositoryInterface
             ->get(['id', 'user_id', 'date', 'session', 'reason']);
     }
 
+    public function getByPatient(int $userId): Collection
+    {
+        return Prescription::query()
+            ->with('appointment:id,date,session,reason')
+            ->where('patient_id', $userId)
+            ->latest()
+            ->get();
+    }
+
     public function create(array $data): Prescription
     {
         return Prescription::create($data);
+    }
+
+    public function update(Prescription $prescription, array $data): Prescription
+    {
+        $prescription->update($data);
+
+        return $prescription->fresh();
     }
 }
