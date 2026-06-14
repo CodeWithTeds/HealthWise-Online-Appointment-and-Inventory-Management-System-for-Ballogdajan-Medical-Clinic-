@@ -43,14 +43,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::inertia('pharmacist/dashboard', 'dashboard')->name('pharmacist.dashboard');
         Route::inertia('patient/dashboard', 'dashboard')->name('patient.dashboard');
 
-        // Secretary (Admin) - User Management & Schedules
+        // Secretary - Scheduling, Appointments & Patient Records (restricted)
         Route::prefix('secretary')->name('secretary.')->group(function () {
-            Route::get('users', [UserManagementController::class, 'index'])->name('users.index');
-            Route::post('users', [UserManagementController::class, 'store'])->name('users.store');
-            Route::put('users/{user}', [UserManagementController::class, 'update'])->name('users.update');
-            Route::patch('users/{user}/approve', [UserManagementController::class, 'approve'])->name('users.approve');
-            Route::delete('users/{user}', [UserManagementController::class, 'destroy'])->name('users.destroy');
-
             Route::get('appointment-scheduling', [ScheduleController::class, 'index'])->name('schedules.index');
             Route::post('appointment-scheduling', [ScheduleController::class, 'store'])->name('schedules.store');
             Route::put('appointment-scheduling/{schedule}', [ScheduleController::class, 'update'])->name('schedules.update');
@@ -60,10 +54,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::get('patient-records', [PatientRecordController::class, 'index'])->name('patient-records.index');
             Route::get('patient-records/{user}/appointments', [PatientRecordController::class, 'appointments'])->name('patient-records.appointments');
-
-            Route::inertia('notifications', 'admin/notifications')->name('notifications.index');
-
-            Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
         });
 
         // Doctor - User Management, Schedules & Appointments

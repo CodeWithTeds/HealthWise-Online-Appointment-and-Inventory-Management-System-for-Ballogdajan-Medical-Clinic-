@@ -89,11 +89,6 @@ const secretaryNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'User Management',
-        href: '/secretary/users',
-        icon: Users,
-    },
-    {
         title: 'Scheduling',
         href: '/secretary/appointment-scheduling',
         icon: Calendar,
@@ -115,26 +110,6 @@ const secretaryNavItems: NavItem[] = [
         title: 'Patient Records',
         href: '/secretary/patient-records',
         icon: ClipboardList,
-    },
-    {
-        title: 'Inventory',
-        href: '/secretary/inventory',
-        icon: Package,
-    },
-    {
-        title: 'Inventory Alerts',
-        href: '/secretary/inventory-alerts',
-        icon: AlertTriangle,
-    },
-    {
-        title: 'Notifications',
-        href: '/secretary/notifications',
-        icon: Bell,
-    },
-    {
-        title: 'Reports',
-        href: '/secretary/reports',
-        icon: BarChart3,
     },
 ];
 

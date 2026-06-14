@@ -32,6 +32,7 @@ export default function Dashboard() {
         <>
             <Head title={t('dashboard')} />
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-6">
+
                 {/* Welcome Section with Logo */}
                 <div className="flex flex-col items-center justify-center rounded-2xl border border-sidebar-border/50 bg-white px-8 py-12 text-center dark:border-sidebar-border dark:bg-neutral-900">
                     <img
