@@ -12,6 +12,7 @@ use App\Http\Controllers\Doctor\InventoryViewController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Patient\AppointmentController;
 use App\Http\Controllers\Patient\AppointmentHistoryController;
+use App\Http\Controllers\Patient\DashboardController as PatientDashboardController;
 use App\Http\Controllers\Patient\FeedbackController;
 use App\Http\Controllers\Patient\QueueStatusController;
 use App\Http\Controllers\Pharmacist\InventoryController;
@@ -44,7 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('doctor/dashboard', DashboardController::class)->name('doctor.dashboard');
         Route::inertia('secretary/dashboard', 'dashboard')->name('secretary.dashboard');
         Route::inertia('pharmacist/dashboard', 'dashboard')->name('pharmacist.dashboard');
-        Route::inertia('patient/dashboard', 'dashboard')->name('patient.dashboard');
+        Route::get('patient/dashboard', PatientDashboardController::class)->name('patient.dashboard');
 
         // Secretary - Scheduling, Appointments & Patient Records (restricted)
         Route::prefix('secretary')->name('secretary.')->group(function () {

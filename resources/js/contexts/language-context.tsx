@@ -70,9 +70,62 @@ const translations: Translations = {
     'confirmed': { en: 'confirmed', tl: 'nakumpirma' },
     'completed': { en: 'completed', tl: 'tapos na' },
     'cancelled': { en: 'cancelled', tl: 'kinansela' },
+    'no_show': { en: 'no show', tl: 'hindi dumating' },
+    'not_arrived': { en: 'not arrived', tl: 'hindi pa dumating' },
 
     // Sidebar navigation
     'dashboard': { en: 'Dashboard', tl: 'Dashboard' },
+
+    // Patient Dashboard
+    'welcome_back': { en: 'Welcome back,', tl: 'Maligayang pagbabalik,' },
+    'dashboard_subtitle': { en: 'Manage your appointments, check your queue status, and leave feedback — all in one place.', tl: 'Pamahalaan ang iyong mga appointment, tingnan ang iyong pila, at mag-iwan ng feedback — lahat sa isang lugar.' },
+    'upcoming': { en: 'Upcoming', tl: 'Paparating' },
+    'feedback_given': { en: 'Feedback Given', tl: 'Ibinigay na Feedback' },
+    'next_appointment': { en: 'Next Appointment', tl: 'Susunod na Appointment' },
+    'queue_status': { en: 'Queue Status', tl: 'Katayuan ng Pila' },
+    'no_upcoming_appointments': { en: 'No upcoming appointments', tl: 'Walang paparating na appointment' },
+    'book_one_now': { en: 'Book one now', tl: 'Mag-book na ngayon' },
+    'recent_appointments': { en: 'Recent Appointments', tl: 'Mga Kamakailang Appointment' },
+    'view_all': { en: 'View all →', tl: 'Tingnan lahat →' },
+    'no_appointments_yet': { en: 'No appointments yet', tl: 'Wala pang mga appointment' },
+    'schedule_new_visit': { en: 'Schedule a new visit', tl: 'Mag-schedule ng bagong bisita' },
+    'check_your_position': { en: 'Check your position', tl: 'Tingnan ang iyong posisyon' },
+    'rate_your_visits': { en: 'Rate your visits', tl: 'I-rate ang iyong mga bisita' },
+    'feedback': { en: 'Feedback', tl: 'Feedback' },
+
+    // Queue Status page
+    'queue_status_title': { en: 'Queue Status', tl: 'Katayuan ng Pila' },
+    'queue_subtitle': { en: 'Your position in the upcoming appointment queue', tl: 'Ang iyong posisyon sa paparating na pila ng appointment' },
+    'refresh': { en: 'Refresh', tl: 'I-refresh' },
+    'no_upcoming_appointment': { en: 'No upcoming appointment', tl: 'Walang paparating na appointment' },
+    'no_pending_appointments': { en: "You don't have any pending or confirmed appointments.", tl: 'Wala kang pending o nakumpirmang appointment.' },
+    'your_position': { en: 'Your Position', tl: 'Ang Iyong Posisyon' },
+    'youre_next': { en: "You're next!", tl: 'Ikaw na ang susunod!' },
+    'patients_ahead': { en: 'patient(s) ahead of you', tl: 'pasyente ang nasa unahan mo' },
+    'am_session': { en: 'AM Session', tl: 'Sesyon ng Umaga' },
+    'pm_session': { en: 'PM Session', tl: 'Sesyon ng Hapon' },
+    'patients_in_queue': { en: 'patients in queue', tl: 'mga pasyente sa pila' },
+    'you': { en: 'You', tl: 'Ikaw' },
+
+    // Feedback page
+    'feedback_title': { en: 'Feedback', tl: 'Feedback' },
+    'feedback_subtitle': { en: 'Rate and comment on your completed appointments', tl: 'Mag-rate at mag-komento sa iyong mga natapos na appointment' },
+    'no_completed_appointments': { en: 'No completed appointments yet', tl: 'Wala pang natapos na appointment' },
+    'completed_feedback_note': { en: 'Once you complete an appointment, you can leave feedback here.', tl: 'Kapag nakumpleto mo na ang isang appointment, maaari kang mag-iwan ng feedback dito.' },
+    'edit': { en: 'Edit', tl: 'I-edit' },
+    'rate': { en: 'Rate', tl: 'I-rate' },
+    'rate_your_visit': { en: 'Rate Your Visit', tl: 'I-rate ang Iyong Bisita' },
+    'how_was_experience': { en: 'How was your experience?', tl: 'Kumusta ang iyong karanasan?' },
+    'poor': { en: 'Poor', tl: 'Mahina' },
+    'fair': { en: 'Fair', tl: 'Katamtaman' },
+    'good': { en: 'Good', tl: 'Mabuti' },
+    'very_good': { en: 'Very Good', tl: 'Napakabuti' },
+    'excellent': { en: 'Excellent', tl: 'Mahusay' },
+    'comment_optional': { en: 'Comment (optional)', tl: 'Komento (opsyonal)' },
+    'share_experience': { en: 'Share your experience...', tl: 'Ibahagi ang iyong karanasan...' },
+    'cancel': { en: 'Cancel', tl: 'Kanselahin' },
+    'submit_feedback': { en: 'Submit Feedback', tl: 'Isumite ang Feedback' },
+    'submitting': { en: 'Submitting...', tl: 'Isinusumite...' },
 };
 
 type LanguageContextType = {

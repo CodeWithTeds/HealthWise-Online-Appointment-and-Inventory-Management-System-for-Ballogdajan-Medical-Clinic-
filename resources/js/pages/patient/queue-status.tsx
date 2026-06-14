@@ -10,6 +10,7 @@ import {
     AlertCircle,
     Calendar,
 } from 'lucide-react';
+import { useLanguage } from '@/contexts/language-context';
 import { FlashAlert } from '@/components/flash-alert';
 
 type MyAppointment = {
@@ -39,6 +40,8 @@ type Props = {
 };
 
 export default function QueueStatus({ myAppointment, queue, position, totalInQueue }: Props) {
+    const { t } = useLanguage();
+
     const refresh = () => {
         router.reload();
     };
@@ -64,7 +67,7 @@ export default function QueueStatus({ myAppointment, queue, position, totalInQue
 
     return (
         <>
-            <Head title="Queue Status" />
+            <Head title={t('queue_status_title')} />
             <div className="flex h-full flex-1 flex-col gap-5 overflow-x-auto p-6">
                 <FlashAlert />
 
@@ -75,8 +78,8 @@ export default function QueueStatus({ myAppointment, queue, position, totalInQue
                             <Users className="h-5 w-5 text-[#0787f7]" />
                         </div>
                         <div>
-                            <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">Queue Status</h1>
-                            <p className="text-xs text-neutral-400">Your position in the upcoming appointment queue</p>
+                            <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">{t('queue_status_title')}</h1>
+                            <p className="text-xs text-neutral-400">{t('queue_subtitle')}</p>
                         </div>
                     </div>
                     <button
@@ -84,16 +87,16 @@ export default function QueueStatus({ myAppointment, queue, position, totalInQue
                         className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 px-4 py-2 text-xs font-semibold text-neutral-600 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800"
                     >
                         <RefreshCw className="h-3.5 w-3.5" />
-                        Refresh
+                        {t('refresh')}
                     </button>
                 </div>
 
-                {/* No Appointment Today */}
+                {/* No Appointment */}
                 {!myAppointment && (
                     <div className="rounded-xl border border-neutral-200 bg-white py-12 text-center dark:border-neutral-700 dark:bg-neutral-900">
                         <AlertCircle className="mx-auto mb-3 h-10 w-10 text-neutral-300 dark:text-neutral-600" />
-                        <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">No upcoming appointment</p>
-                        <p className="mt-1 text-xs text-neutral-400">You don't have any pending or confirmed appointments.</p>
+                        <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('no_upcoming_appointment')}</p>
+                        <p className="mt-1 text-xs text-neutral-400">{t('no_pending_appointments')}</p>
                     </div>
                 )}
 
@@ -102,13 +105,13 @@ export default function QueueStatus({ myAppointment, queue, position, totalInQue
                     <div className="rounded-2xl border border-[#0787f7]/20 bg-gradient-to-br from-[#0787f7]/5 to-white p-6 dark:from-[#0787f7]/10 dark:to-neutral-900">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-xs font-semibold uppercase tracking-wide text-[#0787f7]">Your Position</p>
+                                <p className="text-xs font-semibold uppercase tracking-wide text-[#0787f7]">{t('your_position')}</p>
                                 <div className="mt-2 flex items-baseline gap-1">
                                     <span className="text-5xl font-black text-neutral-900 dark:text-neutral-100">{position}</span>
                                     <span className="text-lg text-neutral-400">/ {totalInQueue}</span>
                                 </div>
                                 <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400">
-                                    {position === 1 ? "You're next!" : `${position - 1} patient${position - 1 > 1 ? 's' : ''} ahead of you`}
+                                    {position === 1 ? t('youre_next') : `${position - 1} ${t('patients_ahead')}`}
                                 </p>
                             </div>
                             <div className="text-right">
@@ -125,7 +128,7 @@ export default function QueueStatus({ myAppointment, queue, position, totalInQue
                                         <Moon className="h-4 w-4 text-indigo-500" />
                                     )}
                                     <span className={`text-xs font-bold ${myAppointment.session === 'AM' ? 'text-amber-700 dark:text-amber-400' : 'text-indigo-700 dark:text-indigo-400'}`}>
-                                        {myAppointment.session} Session
+                                        {myAppointment.session === 'AM' ? t('am_session') : t('pm_session')}
                                     </span>
                                 </div>
                                 <p className="mt-2 text-xs text-neutral-400">
@@ -146,7 +149,7 @@ export default function QueueStatus({ myAppointment, queue, position, totalInQue
                             <h2 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">
                                 Queue — {format(new Date(myAppointment.date), 'MMMM d, yyyy')} · {myAppointment.session} Session
                             </h2>
-                            <p className="text-[10px] text-neutral-400">{totalInQueue} patients in queue</p>
+                            <p className="text-[10px] text-neutral-400">{totalInQueue} {t('patients_in_queue')}</p>
                         </div>
                         <div className="divide-y divide-neutral-100 dark:divide-neutral-700">
                             {queue.map((item, index) => (
@@ -162,7 +165,7 @@ export default function QueueStatus({ myAppointment, queue, position, totalInQue
                                     {/* Name */}
                                     <div className="flex-1 min-w-0">
                                         <p className={`text-sm font-medium ${item.is_me ? 'font-bold text-[#0787f7]' : 'text-neutral-700 dark:text-neutral-300'}`}>
-                                            {item.is_me ? `${item.name} (You)` : item.name}
+                                            {item.is_me ? `${item.name} (${t('you')})` : item.name}
                                         </p>
                                         <div className="flex items-center gap-2 mt-0.5">
                                             <span className="flex items-center gap-1 text-[10px] text-neutral-400">

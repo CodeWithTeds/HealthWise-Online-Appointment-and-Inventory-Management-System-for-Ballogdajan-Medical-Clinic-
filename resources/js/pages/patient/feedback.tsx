@@ -10,6 +10,7 @@ import {
     X,
     CheckCircle2,
 } from 'lucide-react';
+import { useLanguage } from '@/contexts/language-context';
 import { FlashAlert } from '@/components/flash-alert';
 
 type Appointment = {
@@ -37,6 +38,7 @@ type Props = {
 
 export default function Feedback({ appointments, feedbackMap, feedbackComments }: Props) {
     const [ratingModal, setRatingModal] = useState<Appointment | null>(null);
+    const { t } = useLanguage();
 
     const form = useForm({
         appointment_id: '',
@@ -64,7 +66,7 @@ export default function Feedback({ appointments, feedbackMap, feedbackComments }
 
     return (
         <>
-            <Head title="Feedback" />
+            <Head title={t('feedback_title')} />
             <div className="flex h-full flex-1 flex-col gap-5 overflow-x-auto p-6">
                 <FlashAlert />
 
@@ -74,8 +76,8 @@ export default function Feedback({ appointments, feedbackMap, feedbackComments }
                         <MessageSquare className="h-5 w-5 text-[#0787f7]" />
                     </div>
                     <div>
-                        <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">Feedback</h1>
-                        <p className="text-xs text-neutral-400">Rate and comment on your completed appointments</p>
+                        <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">{t('feedback_title')}</h1>
+                        <p className="text-xs text-neutral-400">{t('feedback_subtitle')}</p>
                     </div>
                 </div>
 
@@ -83,8 +85,8 @@ export default function Feedback({ appointments, feedbackMap, feedbackComments }
                 {appointments.data.length === 0 ? (
                     <div className="rounded-xl border border-neutral-200 bg-white py-12 text-center dark:border-neutral-700 dark:bg-neutral-900">
                         <MessageSquare className="mx-auto mb-3 h-10 w-10 text-neutral-300 dark:text-neutral-600" />
-                        <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">No completed appointments yet</p>
-                        <p className="mt-1 text-xs text-neutral-400">Once you complete an appointment, you can leave feedback here.</p>
+                        <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('no_completed_appointments')}</p>
+                        <p className="mt-1 text-xs text-neutral-400">{t('completed_feedback_note')}</p>
                     </div>
                 ) : (
                     <div className="space-y-3">
@@ -136,12 +138,12 @@ export default function Feedback({ appointments, feedbackMap, feedbackComments }
                                         {hasRated ? (
                                             <>
                                                 <CheckCircle2 className="h-3.5 w-3.5" />
-                                                Edit
+                                                {t('edit')}
                                             </>
                                         ) : (
                                             <>
                                                 <Star className="h-3.5 w-3.5" />
-                                                Rate
+                                                {t('rate')}
                                             </>
                                         )}
                                     </button>
@@ -181,21 +183,21 @@ export default function Feedback({ appointments, feedbackMap, feedbackComments }
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
                     <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-neutral-900">
                         <div className="mb-5 flex items-center justify-between">
-                            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">Rate Your Visit</h2>
+                            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">{t('rate_your_visit')}</h2>
                             <button onClick={() => setRatingModal(null)} className="rounded-lg p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800">
                                 <X className="h-5 w-5 text-neutral-400" />
                             </button>
                         </div>
 
                         <p className="mb-1 text-sm text-neutral-600 dark:text-neutral-300">
-                            {format(new Date(ratingModal.date), 'MMMM d, yyyy')} — {ratingModal.session} Session
+                            {format(new Date(ratingModal.date), 'MMMM d, yyyy')} — {ratingModal.session === 'AM' ? t('morning') : t('afternoon')}
                         </p>
                         <p className="mb-5 text-xs text-neutral-400">{ratingModal.reason}</p>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
                             {/* Star Rating */}
                             <div>
-                                <label className="mb-2 block text-xs font-semibold text-neutral-600 dark:text-neutral-300">How was your experience?</label>
+                                <label className="mb-2 block text-xs font-semibold text-neutral-600 dark:text-neutral-300">{t('how_was_experience')}</label>
                                 <div className="flex items-center gap-1">
                                     {[1, 2, 3, 4, 5].map((star) => (
                                         <button
