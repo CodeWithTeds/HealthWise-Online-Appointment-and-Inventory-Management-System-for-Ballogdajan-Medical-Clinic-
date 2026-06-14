@@ -10,6 +10,7 @@ import {
     Users,
     Check,
 } from 'lucide-react';
+import { FlashAlert } from '@/components/flash-alert';
 
 type PaginatedUsers = {
     data: User[];
@@ -158,6 +159,9 @@ export default function UserManagement({ users, filters }: Props) {
         <>
             <Head title="User Management" />
             <div className="flex h-full flex-1 flex-col gap-5 overflow-x-auto p-6">
+                {/* Flash Alert */}
+                <FlashAlert />
+
                 {/* Header */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-3">

@@ -9,6 +9,7 @@ import {
     ChevronRight,
 } from 'lucide-react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isToday } from 'date-fns';
+import { FlashAlert } from '@/components/flash-alert';
 
 type Schedule = {
     id: number;
@@ -137,6 +138,9 @@ export default function AppointmentScheduling({ schedules, calendarData, filters
         <>
             <Head title="Appointment Scheduling" />
             <div className="flex h-full flex-1 flex-col gap-5 overflow-x-auto p-6">
+                {/* Flash Alert */}
+                <FlashAlert />
+
                 {/* Header */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-3">
