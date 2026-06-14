@@ -214,24 +214,24 @@ export default function Feedback({ appointments, feedbackMap, feedbackComments }
                                 </div>
                                 {form.data.rating > 0 && (
                                     <p className="mt-1 text-xs text-neutral-400">
-                                        {form.data.rating === 1 && 'Poor'}
-                                        {form.data.rating === 2 && 'Fair'}
-                                        {form.data.rating === 3 && 'Good'}
-                                        {form.data.rating === 4 && 'Very Good'}
-                                        {form.data.rating === 5 && 'Excellent'}
+                                        {form.data.rating === 1 && t('poor')}
+                                        {form.data.rating === 2 && t('fair')}
+                                        {form.data.rating === 3 && t('good')}
+                                        {form.data.rating === 4 && t('very_good')}
+                                        {form.data.rating === 5 && t('excellent')}
                                     </p>
                                 )}
                             </div>
 
                             {/* Comment */}
                             <div>
-                                <label className="mb-1 block text-xs font-semibold text-neutral-600 dark:text-neutral-300">Comment (optional)</label>
+                                <label className="mb-1 block text-xs font-semibold text-neutral-600 dark:text-neutral-300">{t('comment_optional')}</label>
                                 <textarea
                                     value={form.data.comment}
                                     onChange={(e) => form.setData('comment', e.target.value)}
                                     rows={3}
                                     className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm focus:border-[#0787f7] focus:ring-1 focus:ring-[#0787f7] focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100"
-                                    placeholder="Share your experience..."
+                                    placeholder={t('share_experience')}
                                     maxLength={500}
                                 />
                                 <p className="mt-1 text-right text-[10px] text-neutral-400">{form.data.comment.length}/500</p>
@@ -244,7 +244,7 @@ export default function Feedback({ appointments, feedbackMap, feedbackComments }
                                     onClick={() => setRatingModal(null)}
                                     className="rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300"
                                 >
-                                    Cancel
+                                    {t('cancel')}
                                 </button>
                                 <button
                                     type="submit"
@@ -252,7 +252,7 @@ export default function Feedback({ appointments, feedbackMap, feedbackComments }
                                     className="inline-flex items-center gap-2 rounded-lg bg-[#0787f7] px-5 py-2 text-sm font-semibold text-white hover:bg-[#0670d4] disabled:opacity-50"
                                 >
                                     <Send className="h-3.5 w-3.5" />
-                                    {form.processing ? 'Submitting...' : 'Submit Feedback'}
+                                    {form.processing ? t('submitting') : t('submit_feedback')}
                                 </button>
                             </div>
                         </form>
