@@ -1,4 +1,5 @@
 import { Head, router } from '@inertiajs/react';
+import { format } from 'date-fns';
 import {
     Users,
     Clock,
@@ -7,6 +8,7 @@ import {
     RefreshCw,
     Hash,
     AlertCircle,
+    Calendar,
 } from 'lucide-react';
 import { FlashAlert } from '@/components/flash-alert';
 
@@ -74,7 +76,7 @@ export default function QueueStatus({ myAppointment, queue, position, totalInQue
                         </div>
                         <div>
                             <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">Queue Status</h1>
-                            <p className="text-xs text-neutral-400">Your position in today's queue</p>
+                            <p className="text-xs text-neutral-400">Your position in the upcoming appointment queue</p>
                         </div>
                     </div>
                     <button
@@ -90,8 +92,8 @@ export default function QueueStatus({ myAppointment, queue, position, totalInQue
                 {!myAppointment && (
                     <div className="rounded-xl border border-neutral-200 bg-white py-12 text-center dark:border-neutral-700 dark:bg-neutral-900">
                         <AlertCircle className="mx-auto mb-3 h-10 w-10 text-neutral-300 dark:text-neutral-600" />
-                        <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">No appointment today</p>
-                        <p className="mt-1 text-xs text-neutral-400">You don't have an active appointment for today.</p>
+                        <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">No upcoming appointment</p>
+                        <p className="mt-1 text-xs text-neutral-400">You don't have any pending or confirmed appointments.</p>
                     </div>
                 )}
 
@@ -110,6 +112,12 @@ export default function QueueStatus({ myAppointment, queue, position, totalInQue
                                 </p>
                             </div>
                             <div className="text-right">
+                                <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-3 py-1.5 dark:bg-neutral-800">
+                                    <Calendar className="h-3.5 w-3.5 text-neutral-500" />
+                                    <span className="text-xs font-bold text-neutral-700 dark:text-neutral-300">
+                                        {format(new Date(myAppointment.date), 'MMM d, yyyy')}
+                                    </span>
+                                </div>
                                 <div className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 ${myAppointment.session === 'AM' ? 'bg-amber-50 dark:bg-amber-900/20' : 'bg-indigo-50 dark:bg-indigo-900/20'}`}>
                                     {myAppointment.session === 'AM' ? (
                                         <Sun className="h-4 w-4 text-amber-500" />
@@ -135,7 +143,9 @@ export default function QueueStatus({ myAppointment, queue, position, totalInQue
                 {myAppointment && queue.length > 0 && (
                     <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
                         <div className="border-b border-neutral-100 px-5 py-3 dark:border-neutral-700">
-                            <h2 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">Today's Queue — {myAppointment.session} Session</h2>
+                            <h2 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">
+                                Queue — {format(new Date(myAppointment.date), 'MMMM d, yyyy')} · {myAppointment.session} Session
+                            </h2>
                             <p className="text-[10px] text-neutral-400">{totalInQueue} patients in queue</p>
                         </div>
                         <div className="divide-y divide-neutral-100 dark:divide-neutral-700">
