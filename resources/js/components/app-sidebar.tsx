@@ -142,6 +142,11 @@ const patientNavItems: NavItem[] = [
         href: '/patient/book-appointment',
         icon: Calendar,
     },
+    {
+        title: 'Appointment History',
+        href: '/patient/appointment-history',
+        icon: ClipboardList,
+    },
 ];
 
 function getNavItemsByRole(role: string | undefined): NavItem[] {
