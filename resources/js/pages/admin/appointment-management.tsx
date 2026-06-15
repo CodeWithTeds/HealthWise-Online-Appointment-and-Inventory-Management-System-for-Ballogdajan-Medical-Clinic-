@@ -49,6 +49,7 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
     const [filterStatus, setFilterStatus] = useState(filters.status || '');
     const [filterPriority, setFilterPriority] = useState(filters.priority_type || '');
     const prefix = getRolePrefix();
+    const isReadOnly = prefix === '/doctor';
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -186,6 +187,9 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
                                                 <td className="px-3 py-2 text-neutral-600">{apt.queue_number || '—'}</td>
                                                 <td className="px-3 py-2"><span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${statusBadge(apt.status)}`}>{apt.status.replace('_', ' ')}</span></td>
                                                 <td className="px-3 py-2">
+                                                    {isReadOnly ? (
+                                                        <span className="text-[10px] text-neutral-400">View only</span>
+                                                    ) : (
                                                     <select className="rounded border border-neutral-200 px-2 py-1 text-[10px] dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" value={apt.status} onChange={(e) => updateStatus(apt.id, e.target.value)}>
                                                         <option value="pending">Pending</option>
                                                         <option value="confirmed">Confirmed</option>
@@ -193,6 +197,7 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
                                                         <option value="not_arrived">Not Arrived</option>
                                                         <option value="cancelled">Cancelled</option>
                                                     </select>
+                                                    )}
                                                 </td>
                                             </tr>
                                         ))}
@@ -254,6 +259,9 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
                                                             {apt.priority_type !== 'regular' && (
                                                                 <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold capitalize ${priorityBadge(apt.priority_type)}`}>{apt.priority_type}</span>
                                                             )}
+                                                            {isReadOnly ? (
+                                                                <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold capitalize ${statusBadge(apt.status)}`}>{apt.status.replace('_', ' ')}</span>
+                                                            ) : (
                                                             <select className="w-[70px] rounded border border-neutral-200 px-1 py-0.5 text-[9px] dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" value={apt.status} onChange={(e) => updateStatus(apt.id, e.target.value)}>
                                                                 <option value="pending">Pending</option>
                                                                 <option value="confirmed">Confirmed</option>
@@ -261,6 +269,7 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
                                                                 <option value="not_arrived">Not Arrived</option>
                                                                 <option value="cancelled">Cancelled</option>
                                                             </select>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 ))}

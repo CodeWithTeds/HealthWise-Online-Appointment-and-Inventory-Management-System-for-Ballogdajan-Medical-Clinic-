@@ -65,7 +65,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('patient-records/{user}/appointments', [PatientRecordController::class, 'appointments'])->name('patient-records.appointments');
         });
 
-        // Doctor - User Management, Schedules & Appointments
+        // Doctor - User Management, Schedules & Appointments (view-only for scheduling/appointments)
         Route::prefix('doctor')->name('doctor.')->group(function () {
             Route::get('users', [UserManagementController::class, 'index'])->name('users.index');
             Route::post('users', [UserManagementController::class, 'store'])->name('users.store');
@@ -74,11 +74,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::delete('users/{user}', [UserManagementController::class, 'destroy'])->name('users.destroy');
 
             Route::get('appointment-scheduling', [ScheduleController::class, 'index'])->name('schedules.index');
-            Route::post('appointment-scheduling', [ScheduleController::class, 'store'])->name('schedules.store');
-            Route::put('appointment-scheduling/{schedule}', [ScheduleController::class, 'update'])->name('schedules.update');
 
             Route::get('appointment-management', [AppointmentManagementController::class, 'index'])->name('appointments.index');
-            Route::patch('appointments/{appointment}/status', [AppointmentManagementController::class, 'updateStatus'])->name('appointments.status');
 
             Route::get('patient-records', [PatientRecordController::class, 'index'])->name('patient-records.index');
             Route::get('patient-records/{user}/appointments', [PatientRecordController::class, 'appointments'])->name('patient-records.appointments');

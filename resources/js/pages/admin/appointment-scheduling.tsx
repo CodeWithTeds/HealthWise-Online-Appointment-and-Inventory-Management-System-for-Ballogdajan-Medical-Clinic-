@@ -53,6 +53,9 @@ export default function AppointmentScheduling({ schedules, calendarData, filters
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
+
+    const prefix = getRolePrefix();
+    const isReadOnly = prefix === '/doctor';
     const [filterDateFrom, setFilterDateFrom] = useState(filters.date_from || '');
     const [filterDateTo, setFilterDateTo] = useState(filters.date_to || '');
     const [filterStatus, setFilterStatus] = useState(filters.status || '');
@@ -79,8 +82,6 @@ export default function AppointmentScheduling({ schedules, calendarData, filters
         status: '',
         notes: '',
     });
-
-    const prefix = getRolePrefix();
 
     const monthStart = startOfMonth(currentMonth);
     const monthEnd = endOfMonth(currentMonth);
@@ -157,10 +158,12 @@ export default function AppointmentScheduling({ schedules, calendarData, filters
                             <button onClick={() => setView('calendar')} className={`px-3 py-1.5 text-xs font-semibold transition-colors ${view === 'calendar' ? 'bg-[#0787f7] text-white' : 'text-neutral-600 hover:bg-neutral-50 dark:text-neutral-300'} rounded-l-lg`}>Calendar</button>
                             <button onClick={() => setView('schedules')} className={`px-3 py-1.5 text-xs font-semibold transition-colors ${view === 'schedules' ? 'bg-[#0787f7] text-white' : 'text-neutral-600 hover:bg-neutral-50 dark:text-neutral-300'} rounded-r-lg`}>Schedules</button>
                         </div>
-                        <button onClick={() => setShowCreateModal(true)} className="inline-flex items-center gap-2 rounded-lg bg-[#0787f7] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#0670d4]">
-                            <Plus className="h-3.5 w-3.5" />
-                            Create Weekly
-                        </button>
+                        {!isReadOnly && (
+                            <button onClick={() => setShowCreateModal(true)} className="inline-flex items-center gap-2 rounded-lg bg-[#0787f7] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#0670d4]">
+                                <Plus className="h-3.5 w-3.5" />
+                                Create Weekly
+                            </button>
+                        )}
                     </div>
                 </div>
 
@@ -189,7 +192,7 @@ export default function AppointmentScheduling({ schedules, calendarData, filters
                                     <div key={day.toISOString()} className={`min-h-[90px] border-b border-r border-neutral-100 p-1.5 dark:border-neutral-700 ${isToday(day) ? 'bg-[#0787f7]/5' : ''}`}>
                                         <p className={`text-[11px] font-medium ${isToday(day) ? 'font-bold text-[#0787f7]' : 'text-neutral-500'}`}>{format(day, 'd')}</p>
                                         {schedule && (
-                                            <div className="mt-1 cursor-pointer space-y-0.5" onClick={() => openEdit(schedule)}>
+                                            <div className={`mt-1 space-y-0.5 ${!isReadOnly ? 'cursor-pointer' : ''}`} onClick={() => !isReadOnly && openEdit(schedule)}>
                                                 <div className="rounded bg-blue-50 px-1 py-0.5">
                                                     <p className="text-[8px] font-bold text-blue-700">AM {schedule.am_booked}/{schedule.am_slots}</p>
                                                 </div>
@@ -259,7 +262,9 @@ export default function AppointmentScheduling({ schedules, calendarData, filters
                                             </td>
                                             <td className="max-w-[120px] truncate px-3 py-2 text-neutral-500">{s.notes || '—'}</td>
                                             <td className="px-3 py-2">
-                                                <button onClick={() => openEdit(s)} className="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-[#0787f7] dark:hover:bg-neutral-700"><Pencil className="h-3.5 w-3.5" /></button>
+                                                {!isReadOnly && (
+                                                    <button onClick={() => openEdit(s)} className="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-[#0787f7] dark:hover:bg-neutral-700"><Pencil className="h-3.5 w-3.5" /></button>
+                                                )}
                                             </td>
                                         </tr>
                                     ))}
