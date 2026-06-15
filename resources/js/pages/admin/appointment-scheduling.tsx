@@ -55,7 +55,16 @@ export default function AppointmentScheduling({ schedules, calendarData, filters
     const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
 
     const prefix = getRolePrefix();
-    const isReadOnly = prefix === '/doctor';
+    const isReadOnly = false; // scheduling is editable by both doctor and secretary
+
+    const navigateMonth = (newMonth: Date) => {
+        setCurrentMonth(newMonth);
+        router.get(`${prefix}/appointment-scheduling`, {
+            view: 'calendar',
+            year: newMonth.getFullYear(),
+            month: newMonth.getMonth() + 1,
+        }, { preserveState: true, preserveScroll: true, only: ['calendarData'] });
+    };
     const [filterDateFrom, setFilterDateFrom] = useState(filters.date_from || '');
     const [filterDateTo, setFilterDateTo] = useState(filters.date_to || '');
     const [filterStatus, setFilterStatus] = useState(filters.status || '');
@@ -171,11 +180,11 @@ export default function AppointmentScheduling({ schedules, calendarData, filters
                 {view === 'calendar' && (
                     <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
                         <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-3 dark:border-neutral-700">
-                            <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="rounded-lg p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800">
+                            <button onClick={() => navigateMonth(subMonths(currentMonth, 1))} className="rounded-lg p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800">
                                 <ChevronLeft className="h-4 w-4 text-neutral-600 dark:text-neutral-300" />
                             </button>
                             <h2 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">{format(currentMonth, 'MMMM yyyy')}</h2>
-                            <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="rounded-lg p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800">
+                            <button onClick={() => navigateMonth(addMonths(currentMonth, 1))} className="rounded-lg p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800">
                                 <ChevronRight className="h-4 w-4 text-neutral-600 dark:text-neutral-300" />
                             </button>
                         </div>
@@ -250,7 +259,7 @@ export default function AppointmentScheduling({ schedules, calendarData, filters
                                 <tbody className="divide-y divide-neutral-100 dark:divide-neutral-700">
                                     {schedules.data.map((s) => (
                                         <tr key={s.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
-                                            <td className="whitespace-nowrap px-3 py-2 font-medium text-neutral-900 dark:text-neutral-100">{s.date}</td>
+                                            <td className="whitespace-nowrap px-3 py-2 font-medium text-neutral-900 dark:text-neutral-100">{format(new Date(s.date.slice(0, 10) + 'T00:00:00'), 'MMM d, yyyy')}</td>
                                             <td className="whitespace-nowrap px-3 py-2 text-neutral-600 dark:text-neutral-300">{s.am_start.slice(0, 5)}–{s.am_end.slice(0, 5)}</td>
                                             <td className="whitespace-nowrap px-3 py-2 text-neutral-600 dark:text-neutral-300">{s.am_slots}</td>
                                             <td className="whitespace-nowrap px-3 py-2 text-neutral-600 dark:text-neutral-300">{s.am_booked}</td>
@@ -348,7 +357,7 @@ export default function AppointmentScheduling({ schedules, calendarData, filters
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
                     <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl dark:bg-neutral-900">
                         <div className="mb-5 flex items-center justify-between">
-                            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">Edit — {editingSchedule.date}</h2>
+                            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">Edit — {format(new Date(editingSchedule.date.slice(0, 10) + 'T00:00:00'), 'MMM d, yyyy')}</h2>
                             <button onClick={() => setEditingSchedule(null)} className="rounded-lg p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800"><X className="h-5 w-5 text-neutral-400" /></button>
                         </div>
                         <form onSubmit={handleEdit} className="grid gap-4">

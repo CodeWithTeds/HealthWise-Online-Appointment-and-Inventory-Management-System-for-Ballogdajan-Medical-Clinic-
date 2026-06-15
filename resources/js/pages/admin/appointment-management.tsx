@@ -180,7 +180,7 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
                                         {appointments.data.map((apt) => (
                                             <tr key={apt.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
                                                 <td className="whitespace-nowrap px-3 py-2 font-medium text-neutral-900 dark:text-neutral-100">{apt.user.name}</td>
-                                                <td className="whitespace-nowrap px-3 py-2 text-neutral-600">{apt.date}</td>
+                                                <td className="whitespace-nowrap px-3 py-2 text-neutral-600">{format(new Date(apt.date.slice(0, 10) + 'T00:00:00'), 'MMM d, yyyy')}</td>
                                                 <td className="px-3 py-2"><span className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${apt.session === 'AM' ? 'bg-blue-50 text-blue-700' : 'bg-orange-50 text-orange-700'}`}>{apt.session}</span></td>
                                                 <td className="max-w-[120px] truncate px-3 py-2 text-neutral-600">{apt.reason}</td>
                                                 <td className="px-3 py-2"><span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${priorityBadge(apt.priority_type)}`}>{apt.priority_type}</span></td>

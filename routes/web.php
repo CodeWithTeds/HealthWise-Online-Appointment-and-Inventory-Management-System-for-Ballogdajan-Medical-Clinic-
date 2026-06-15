@@ -74,6 +74,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::delete('users/{user}', [UserManagementController::class, 'destroy'])->name('users.destroy');
 
             Route::get('appointment-scheduling', [ScheduleController::class, 'index'])->name('schedules.index');
+            Route::post('appointment-scheduling', [ScheduleController::class, 'store'])->name('schedules.store');
+            Route::put('appointment-scheduling/{schedule}', [ScheduleController::class, 'update'])->name('schedules.update');
 
             Route::get('appointment-management', [AppointmentManagementController::class, 'index'])->name('appointments.index');
 
