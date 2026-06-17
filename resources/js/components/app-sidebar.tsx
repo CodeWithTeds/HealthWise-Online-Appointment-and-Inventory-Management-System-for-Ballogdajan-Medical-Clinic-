@@ -123,6 +123,21 @@ const secretaryNavItems: NavItem[] = [
         href: '/secretary/patient-records',
         icon: ClipboardList,
     },
+    {
+        title: 'Inventory',
+        href: '/secretary/inventory',
+        icon: Package,
+    },
+    {
+        title: 'Inventory Alerts',
+        href: '/secretary/inventory-alerts',
+        icon: AlertTriangle,
+    },
+    {
+        title: 'Reports',
+        href: '/secretary/reports',
+        icon: BarChart3,
+    },
 ];
 
 const pharmacistNavItems: NavItem[] = [

@@ -63,6 +63,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::get('patient-records', [PatientRecordController::class, 'index'])->name('patient-records.index');
             Route::get('patient-records/{user}/appointments', [PatientRecordController::class, 'appointments'])->name('patient-records.appointments');
+
+            Route::get('inventory', [InventoryViewController::class, 'index'])->name('inventory.index');
+            Route::get('inventory-alerts', [InventoryViewController::class, 'alerts'])->name('inventory-alerts.index');
+
+            Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
         });
 
         // Doctor - User Management, Schedules & Appointments (view-only for scheduling/appointments)
