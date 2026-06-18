@@ -11,6 +11,7 @@ import { useState } from 'react';
 
 type FormData = {
     name: string;
+    username: string;
     email: string;
     role: string;
     phone: string;
@@ -35,6 +36,7 @@ export default function Register() {
     const [errors, setErrors] = useState<Errors>({});
     const [form, setForm] = useState<FormData>({
         name: '',
+        username: '',
         email: '',
         role: '',
         phone: '',
@@ -59,6 +61,8 @@ export default function Register() {
 
         if (s === 0) {
             if (!form.name.trim()) e.name = 'Name is required.';
+            if (!form.username.trim()) e.username = 'Username is required.';
+            else if (form.username.length < 3) e.username = 'Username must be at least 3 characters.';
             if (!form.email.trim()) e.email = 'Email is required.';
             else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Enter a valid email.';
             if (!form.role) e.role = 'Role is required.';
@@ -95,7 +99,7 @@ export default function Register() {
             onError: (serverErrors) => {
                 setErrors(serverErrors as Errors);
                 // Go back to the step with the first error
-                const step0Fields: (keyof FormData)[] = ['name', 'email', 'role', 'phone', 'gender'];
+                const step0Fields: (keyof FormData)[] = ['name', 'username', 'email', 'role', 'phone', 'gender'];
                 const step1Fields: (keyof FormData)[] = ['birthdate', 'address', 'civil_status', 'contact_person', 'contact_number', 'blood_type'];
                 const errKeys = Object.keys(serverErrors) as (keyof FormData)[];
                 if (errKeys.some((k) => step0Fields.includes(k))) setStep(0);
@@ -152,6 +156,11 @@ export default function Register() {
                         <Label htmlFor="name">Full Name *</Label>
                         <Input id="name" value={form.name} onChange={(e) => set('name', e.target.value)} placeholder="Juan Dela Cruz" />
                         <InputError message={errors.name} />
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="username">Username *</Label>
+                        <Input id="username" value={form.username} onChange={(e) => set('username', e.target.value)} placeholder="juandelacruz" />
+                        <InputError message={errors.username} />
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="email">Email Address *</Label>

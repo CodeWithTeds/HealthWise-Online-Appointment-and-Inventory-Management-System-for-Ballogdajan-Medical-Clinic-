@@ -33,7 +33,7 @@ Route::inertia('/', 'welcome', [
 Route::post('/verification-code/send', [EmailVerificationCodeController::class, 'send'])->name('verification-code.send');
 Route::post('/verification-code/verify', [EmailVerificationCodeController::class, 'verify'])->name('verification-code.verify');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     // Pending account page
     Route::inertia('account/pending', 'auth/account-pending')->name('account.pending');
 

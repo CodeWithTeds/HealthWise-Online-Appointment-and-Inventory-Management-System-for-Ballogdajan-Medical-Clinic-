@@ -25,6 +25,7 @@ class CreateNewUser implements CreatesNewUsers
     {
         Validator::make($input, [
             ...$this->profileRules(),
+            'username' => ['required', 'string', 'min:3', 'max:50', 'unique:users,username', 'regex:/^[a-zA-Z0-9._-]+$/'],
             'password' => $this->passwordRules(),
             'role' => ['required', Rule::enum(UserRole::class)],
             'phone' => ['required', 'string', 'max:20'],
@@ -39,6 +40,7 @@ class CreateNewUser implements CreatesNewUsers
 
         return User::create([
             'name' => $input['name'],
+            'username' => $input['username'],
             'email' => $input['email'],
             'password' => $input['password'],
             'role' => $input['role'],
@@ -51,7 +53,6 @@ class CreateNewUser implements CreatesNewUsers
             'contact_number' => $input['contact_number'] ?? null,
             'blood_type' => $input['blood_type'] ?? null,
             'status' => 'pending',
-            'email_verified_at' => null,
         ]);
     }
 }
