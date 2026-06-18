@@ -34,6 +34,7 @@ final class InventoryRepository implements InventoryRepositoryInterface
     {
         return InventoryItem::query()
             ->where('status', 'active')
+            ->where('category', 'medicine')
             ->where(function ($q) {
                 $q->whereColumn('quantity', '<=', 'minimum_stock')
                     ->orWhere('expiration_date', '<=', now()->addDays(30));

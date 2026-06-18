@@ -15,6 +15,7 @@ class UserSeeder extends Seeder
         // 1 Doctor
         User::factory()->withRole(UserRole::DOCTOR)->create([
             'name' => 'Dr. Maria Santos',
+            'username' => 'doctor',
             'email' => 'doctor@healthwise.test',
             'phone' => '0917-123-4567',
             'gender' => 'female',
@@ -29,6 +30,7 @@ class UserSeeder extends Seeder
         // 1 Secretary
         User::factory()->withRole(UserRole::SECRETARY)->create([
             'name' => 'Ana Reyes',
+            'username' => 'secretary',
             'email' => 'secretary@healthwise.test',
             'phone' => '0926-234-5678',
             'gender' => 'female',
@@ -43,6 +45,7 @@ class UserSeeder extends Seeder
         // 1 Pharmacist
         User::factory()->withRole(UserRole::PHARMACIST)->create([
             'name' => 'Carlos Cruz',
+            'username' => 'pharmacist',
             'email' => 'pharmacist@healthwise.test',
             'phone' => '0935-345-6789',
             'gender' => 'male',
@@ -68,6 +71,7 @@ class UserSeeder extends Seeder
             ->count(97)
             ->withRole(UserRole::PATIENT)
             ->sequence(fn ($sequence) => [
+                'username' => 'patient' . ($sequence->index + 1),
                 'phone' => '09' . fake()->numerify('##-###-####'),
                 'gender' => fake()->randomElement($genders),
                 'birthdate' => fake()->date('Y-m-d', '2005-01-01'),

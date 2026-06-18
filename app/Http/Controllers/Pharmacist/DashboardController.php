@@ -17,17 +17,21 @@ final class DashboardController extends Controller
             'stats' => [
                 'total_items' => InventoryItem::where('status', 'active')->count(),
                 'low_stock' => InventoryItem::where('status', 'active')
+                    ->where('category', 'medicine')
                     ->whereColumn('quantity', '<=', 'minimum_stock')
                     ->count(),
                 'expiring_soon' => InventoryItem::where('status', 'active')
+                    ->where('category', 'medicine')
                     ->where('expiration_date', '<=', now()->addDays(30))
                     ->where('expiration_date', '>', now())
                     ->count(),
                 'expired' => InventoryItem::where('status', 'active')
+                    ->where('category', 'medicine')
                     ->where('expiration_date', '<=', now())
                     ->count(),
             ],
             'recentAlerts' => InventoryItem::where('status', 'active')
+                ->where('category', 'medicine')
                 ->where(function ($q) {
                     $q->whereColumn('quantity', '<=', 'minimum_stock')
                         ->orWhere('expiration_date', '<=', now()->addDays(30));
