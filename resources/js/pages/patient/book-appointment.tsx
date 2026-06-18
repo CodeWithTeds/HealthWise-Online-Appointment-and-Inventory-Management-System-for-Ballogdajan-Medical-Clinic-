@@ -55,6 +55,7 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
         temperature: '',
         blood_pressure: '',
         weight: '',
+        height: '',
         priority_type: 'regular',
         notes: '',
     });
@@ -75,6 +76,7 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
             temperature: '',
             blood_pressure: '',
             weight: '',
+            height: '',
             priority_type: 'regular',
             notes: '',
         });
@@ -299,7 +301,7 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
                                     {form.errors.current_medication && <p className="mt-1 text-xs text-red-500">{form.errors.current_medication}</p>}
                                 </div>
                             </div>
-                            <div className="grid gap-3 sm:grid-cols-3">
+                            <div className="grid gap-3 sm:grid-cols-4">
                                 <div>
                                     <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('temperature')}</label>
                                     <input type="text" value={form.data.temperature} onChange={(e) => form.setData('temperature', e.target.value)} className={inputCls} placeholder="37.5°C" />
@@ -314,6 +316,11 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
                                     <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('weight_kg')}</label>
                                     <input type="text" value={form.data.weight} onChange={(e) => form.setData('weight', e.target.value)} className={inputCls} placeholder="65" />
                                     {form.errors.weight && <p className="mt-1 text-xs text-red-500">{form.errors.weight}</p>}
+                                </div>
+                                <div>
+                                    <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Height (cm)</label>
+                                    <input type="text" value={form.data.height} onChange={(e) => form.setData('height', e.target.value)} className={inputCls} placeholder="165" />
+                                    {form.errors.height && <p className="mt-1 text-xs text-red-500">{form.errors.height}</p>}
                                 </div>
                             </div>
                             <div>

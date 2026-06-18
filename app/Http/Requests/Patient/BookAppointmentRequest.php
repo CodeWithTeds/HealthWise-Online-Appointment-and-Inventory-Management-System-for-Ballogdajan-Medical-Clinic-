@@ -29,6 +29,7 @@ final class BookAppointmentRequest extends FormRequest
             'temperature' => ['nullable', 'string', 'max:10'],
             'blood_pressure' => ['nullable', 'string', 'max:20'],
             'weight' => ['nullable', 'string', 'max:10'],
+            'height' => ['nullable', 'string', 'max:10'],
             'priority_type' => ['required', Rule::in(['regular', 'senior', 'pwd', 'pregnant'])],
             'notes' => ['nullable', 'string', 'max:500'],
         ];

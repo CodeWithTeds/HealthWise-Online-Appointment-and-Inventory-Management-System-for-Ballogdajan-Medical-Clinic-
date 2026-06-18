@@ -23,6 +23,7 @@ class Appointment extends Model
         'temperature',
         'blood_pressure',
         'weight',
+        'height',
         'priority_type',
         'status',
         'queue_number',

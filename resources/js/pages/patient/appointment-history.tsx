@@ -27,6 +27,7 @@ type Appointment = {
     temperature: string | null;
     blood_pressure: string | null;
     weight: string | null;
+    height: string | null;
     priority_type: string;
     status: string;
     queue_number: number | null;
@@ -231,6 +232,7 @@ export default function AppointmentHistory({ appointments, filters }: Props) {
                                             <DetailItem label="Temperature" value={apt.temperature ? `${apt.temperature}°C` : null} />
                                             <DetailItem label="Blood Pressure" value={apt.blood_pressure} />
                                             <DetailItem label="Weight" value={apt.weight ? `${apt.weight} kg` : null} />
+                                            <DetailItem label="Height" value={apt.height ? `${apt.height} cm` : null} />
                                             <DetailItem label="Notes" value={apt.notes} />
                                         </div>
                                     </div>
