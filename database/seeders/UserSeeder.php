@@ -85,3 +85,4 @@ class UserSeeder extends Seeder
             ->create();
     }
 }
+ 

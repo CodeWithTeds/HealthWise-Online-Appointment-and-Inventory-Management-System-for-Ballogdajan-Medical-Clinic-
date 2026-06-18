@@ -43,6 +43,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('dashboard', function () {
             $role = Auth::user()->role->value;
 
+            if ($role === 'patient') {
+                return redirect()->route('patient.appointments.index');
+            }
+
             return redirect()->route("{$role}.dashboard");
         })->name('dashboard');
 
