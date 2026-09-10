@@ -65,6 +65,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('appointment-management', [AppointmentManagementController::class, 'index'])->name('appointments.index');
             Route::patch('appointments/{appointment}/status', [AppointmentManagementController::class, 'updateStatus'])->name('appointments.status');
+            Route::patch('appointments/{appointment}/vitals', [AppointmentManagementController::class, 'updateVitals'])->name('appointments.vitals');
 
             Route::get('patient-records', [PatientRecordController::class, 'index'])->name('patient-records.index');
             Route::get('patient-records/{user}/appointments', [PatientRecordController::class, 'appointments'])->name('patient-records.appointments');

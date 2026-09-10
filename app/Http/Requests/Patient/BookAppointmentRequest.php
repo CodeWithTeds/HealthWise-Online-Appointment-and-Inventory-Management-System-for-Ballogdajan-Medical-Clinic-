@@ -26,10 +26,7 @@ final class BookAppointmentRequest extends FormRequest
             'allergies' => ['nullable', 'string', 'max:255'],
             'current_medication' => ['nullable', 'string', 'max:255'],
             'medical_history' => ['nullable', 'string', 'max:1000'],
-            'temperature' => ['nullable', 'string', 'max:10'],
-            'blood_pressure' => ['nullable', 'string', 'max:20'],
-            'weight' => ['nullable', 'string', 'max:10'],
-            'height' => ['nullable', 'string', 'max:10'],
+            // Vitals (Temperature, BP, Weight, Height) are recorded by Secretary at clinic — not by patient
             'priority_type' => ['required', Rule::in(['regular', 'senior', 'pwd', 'pregnant'])],
             'notes' => ['nullable', 'string', 'max:500'],
         ];

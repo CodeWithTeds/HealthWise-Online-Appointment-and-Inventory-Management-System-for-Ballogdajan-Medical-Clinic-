@@ -52,10 +52,6 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
         allergies: '',
         current_medication: '',
         medical_history: '',
-        temperature: '',
-        blood_pressure: '',
-        weight: '',
-        height: '',
         priority_type: 'regular',
         notes: '',
     });
@@ -73,10 +69,6 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
             allergies: '',
             current_medication: '',
             medical_history: '',
-            temperature: '',
-            blood_pressure: '',
-            weight: '',
-            height: '',
             priority_type: 'regular',
             notes: '',
         });
@@ -301,28 +293,6 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
                                     {form.errors.current_medication && <p className="mt-1 text-xs text-red-500">{form.errors.current_medication}</p>}
                                 </div>
                             </div>
-                            <div className="grid gap-3 sm:grid-cols-4">
-                                <div>
-                                    <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('temperature')}</label>
-                                    <input type="text" value={form.data.temperature} onChange={(e) => form.setData('temperature', e.target.value)} className={inputCls} placeholder="37.5°C" />
-                                    {form.errors.temperature && <p className="mt-1 text-xs text-red-500">{form.errors.temperature}</p>}
-                                </div>
-                                <div>
-                                    <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('blood_pressure')}</label>
-                                    <input type="text" value={form.data.blood_pressure} onChange={(e) => form.setData('blood_pressure', e.target.value)} className={inputCls} placeholder="120/80" />
-                                    {form.errors.blood_pressure && <p className="mt-1 text-xs text-red-500">{form.errors.blood_pressure}</p>}
-                                </div>
-                                <div>
-                                    <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('weight_kg')}</label>
-                                    <input type="text" value={form.data.weight} onChange={(e) => form.setData('weight', e.target.value)} className={inputCls} placeholder="65" />
-                                    {form.errors.weight && <p className="mt-1 text-xs text-red-500">{form.errors.weight}</p>}
-                                </div>
-                                <div>
-                                    <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Height (cm)</label>
-                                    <input type="text" value={form.data.height} onChange={(e) => form.setData('height', e.target.value)} className={inputCls} placeholder="165" />
-                                    {form.errors.height && <p className="mt-1 text-xs text-red-500">{form.errors.height}</p>}
-                                </div>
-                            </div>
                             <div>
                                 <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('medical_history')}</label>
                                 <textarea value={form.data.medical_history} onChange={(e) => form.setData('medical_history', e.target.value)} rows={2} className="w-full rounded-xl border border-neutral-200 px-4 py-3 text-sm focus:border-[#0787f7] focus:ring-2 focus:ring-[#0787f7]/10 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" placeholder={t('placeholder_history')} />
@@ -340,6 +310,11 @@ export default function BookAppointment({ availableSchedules, appointments }: Pr
                             <div>
                                 <label className="mb-1.5 block text-xs font-semibold text-neutral-700 dark:text-neutral-200">{t('additional_notes')}</label>
                                 <textarea value={form.data.notes} onChange={(e) => form.setData('notes', e.target.value)} rows={2} className="w-full rounded-xl border border-neutral-200 px-4 py-3 text-sm focus:border-[#0787f7] focus:ring-2 focus:ring-[#0787f7]/10 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" placeholder={t('placeholder_notes')} />
+                            </div>
+                            <div className="rounded-xl bg-blue-50 p-3 dark:bg-blue-900/10">
+                                <p className="text-[11px] leading-relaxed text-blue-700 dark:text-blue-400">
+                                    After booking, please wait for <b>Secretary confirmation</b>. Once confirmed, proceed directly to the clinic — <b>Secretary will record your Temperature, BP, Weight & Height</b> at the clinic. No need to enter vitals yourself.
+                                </p>
                             </div>
                             <button type="submit" disabled={form.processing} className="w-full rounded-xl bg-[#0787f7] py-3.5 text-sm font-bold text-white shadow-lg shadow-[#0787f7]/20 transition-all hover:bg-[#0670d4] active:scale-[0.98] disabled:opacity-50">
                                 {form.processing ? t('booking') : t('confirm_booking_btn')}

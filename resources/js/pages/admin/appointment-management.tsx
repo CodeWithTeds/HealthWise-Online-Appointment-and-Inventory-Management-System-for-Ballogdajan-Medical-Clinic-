@@ -1,7 +1,8 @@
-import { Head, router } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { ClipboardList, Users, Search } from 'lucide-react';
+import { ClipboardList, Users, Search, Thermometer, HeartPulse, Scale, Ruler, X, Stethoscope } from 'lucide-react';
+import Swal from 'sweetalert2';
 
 type AppointmentUser = { id: number; name: string; email: string; phone: string | null };
 
@@ -15,6 +16,10 @@ type Appointment = {
     status: string;
     queue_number: number | null;
     notes: string | null;
+    temperature: string | null;
+    blood_pressure: string | null;
+    weight: string | null;
+    height: string | null;
     user: AppointmentUser;
 };
 
@@ -50,6 +55,40 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
     const [filterPriority, setFilterPriority] = useState(filters.priority_type || '');
     const prefix = getRolePrefix();
     const isReadOnly = prefix === '/doctor';
+
+    // Secretary vitals — Temperature, BP, Weight, Height (recorded at clinic, not by patient)
+    const [showVitals, setShowVitals] = useState(false);
+    const [vitalsAppointment, setVitalsAppointment] = useState<Appointment | null>(null);
+    const vitalsForm = useForm({ temperature: '', blood_pressure: '', weight: '', height: '' });
+
+    const openVitals = (apt: Appointment) => {
+        setVitalsAppointment(apt);
+        vitalsForm.setData({
+            temperature: apt.temperature || '',
+            blood_pressure: apt.blood_pressure || '',
+            weight: apt.weight || '',
+            height: apt.height || '',
+        });
+        vitalsForm.clearErrors();
+        setShowVitals(true);
+    };
+
+    const handleVitalsSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!vitalsAppointment) return;
+        vitalsForm.patch(`${prefix}/appointments/${vitalsAppointment.id}/vitals`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setShowVitals(false);
+                Swal.fire({ icon: 'success', title: 'Vitals Recorded', text: `Vitals for ${vitalsAppointment.user.name} saved successfully.`, confirmButtonColor: '#0787f7' });
+            },
+            onError: () => {
+                Swal.fire({ icon: 'error', title: 'Failed', text: 'Please check vitals fields.', confirmButtonColor: '#0787f7' });
+            },
+        });
+    };
+
+    const hasVitals = (apt: Appointment) => !!(apt.temperature || apt.blood_pressure || apt.weight || apt.height);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -173,6 +212,7 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
                                             <th className="px-3 py-2 font-semibold text-neutral-600">Priority</th>
                                             <th className="px-3 py-2 font-semibold text-neutral-600">Queue #</th>
                                             <th className="px-3 py-2 font-semibold text-neutral-600">Status</th>
+                                            <th className="px-3 py-2 font-semibold text-neutral-600">Vitals</th>
                                             <th className="px-3 py-2 font-semibold text-neutral-600">Actions</th>
                                         </tr>
                                     </thead>
@@ -186,6 +226,24 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
                                                 <td className="px-3 py-2"><span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${priorityBadge(apt.priority_type)}`}>{apt.priority_type}</span></td>
                                                 <td className="px-3 py-2 text-neutral-600">{apt.queue_number || '—'}</td>
                                                 <td className="px-3 py-2"><span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${statusBadge(apt.status)}`}>{apt.status.replace('_', ' ')}</span></td>
+                                                <td className="px-3 py-2">
+                                                    <div className="flex items-center gap-1.5">
+                                                        {hasVitals(apt) ? (
+                                                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400" title={`${apt.temperature || '—'}°C • ${apt.blood_pressure || '—'} • ${apt.weight || '—'}kg • ${apt.height || '—'}cm`}>
+                                                                <Stethoscope className="h-3 w-3" /> {apt.temperature ? `${apt.temperature}°C` : '—'} {apt.blood_pressure ? `• ${apt.blood_pressure}` : ''}
+                                                            </span>
+                                                        ) : (
+                                                            <span className="text-[10px] text-neutral-400">—</span>
+                                                        )}
+                                                        {!isReadOnly ? (
+                                                            <button onClick={() => openVitals(apt)} className="inline-flex items-center gap-1 rounded-md bg-[#0787f7]/10 px-2 py-1 text-[10px] font-semibold text-[#0787f7] hover:bg-[#0787f7]/20">
+                                                                <Stethoscope className="h-3 w-3" /> {hasVitals(apt) ? 'Edit' : 'Record'}
+                                                            </button>
+                                                        ) : hasVitals(apt) ? (
+                                                            <span className="text-[10px] text-neutral-500">{apt.weight ? `${apt.weight}kg` : ''} {apt.height ? `${apt.height}cm` : ''}</span>
+                                                        ) : null}
+                                                    </div>
+                                                </td>
                                                 <td className="px-3 py-2">
                                                     {isReadOnly ? (
                                                         <span className="text-[10px] text-neutral-400">View only</span>
@@ -201,7 +259,7 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
                                                 </td>
                                             </tr>
                                         ))}
-                                        {appointments.data.length === 0 && <tr><td colSpan={8} className="px-3 py-8 text-center text-neutral-400">No appointments yet.</td></tr>}
+                                        {appointments.data.length === 0 && <tr><td colSpan={9} className="px-3 py-8 text-center text-neutral-400">No appointments yet.</td></tr>}
                                     </tbody>
                                 </table>
                             </div>
@@ -280,6 +338,70 @@ export default function AppointmentManagement({ appointments, priorityQueue, fil
                             )}
                         </div>
                     </>
+                )}
+
+                {/* Secretary Vitals Modal — Temperature, BP, Weight, Height (recorded at clinic, not by patient) */}
+                {showVitals && vitalsAppointment && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+                        <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-neutral-900">
+                            <div className="mb-1 flex items-center justify-between">
+                                <h2 className="flex items-center gap-2 text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                                    <Stethoscope className="h-5 w-5 text-[#0787f7]" /> Record Vital Signs
+                                </h2>
+                                <button onClick={() => setShowVitals(false)} className="rounded-full p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800">
+                                    <X className="h-5 w-5 text-neutral-400" />
+                                </button>
+                            </div>
+                            <p className="mb-5 text-xs text-neutral-400">
+                                {vitalsAppointment.user.name} • {format(new Date(vitalsAppointment.date.slice(0, 10) + 'T00:00:00'), 'MMM d, yyyy')} • {vitalsAppointment.session} — Secretary records at clinic after confirmation. Patient basic info only.
+                            </p>
+                            <form onSubmit={handleVitalsSubmit} className="space-y-4">
+                                <div className="grid gap-4 sm:grid-cols-2">
+                                    <div>
+                                        <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-200">
+                                            <Thermometer className="h-3.5 w-3.5 text-red-500" /> Temperature
+                                        </label>
+                                        <input type="text" value={vitalsForm.data.temperature} onChange={(e) => vitalsForm.setData('temperature', e.target.value)} className="h-10 w-full rounded-xl border border-neutral-200 px-4 text-sm focus:border-[#0787f7] focus:ring-2 focus:ring-[#0787f7]/10 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" placeholder="37.5°C" />
+                                        {vitalsForm.errors.temperature && <p className="mt-1 text-xs text-red-500">{vitalsForm.errors.temperature}</p>}
+                                    </div>
+                                    <div>
+                                        <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-200">
+                                            <HeartPulse className="h-3.5 w-3.5 text-rose-500" /> Blood Pressure (BP)
+                                        </label>
+                                        <input type="text" value={vitalsForm.data.blood_pressure} onChange={(e) => vitalsForm.setData('blood_pressure', e.target.value)} className="h-10 w-full rounded-xl border border-neutral-200 px-4 text-sm focus:border-[#0787f7] focus:ring-2 focus:ring-[#0787f7]/10 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" placeholder="120/80" />
+                                        {vitalsForm.errors.blood_pressure && <p className="mt-1 text-xs text-red-500">{vitalsForm.errors.blood_pressure}</p>}
+                                    </div>
+                                </div>
+                                <div className="grid gap-4 sm:grid-cols-2">
+                                    <div>
+                                        <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-200">
+                                            <Scale className="h-3.5 w-3.5 text-emerald-600" /> Weight (kg)
+                                        </label>
+                                        <input type="text" value={vitalsForm.data.weight} onChange={(e) => vitalsForm.setData('weight', e.target.value)} className="h-10 w-full rounded-xl border border-neutral-200 px-4 text-sm focus:border-[#0787f7] focus:ring-2 focus:ring-[#0787f7]/10 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" placeholder="65" />
+                                        {vitalsForm.errors.weight && <p className="mt-1 text-xs text-red-500">{vitalsForm.errors.weight}</p>}
+                                    </div>
+                                    <div>
+                                        <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-200">
+                                            <Ruler className="h-3.5 w-3.5 text-blue-600" /> Height (cm)
+                                        </label>
+                                        <input type="text" value={vitalsForm.data.height} onChange={(e) => vitalsForm.setData('height', e.target.value)} className="h-10 w-full rounded-xl border border-neutral-200 px-4 text-sm focus:border-[#0787f7] focus:ring-2 focus:ring-[#0787f7]/10 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" placeholder="165" />
+                                        {vitalsForm.errors.height && <p className="mt-1 text-xs text-red-500">{vitalsForm.errors.height}</p>}
+                                    </div>
+                                </div>
+                                <div className="rounded-xl bg-amber-50 p-3 dark:bg-amber-900/10">
+                                    <p className="text-[11px] leading-relaxed text-amber-700 dark:text-amber-400">
+                                        Walk-in clinic flow: Patient books basic info only → Secretary confirms → Patient proceeds to clinic → Secretary records vitals here.
+                                    </p>
+                                </div>
+                                <div className="flex justify-end gap-3 pt-2">
+                                    <button type="button" onClick={() => setShowVitals(false)} className="rounded-xl border border-neutral-200 px-5 py-2.5 text-sm font-medium text-neutral-600 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300">Cancel</button>
+                                    <button type="submit" disabled={vitalsForm.processing} className="rounded-xl bg-[#0787f7] px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-[#0787f7]/20 hover:bg-[#0670d4] disabled:opacity-50">
+                                        {vitalsForm.processing ? 'Saving...' : 'Save Vitals'}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 )}
             </div>
         </>

@@ -43,4 +43,18 @@ final class AppointmentManagementController extends Controller
 
         return back()->with('success', 'Appointment status updated.');
     }
+
+    public function updateVitals(Request $request, Appointment $appointment): RedirectResponse
+    {
+        $data = $request->validate([
+            'temperature' => ['nullable', 'string', 'max:10'],
+            'blood_pressure' => ['nullable', 'string', 'max:20'],
+            'weight' => ['nullable', 'string', 'max:10'],
+            'height' => ['nullable', 'string', 'max:10'],
+        ]);
+
+        $this->appointments->update($appointment, $data);
+
+        return back()->with('success', 'Vital signs recorded successfully — patient vitals updated by Secretary.');
+    }
 }
