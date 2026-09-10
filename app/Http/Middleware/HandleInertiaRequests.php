@@ -62,7 +62,7 @@ class HandleInertiaRequests extends Middleware
         }
 
         $role = $request->user()->role->value ?? '';
-        if (! in_array($role, ['doctor', 'pharmacist', 'secretary'])) {
+        if (! in_array($role, ['pharmacist'])) {
             return 0;
         }
 

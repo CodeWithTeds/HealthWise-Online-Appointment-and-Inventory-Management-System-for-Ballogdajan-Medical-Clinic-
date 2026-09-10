@@ -65,9 +65,9 @@ export default function Welcome({
                 {/* Navigation */}
                 <nav className="fixed top-0 right-0 left-0 z-50 bg-white/80 backdrop-blur-xl">
                     <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 lg:px-8">
-                        <div className="flex items-center gap-3">
-                            <img src="/images/logo.png" alt="HealthWise" className="h-10 w-10 rounded-xl object-contain" />
-                            <span className="text-xl font-extrabold tracking-tight text-[#11165a]">
+                        <div className="flex items-center gap-3.5">
+                            <img src="/images/logo.png" alt="HealthWise" className="h-14 w-14 rounded-xl object-contain lg:h-16 lg:w-16" />
+                            <span className="text-2xl font-extrabold tracking-tight text-[#11165a] lg:text-3xl">
                                 Health<span className="text-[#0787f7]">Wise</span>
                             </span>
                         </div>
@@ -166,9 +166,9 @@ export default function Welcome({
                     <div className="absolute -top-32 right-0 h-[600px] w-[600px] rounded-full bg-[#0787f7]/[0.04] blur-3xl" />
                     <div className="absolute bottom-0 -left-32 h-[400px] w-[400px] rounded-full bg-[#11165a]/[0.03] blur-3xl" />
 
-                    <div className="relative mx-auto flex min-h-[calc(100vh-4.5rem)] max-w-7xl flex-col items-center justify-center px-6 py-16 lg:flex-row lg:gap-12 lg:px-8">
-                        {/* Left Content */}
-                        <div className="flex-1 text-center lg:text-left">
+                    <div className="relative mx-auto flex min-h-[calc(100vh-4.5rem)] max-w-7xl flex-col items-center justify-center px-6 py-20 lg:px-8">
+                        {/* Centered Content - No Image */}
+                        <div className="mx-auto max-w-3xl text-center">
                             {user && roleInfo ? (
                                 <div className="mb-6 inline-flex items-center gap-3 rounded-full border border-gray-100 bg-white px-5 py-2.5 shadow-sm">
                                     <div className={`flex h-8 w-8 items-center justify-center rounded-full ${roleInfo.color}`}>
@@ -180,9 +180,9 @@ export default function Welcome({
                                     </div>
                                 </div>
                             ) : (
-                                <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-[#0787f7]/[0.08] px-4 py-2">
-                                    <Heart className="h-3.5 w-3.5 text-[#0787f7]" />
-                                    <span className="text-xs font-bold tracking-wide text-[#0787f7] uppercase">Ballogdajan Medical Clinic</span>
+                                <div className="mb-8 inline-flex items-center gap-3.5 rounded-full border border-[#0787f7]/10 bg-[#0787f7]/[0.08] px-8 py-4 shadow-sm lg:px-9 lg:py-5">
+                                    <Heart className="h-6 w-6 text-[#0787f7] lg:h-7 lg:w-7" />
+                                    <span className="text-base font-extrabold tracking-widest text-[#0787f7] uppercase lg:text-lg">Ballogdajan Medical Clinic</span>
                                 </div>
                             )}
 
@@ -195,15 +195,15 @@ export default function Welcome({
                                 </span>
                             </h1>
 
-                            <p className="mx-auto mb-8 max-w-lg text-lg leading-relaxed text-[#192433]/55 lg:mx-0 lg:text-lg">
+                            <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-[#192433]/60">
                                 An integrated platform for online appointments, patient records, and inventory management — built for the community of Ballogdajan, Tibiao, Antique.
                             </p>
 
-                            <div className="flex flex-col items-center gap-3 sm:flex-row lg:items-start">
+                            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
                                 {!auth.user && canRegister ? (
                                     <Link
                                         href={register()}
-                                        className="group inline-flex items-center gap-2.5 rounded-full bg-[#0787f7] px-7 py-3.5 text-[13px] font-bold text-white shadow-xl shadow-[#0787f7]/25 transition-all hover:shadow-2xl hover:shadow-[#0787f7]/35"
+                                        className="group inline-flex items-center gap-2.5 rounded-full bg-[#0787f7] px-8 py-3.5 text-[13px] font-bold text-white shadow-xl shadow-[#0787f7]/25 transition-all hover:shadow-2xl hover:shadow-[#0787f7]/35"
                                     >
                                         Book an Appointment
                                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -211,7 +211,7 @@ export default function Welcome({
                                 ) : auth.user ? (
                                     <Link
                                         href={dashboard()}
-                                        className="group inline-flex items-center gap-2.5 rounded-full bg-[#0787f7] px-7 py-3.5 text-[13px] font-bold text-white shadow-xl shadow-[#0787f7]/25 transition-all hover:shadow-2xl hover:shadow-[#0787f7]/35"
+                                        className="group inline-flex items-center gap-2.5 rounded-full bg-[#0787f7] px-8 py-3.5 text-[13px] font-bold text-white shadow-xl shadow-[#0787f7]/25 transition-all hover:shadow-2xl hover:shadow-[#0787f7]/35"
                                     >
                                         Go to Dashboard
                                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -219,7 +219,7 @@ export default function Welcome({
                                 ) : (
                                     <Link
                                         href={login()}
-                                        className="group inline-flex items-center gap-2.5 rounded-full bg-[#0787f7] px-7 py-3.5 text-[13px] font-bold text-white shadow-xl shadow-[#0787f7]/25 transition-all hover:shadow-2xl hover:shadow-[#0787f7]/35"
+                                        className="group inline-flex items-center gap-2.5 rounded-full bg-[#0787f7] px-8 py-3.5 text-[13px] font-bold text-white shadow-xl shadow-[#0787f7]/25 transition-all hover:shadow-2xl hover:shadow-[#0787f7]/35"
                                     >
                                         Sign In
                                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -227,14 +227,14 @@ export default function Welcome({
                                 )}
                                 <a
                                     href="#features"
-                                    className="inline-flex items-center gap-2 rounded-full border-2 border-[#192433]/10 px-7 py-3.5 text-[13px] font-bold text-[#192433] transition-all hover:border-[#0787f7]/30 hover:text-[#0787f7]"
+                                    className="inline-flex items-center gap-2 rounded-full border-2 border-[#192433]/10 bg-white px-8 py-3.5 text-[13px] font-bold text-[#192433] transition-all hover:border-[#0787f7]/30 hover:text-[#0787f7]"
                                 >
                                     Explore Features
                                 </a>
                             </div>
 
-                            {/* Mini Stats */}
-                            <div className="mt-14 flex items-center justify-center gap-8 lg:justify-start">
+                            {/* Mini Stats - Centered */}
+                            <div className="mt-14 flex items-center justify-center gap-8">
                                 <div className="text-center">
                                     <p className="text-2xl font-black text-[#11165a]">24/7</p>
                                     <p className="mt-0.5 text-[11px] font-medium text-[#192433]/40">Online Booking</p>
@@ -248,43 +248,6 @@ export default function Welcome({
                                 <div className="text-center">
                                     <p className="text-2xl font-black text-[#11165a]">4</p>
                                     <p className="mt-0.5 text-[11px] font-medium text-[#192433]/40">User Roles</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Right - Hero Image */}
-                        <div className="relative mt-12 flex-1 lg:mt-0">
-                            <div className="relative mx-auto max-w-md lg:max-w-none">
-                                <div className="overflow-hidden rounded-3xl shadow-2xl shadow-[#11165a]/10">
-                                    <img
-                                        src="/images/hero.png"
-                                        alt="HealthWise System"
-                                        className="h-auto w-full object-cover"
-                                    />
-                                </div>
-                                {/* Floating card */}
-                                <div className="absolute -bottom-5 -left-5 rounded-2xl border border-white/80 bg-white/90 p-4 shadow-xl backdrop-blur-sm lg:-left-8">
-                                    <div className="flex items-center gap-3">
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-50">
-                                            <Shield className="h-5 w-5 text-green-500" />
-                                        </div>
-                                        <div>
-                                            <p className="text-xs font-bold text-[#192433]">Secure & Reliable</p>
-                                            <p className="text-[10px] text-[#192433]/40">Role-based access control</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* Floating card top-right */}
-                                <div className="absolute -top-3 -right-3 rounded-2xl border border-white/80 bg-white/90 p-4 shadow-xl backdrop-blur-sm lg:-right-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0787f7]/10">
-                                            <Calendar className="h-5 w-5 text-[#0787f7]" />
-                                        </div>
-                                        <div>
-                                            <p className="text-xs font-bold text-[#192433]">Easy Scheduling</p>
-                                            <p className="text-[10px] text-[#192433]/40">AM / PM slots available</p>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -565,9 +528,9 @@ export default function Welcome({
                 <footer className="border-t border-gray-100 py-10">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-                            <div className="flex items-center gap-3">
-                                <img src="/images/logo.png" alt="HealthWise" className="h-8 w-8 rounded-lg object-contain" />
-                                <span className="text-lg font-extrabold tracking-tight text-[#11165a]">
+                            <div className="flex items-center gap-3.5">
+                                <img src="/images/logo.png" alt="HealthWise" className="h-11 w-11 rounded-lg object-contain lg:h-12 lg:w-12" />
+                                <span className="text-xl font-extrabold tracking-tight text-[#11165a] lg:text-2xl">
                                     Health<span className="text-[#0787f7]">Wise</span>
                                 </span>
                             </div>

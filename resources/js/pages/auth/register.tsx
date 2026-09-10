@@ -110,7 +110,7 @@ export default function Register() {
         });
     };
 
-    const inputClass = 'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50';
+    const inputClass = 'flex h-12 w-full rounded-md border border-input bg-transparent px-3.5 py-2 text-base shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-[15px] lg:h-[48px]';
     const selectClass = inputClass;
 
     return (
@@ -127,7 +127,7 @@ export default function Register() {
                                     <div className={`h-0.5 flex-1 transition-colors ${i <= step ? 'bg-[#0787f7]' : 'bg-neutral-200 dark:bg-neutral-700'}`} />
                                 )}
                                 <div
-                                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all ${
+                                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold transition-all ${
                                         i < step
                                             ? 'bg-[#0787f7] text-white'
                                             : i === step
@@ -141,7 +141,7 @@ export default function Register() {
                                     <div className={`h-0.5 flex-1 transition-colors ${i < step ? 'bg-[#0787f7]' : 'bg-neutral-200 dark:bg-neutral-700'}`} />
                                 )}
                             </div>
-                            <span className={`mt-1.5 text-[10px] font-medium ${i <= step ? 'text-[#0787f7]' : 'text-neutral-400'}`}>
+                            <span className={`mt-2 text-xs font-medium ${i <= step ? 'text-[#0787f7]' : 'text-neutral-400'}`}>
                                 {label}
                             </span>
                         </div>
@@ -151,25 +151,25 @@ export default function Register() {
 
             {/* Step 1: Personal Info */}
             {step === 0 && (
-                <div className="grid gap-4">
+                <div className="grid gap-5">
                     <div className="grid gap-2">
-                        <Label htmlFor="name">Full Name *</Label>
-                        <Input id="name" value={form.name} onChange={(e) => set('name', e.target.value)} placeholder="Juan Dela Cruz" />
+                        <Label htmlFor="name" className="text-[15px] font-semibold lg:text-base">Full Name *</Label>
+                        <Input id="name" value={form.name} onChange={(e) => set('name', e.target.value)} placeholder="Juan Dela Cruz" className="h-12 text-base md:text-[15px] lg:h-[48px]" />
                         <InputError message={errors.name} />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="username">Username *</Label>
-                        <Input id="username" value={form.username} onChange={(e) => set('username', e.target.value)} placeholder="juandelacruz" />
+                        <Label htmlFor="username" className="text-[15px] font-semibold lg:text-base">Username *</Label>
+                        <Input id="username" value={form.username} onChange={(e) => set('username', e.target.value)} placeholder="juandelacruz" className="h-12 text-base md:text-[15px] lg:h-[48px]" />
                         <InputError message={errors.username} />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="email">Email Address *</Label>
-                        <Input id="email" type="email" value={form.email} onChange={(e) => set('email', e.target.value)} placeholder="email@example.com" />
+                        <Label htmlFor="email" className="text-[15px] font-semibold lg:text-base">Email Address *</Label>
+                        <Input id="email" type="email" value={form.email} onChange={(e) => set('email', e.target.value)} placeholder="email@example.com" className="h-12 text-base md:text-[15px] lg:h-[48px]" />
                         <InputError message={errors.email} />
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div className="grid gap-2">
-                            <Label htmlFor="role">Role *</Label>
+                            <Label htmlFor="role" className="text-[15px] font-semibold lg:text-base">Role *</Label>
                             <select id="role" value={form.role} onChange={(e) => set('role', e.target.value)} className={selectClass}>
                                 <option value="">Select role</option>
                                 <option value="patient">Patient</option>
@@ -180,7 +180,7 @@ export default function Register() {
                             <InputError message={errors.role} />
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="gender">Gender *</Label>
+                            <Label htmlFor="gender" className="text-[15px] font-semibold lg:text-base">Gender *</Label>
                             <select id="gender" value={form.gender} onChange={(e) => set('gender', e.target.value)} className={selectClass}>
                                 <option value="">Select gender</option>
                                 <option value="male">Male</option>
@@ -190,8 +190,8 @@ export default function Register() {
                         </div>
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="phone">Phone Number *</Label>
-                        <Input id="phone" value={form.phone} onChange={(e) => set('phone', e.target.value)} placeholder="09XX-XXX-XXXX" />
+                        <Label htmlFor="phone" className="text-[15px] font-semibold lg:text-base">Phone Number *</Label>
+                        <Input id="phone" value={form.phone} onChange={(e) => set('phone', e.target.value)} placeholder="09XX-XXX-XXXX" className="h-12 text-base md:text-[15px] lg:h-[48px]" />
                         <InputError message={errors.phone} />
                     </div>
                 </div>
@@ -202,12 +202,12 @@ export default function Register() {
                 <div className="grid gap-4">
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div className="grid gap-2">
-                            <Label htmlFor="birthdate">Birthdate *</Label>
-                            <Input id="birthdate" type="date" value={form.birthdate} onChange={(e) => set('birthdate', e.target.value)} />
+                            <Label htmlFor="birthdate" className="text-[15px] font-semibold lg:text-base">Birthdate *</Label>
+                            <Input id="birthdate" type="date" value={form.birthdate} onChange={(e) => set('birthdate', e.target.value)} className="h-12 text-base md:text-[15px] lg:h-[48px]" />
                             <InputError message={errors.birthdate} />
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="civil_status">Civil Status *</Label>
+                            <Label htmlFor="civil_status" className="text-[15px] font-semibold lg:text-base">Civil Status *</Label>
                             <select id="civil_status" value={form.civil_status} onChange={(e) => set('civil_status', e.target.value)} className={selectClass}>
                                 <option value="">Select status</option>
                                 <option value="single">Single</option>
@@ -219,13 +219,13 @@ export default function Register() {
                         </div>
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="address">Address *</Label>
-                        <Input id="address" value={form.address} onChange={(e) => set('address', e.target.value)} placeholder="Barangay, Municipality, Province" />
+                        <Label htmlFor="address" className="text-[15px] font-semibold lg:text-base">Address *</Label>
+                        <Input id="address" value={form.address} onChange={(e) => set('address', e.target.value)} placeholder="Barangay, Municipality, Province" className="h-12 text-base md:text-[15px] lg:h-[48px]" />
                         <InputError message={errors.address} />
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div className="grid gap-2">
-                            <Label htmlFor="blood_type">Blood Type</Label>
+                            <Label htmlFor="blood_type" className="text-[15px] font-semibold lg:text-base">Blood Type</Label>
                             <select id="blood_type" value={form.blood_type} onChange={(e) => set('blood_type', e.target.value)} className={selectClass}>
                                 <option value="">Select blood type</option>
                                 <option value="A+">A+</option>
@@ -240,14 +240,14 @@ export default function Register() {
                             <InputError message={errors.blood_type} />
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="contact_person">Emergency Contact Person</Label>
-                            <Input id="contact_person" value={form.contact_person} onChange={(e) => set('contact_person', e.target.value)} placeholder="Full name" />
+                            <Label htmlFor="contact_person" className="text-[15px] font-semibold lg:text-base">Emergency Contact Person</Label>
+                            <Input id="contact_person" value={form.contact_person} onChange={(e) => set('contact_person', e.target.value)} placeholder="Full name" className="h-12 text-base md:text-[15px] lg:h-[48px]" />
                             <InputError message={errors.contact_person} />
                         </div>
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="contact_number">Emergency Contact Number</Label>
-                        <Input id="contact_number" value={form.contact_number} onChange={(e) => set('contact_number', e.target.value)} placeholder="09XX-XXX-XXXX" />
+                        <Label htmlFor="contact_number" className="text-[15px] font-semibold lg:text-base">Emergency Contact Number</Label>
+                        <Input id="contact_number" value={form.contact_number} onChange={(e) => set('contact_number', e.target.value)} placeholder="09XX-XXX-XXXX" className="h-12 text-base md:text-[15px] lg:h-[48px]" />
                         <InputError message={errors.contact_number} />
                     </div>
                 </div>
@@ -257,18 +257,18 @@ export default function Register() {
             {step === 2 && (
                 <div className="grid gap-4">
                     <div className="grid gap-2">
-                        <Label htmlFor="password">Password *</Label>
-                        <PasswordInput id="password" value={form.password} onChange={(e) => set('password', e.target.value)} placeholder="Min 8 characters" name="password" />
+                        <Label htmlFor="password" className="text-[15px] font-semibold lg:text-base">Password *</Label>
+                        <PasswordInput id="password" value={form.password} onChange={(e) => set('password', e.target.value)} placeholder="Min 8 characters" name="password" className="h-12 text-base md:text-[15px] lg:h-[48px]" />
                         <InputError message={errors.password} />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="password_confirmation">Confirm Password *</Label>
-                        <PasswordInput id="password_confirmation" value={form.password_confirmation} onChange={(e) => set('password_confirmation', e.target.value)} placeholder="Confirm password" name="password_confirmation" />
+                        <Label htmlFor="password_confirmation" className="text-[15px] font-semibold lg:text-base">Confirm Password *</Label>
+                        <PasswordInput id="password_confirmation" value={form.password_confirmation} onChange={(e) => set('password_confirmation', e.target.value)} placeholder="Confirm password" name="password_confirmation" className="h-12 text-base md:text-[15px] lg:h-[48px]" />
                         <InputError message={errors.password_confirmation} />
                     </div>
                     <div className="rounded-lg border border-blue-100 bg-blue-50/50 p-4 dark:border-blue-900 dark:bg-blue-900/20">
-                        <p className="mb-2 text-xs font-semibold text-neutral-700 dark:text-neutral-200">Account Summary</p>
-                        <div className="grid grid-cols-2 gap-1 text-[11px] text-neutral-500">
+                        <p className="mb-2 text-sm font-semibold text-neutral-700 dark:text-neutral-200">Account Summary</p>
+                        <div className="grid grid-cols-2 gap-1 text-xs text-neutral-500">
                             <span>Name:</span><span className="font-medium text-neutral-700 dark:text-neutral-200">{form.name}</span>
                             <span>Email:</span><span className="font-medium text-neutral-700 dark:text-neutral-200">{form.email}</span>
                             <span>Role:</span><span className="font-medium capitalize text-neutral-700 dark:text-neutral-200">{form.role}</span>
@@ -284,7 +284,7 @@ export default function Register() {
                     <button
                         type="button"
                         onClick={prev}
-                        className="rounded-md border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300"
+                        className="rounded-md border border-neutral-200 px-7 py-3 text-base font-semibold text-neutral-600 transition-colors hover:bg-neutral-50 lg:px-8 lg:py-3.5 lg:text-[17px] dark:border-neutral-700 dark:text-neutral-300"
                     >
                         Back
                     </button>
@@ -293,20 +293,20 @@ export default function Register() {
                 )}
 
                 {step < 2 ? (
-                    <Button type="button" onClick={next}>
+                    <Button type="button" onClick={next} className="h-12 px-8 text-base font-bold lg:h-[48px] lg:px-10 lg:text-[17px]">
                         Next
                     </Button>
                 ) : (
-                    <Button type="button" onClick={submit} disabled={processing}>
+                    <Button type="button" onClick={submit} disabled={processing} className="h-12 px-8 text-base font-bold lg:h-[48px] lg:px-10 lg:text-[17px]">
                         {processing && <Spinner />}
                         Create Account
                     </Button>
                 )}
             </div>
 
-            <div className="mt-4 text-center text-sm text-muted-foreground">
+            <div className="mt-6 text-center text-[15px] text-muted-foreground lg:text-base">
                 Already have an account?{' '}
-                <TextLink href={login()}>Log in</TextLink>
+                <TextLink href={login()} className="text-[15px] font-semibold lg:text-base">Log in</TextLink>
             </div>
         </>
     );

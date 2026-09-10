@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\PatientRecordController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Auth\EmailVerificationCodeController;
 use App\Http\Controllers\Doctor\DashboardController;
-use App\Http\Controllers\Doctor\InventoryViewController;
 use App\Http\Controllers\Doctor\PatientFeedbackController;
 use App\Http\Controllers\Doctor\PrescriptionController;
 use App\Http\Controllers\NotificationController;
@@ -16,10 +15,12 @@ use App\Http\Controllers\Patient\AppointmentController;
 use App\Http\Controllers\Patient\AppointmentHistoryController;
 use App\Http\Controllers\Patient\DashboardController as PatientDashboardController;
 use App\Http\Controllers\Patient\FeedbackController;
+use App\Http\Controllers\Patient\MedicineSaleController as PatientMedicineSaleController;
 use App\Http\Controllers\Patient\PrescriptionController as PatientPrescriptionController;
 use App\Http\Controllers\Patient\QueueStatusController;
 use App\Http\Controllers\Pharmacist\DashboardController as PharmacistDashboardController;
 use App\Http\Controllers\Pharmacist\InventoryController;
+use App\Http\Controllers\Pharmacist\SaleController as PharmacistSaleController;
 use App\Http\Controllers\Secretary\DashboardController as SecretaryDashboardController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -68,9 +69,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('patient-records', [PatientRecordController::class, 'index'])->name('patient-records.index');
             Route::get('patient-records/{user}/appointments', [PatientRecordController::class, 'appointments'])->name('patient-records.appointments');
 
-            Route::get('inventory', [InventoryViewController::class, 'index'])->name('inventory.index');
-            Route::get('inventory-alerts', [InventoryViewController::class, 'alerts'])->name('inventory-alerts.index');
-
             Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
         });
 
@@ -91,9 +89,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('patient-records', [PatientRecordController::class, 'index'])->name('patient-records.index');
             Route::get('patient-records/{user}/appointments', [PatientRecordController::class, 'appointments'])->name('patient-records.appointments');
 
-            Route::get('inventory', [InventoryViewController::class, 'index'])->name('inventory.index');
-            Route::get('inventory-alerts', [InventoryViewController::class, 'alerts'])->name('inventory-alerts.index');
-
             Route::inertia('notifications', 'admin/notifications')->name('notifications.index');
 
             Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
@@ -106,7 +101,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('prescriptions/{prescription}/pdf', [PrescriptionController::class, 'exportPdf'])->name('prescriptions.pdf');
         });
 
-        // Pharmacist - Inventory Management
+        // Pharmacist - Inventory Management (walk-in sales handled here)
         Route::prefix('pharmacist')->name('pharmacist.')->group(function () {
             Route::get('inventory', [InventoryController::class, 'index'])->name('inventory.index');
             Route::post('inventory', [InventoryController::class, 'store'])->name('inventory.store');
@@ -114,6 +109,8 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('inventory/{item}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
             Route::patch('inventory/{item}/adjust', [InventoryController::class, 'adjust'])->name('inventory.adjust');
             Route::get('inventory-alerts', [InventoryController::class, 'alerts'])->name('inventory-alerts.index');
+            Route::get('sales', [PharmacistSaleController::class, 'index'])->name('sales.index');
+            Route::post('sales', [PharmacistSaleController::class, 'store'])->name('sales.store');
         });
 
         // Patient - Book Appointment
@@ -125,6 +122,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('feedback', [FeedbackController::class, 'index'])->name('feedback.index');
             Route::post('feedback', [FeedbackController::class, 'store'])->name('feedback.store');
             Route::get('prescriptions', PatientPrescriptionController::class)->name('prescriptions');
+            Route::get('pharmacy', [PatientMedicineSaleController::class, 'index'])->name('pharmacy.index');
+            Route::post('pharmacy/purchase', [PatientMedicineSaleController::class, 'store'])->name('pharmacy.purchase');
         });
 
         // App Settings (branding)

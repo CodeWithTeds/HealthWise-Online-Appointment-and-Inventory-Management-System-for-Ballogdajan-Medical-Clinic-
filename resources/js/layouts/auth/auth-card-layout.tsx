@@ -26,16 +26,16 @@ export default function AuthCardLayout({
                     href={home()}
                     className="flex items-center gap-2 self-center font-medium"
                 >
-                    <div className="flex h-9 w-9 items-center justify-center">
-                        <AppLogoIcon className="size-9 fill-current text-black dark:text-white" />
+                    <div className="flex h-14 w-14 items-center justify-center lg:h-16 lg:w-16">
+                        <AppLogoIcon className="size-14 fill-current text-black dark:text-white lg:size-16" />
                     </div>
                 </Link>
 
                 <div className="flex flex-col gap-6">
                     <Card className="rounded-xl">
                         <CardHeader className="px-10 pt-8 pb-0 text-center">
-                            <CardTitle className="text-xl">{title}</CardTitle>
-                            <CardDescription>{description}</CardDescription>
+                            <CardTitle className="text-2xl lg:text-3xl">{title}</CardTitle>
+                            <CardDescription className="text-base lg:text-lg">{description}</CardDescription>
                         </CardHeader>
                         <CardContent className="px-10 py-8">
                             {children}

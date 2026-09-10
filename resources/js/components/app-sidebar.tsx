@@ -10,6 +10,7 @@ import {
     BarChart3,
     MessageSquare,
     Pill,
+    Receipt,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -68,16 +69,6 @@ const doctorNavItems: NavItem[] = [
         icon: Pill,
     },
     {
-        title: 'Inventory',
-        href: '/doctor/inventory',
-        icon: Package,
-    },
-    {
-        title: 'Inventory Alerts',
-        href: '/doctor/inventory-alerts',
-        icon: AlertTriangle,
-    },
-    {
         title: 'Notifications',
         href: '/doctor/notifications',
         icon: Bell,
@@ -124,16 +115,6 @@ const secretaryNavItems: NavItem[] = [
         icon: ClipboardList,
     },
     {
-        title: 'Inventory',
-        href: '/secretary/inventory',
-        icon: Package,
-    },
-    {
-        title: 'Inventory Alerts',
-        href: '/secretary/inventory-alerts',
-        icon: AlertTriangle,
-    },
-    {
         title: 'Reports',
         href: '/secretary/reports',
         icon: BarChart3,
@@ -150,6 +131,11 @@ const pharmacistNavItems: NavItem[] = [
         title: 'Inventory',
         href: '/pharmacist/inventory',
         icon: Package,
+    },
+    {
+        title: 'Sales',
+        href: '/pharmacist/sales',
+        icon: Receipt,
     },
     {
         title: 'Inventory Alerts',
